@@ -268,14 +268,27 @@ export const Hero = () => {
                   <div className="flex-1 flex flex-col p-8 bg-white overflow-hidden">
                     {/* Image */}
                     <div className="flex-1 relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200">
-                      <img
-                        src="/user-model.png"
-                        className="absolute inset-0 w-full h-full object-cover"
-                        alt="User Base"
-                      />
-                      <div
-                        className={`absolute inset-0 color-layer ${selectedColor} opacity-30 pointer-events-none`}
-                      ></div>
+                      {/* Loading Animation */}
+                      {isPanelOpen && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20 sidepanel-loader">
+                          <div className="w-10 h-10 border-2 border-stone-200 border-t-brand-pink rounded-full animate-spin"></div>
+                        </div>
+                      )}
+                      {/* Image */}
+                      {isPanelOpen && (
+                        <>
+                          <div className="absolute inset-0 sidepanel-image z-10">
+                            <img
+                              src="/user-model.png"
+                              className="w-full h-full object-cover"
+                              alt="User Base"
+                            />
+                          </div>
+                          <div
+                            className={`absolute inset-0 color-layer ${selectedColor} opacity-30 pointer-events-none sidepanel-color-layer z-10`}
+                          ></div>
+                        </>
+                      )}
                       <div className="absolute top-4 left-4 bg-green-500/90 backdrop-blur text-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-sm shadow-sm flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                         Live Render
