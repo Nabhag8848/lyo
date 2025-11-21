@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export const Hero = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState('bg-stone-400');
+  const [selectedColor, setSelectedColor] = useState('bg-yellow-400');
 
   const openPanel = () => {
     setIsPanelOpen(true);
@@ -14,6 +14,19 @@ export const Hero = () => {
 
   const changeColor = (colorClass: string) => {
     setSelectedColor(colorClass);
+  };
+
+  const getImageSrc = (color: string) => {
+    if (color === 'bg-stone-900') {
+      return '/user-model-black.png';
+    }
+    if (color === 'bg-stone-400') {
+      return '/user-model-grey.png';
+    }
+    if (color === 'bg-yellow-400') {
+      return '/user-model.png';
+    }
+    return '/user-model.png';
   };
 
   return (
@@ -276,18 +289,13 @@ export const Hero = () => {
                       )}
                       {/* Image */}
                       {isPanelOpen && (
-                        <>
-                          <div className="absolute inset-0 sidepanel-image z-10">
-                            <img
-                              src="/user-model.png"
-                              className="w-full h-full object-cover"
-                              alt="User Base"
-                            />
-                          </div>
-                          <div
-                            className={`absolute inset-0 color-layer ${selectedColor} opacity-30 pointer-events-none sidepanel-color-layer z-10`}
-                          ></div>
-                        </>
+                        <div className="absolute inset-0 sidepanel-image z-10">
+                          <img
+                            src={getImageSrc(selectedColor)}
+                            className="w-full h-full object-cover"
+                            alt="User Base"
+                          />
+                        </div>
                       )}
                       <div className="absolute top-4 left-4 bg-green-500/90 backdrop-blur text-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] rounded-sm shadow-sm flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
@@ -340,20 +348,34 @@ export const Hero = () => {
                           </span>
                           <div className="flex gap-2">
                             <button
+                              onClick={() => changeColor('bg-yellow-400')}
+                              className={`w-8 h-8 rounded-full bg-yellow-400 shadow-sm ring-1 ring-stone-200 ring-offset-2 transition-transform ${
+                                selectedColor === 'bg-yellow-400'
+                                  ? 'ring-2 ring-black scale-110'
+                                  : 'hover:scale-110'
+                              }`}
+                            ></button>
+                            <button
                               onClick={() => changeColor('bg-stone-400')}
-                              className="w-8 h-8 rounded-full bg-[#d6d3cd] shadow-sm ring-1 ring-stone-200 ring-offset-2 hover:scale-110 transition-transform"
+                              className={`w-8 h-8 rounded-full bg-[#d6d3cd] shadow-sm ring-1 ring-stone-200 ring-offset-2 transition-transform ${
+                                selectedColor === 'bg-stone-400'
+                                  ? 'ring-2 ring-black scale-110'
+                                  : 'hover:scale-110'
+                              }`}
                             ></button>
                             <button
                               onClick={() => changeColor('bg-stone-900')}
-                              className="w-8 h-8 rounded-full bg-stone-900 shadow-sm ring-1 ring-stone-200 ring-offset-2 hover:scale-110 transition-transform"
+                              className={`w-8 h-8 rounded-full bg-stone-900 shadow-sm ring-1 ring-stone-200 ring-offset-2 transition-transform ${
+                                selectedColor === 'bg-stone-900'
+                                  ? 'ring-2 ring-black scale-110'
+                                  : 'hover:scale-110'
+                              }`}
                             ></button>
+
                             <button
-                              onClick={() => changeColor('bg-rose-900')}
-                              className="w-8 h-8 rounded-full bg-rose-900 shadow-sm ring-1 ring-stone-200 ring-offset-2 hover:scale-110 transition-transform"
-                            ></button>
-                            <button
-                              onClick={() => changeColor('bg-blue-900')}
-                              className="w-8 h-8 rounded-full bg-blue-900 shadow-sm ring-1 ring-stone-200 ring-offset-2 hover:scale-110 transition-transform"
+                              disabled
+                              className="w-8 h-8 rounded-full bg-rose-900 shadow-sm ring-1 ring-stone-200 ring-offset-2 opacity-40 cursor-not-allowed"
+                              title="Coming soon"
                             ></button>
                           </div>
                         </div>
