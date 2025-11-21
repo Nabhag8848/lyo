@@ -110,7 +110,7 @@ export const HowItWorks = () => {
                   </div>
                   <div className="absolute inset-0 s1-photo">
                     <img
-                      src="/public/user-model-pic.png"
+                      src="/user-model-pic.png"
                       className="w-full h-full object-cover opacity-80"
                       alt="uploaded"
                     />
@@ -299,7 +299,7 @@ export const HowItWorks = () => {
                   </div>
                   <div className="absolute inset-0 step3-image z-10">
                     <img
-                      src="/public/user-model.png"
+                      src="/user-model.png"
                       className="w-full h-full object-cover"
                       alt="Result"
                     />

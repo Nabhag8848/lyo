@@ -1,0 +1,12 @@
+{
+  "buildCommand": "pnpm nx build lyo-website",
+  "outputDirectory": "apps/lyo-website/dist",
+  "installCommand": "pnpm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

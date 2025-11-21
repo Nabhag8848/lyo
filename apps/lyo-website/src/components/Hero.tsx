@@ -269,7 +269,7 @@ export const Hero = () => {
                     {/* Image */}
                     <div className="flex-1 relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200">
                       <img
-                        src="/public/user-model.png"
+                        src="/user-model.png"
                         className="absolute inset-0 w-full h-full object-cover"
                         alt="User Base"
                       />
