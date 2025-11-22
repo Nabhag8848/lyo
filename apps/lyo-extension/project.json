@@ -1,0 +1,128 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "@lyo/lyo-extension",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "dev:chrome": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt -b chrome",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "dev:firefox": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt -b firefox",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "dev:edge": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt -b edge",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "dev:safari": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt -b safari",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt build",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "build:chrome": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt build -b chrome",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "build:firefox": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt build -b firefox",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "build:edge": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt build -b edge",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "build:safari": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt build -b safari",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "zip": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt zip",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "zip:chrome": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt zip -b chrome",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "zip:firefox": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt zip -b firefox",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "zip:edge": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt zip -b edge",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "zip:safari": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt zip -b safari",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/.output"]
+    },
+    "compile": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}
