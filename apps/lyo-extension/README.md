@@ -1,13 +1,23 @@
 # Hiloy - How it looks on you
 
-## Adding shadcn/ui Components
+A browser extension that helps you see how you look on your wardrobe.
 
-This template is pre-configured for shadcn/ui. To add components:
+## Development
 
 ```bash
-# Example: Add a button component
-pnpm dlx shadcn@latest add button
+# Start development server
+pnpm nx dev lyo-extension
 
-# Example: Add a dialog component
-pnpm dlx shadcn@latest add dialog
+# Build for production
+pnpm nx build lyo-extension
+
+# Build for specific browser
+pnpm nx build:chrome lyo-extension
 ```
+
+## Tech Stack
+
+- **WXT** - Browser extension framework
+- **React** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS 4.0** - Styling

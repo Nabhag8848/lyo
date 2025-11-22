@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { MATCHES } from '@/lib/matches';
 import ReactDOM from 'react-dom/client';
 import '@/assets/tailwind.css';
@@ -22,18 +21,15 @@ export default defineContentScript({
         const App = () => {
           return (
             <main className="mr-4">
-              <Button
-                variant="default"
-                className="px-14 py-7 rounded-sm"
+              <button
+                className="px-14 py-7 rounded-sm bg-primary text-primary-foreground font-semibold uppercase flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
                 onClick={async () => {
                   await sendMessage('openSidePanel');
                 }}
               >
                 <Shirt className="size-5" />
-                <span className="font-semibold uppercase flex items-center justify-center">
-                  Try On
-                </span>
-              </Button>
+                <span>Try On</span>
+              </button>
             </main>
           );
         };
