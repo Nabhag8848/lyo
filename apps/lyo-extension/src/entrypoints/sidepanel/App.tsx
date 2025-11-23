@@ -253,7 +253,24 @@ function App() {
               : 'bg-brand-pink text-white hover:bg-rose-600 shadow-lg hover:shadow-rose-200'
           }`}
         >
-          <span>{buttonText}</span>
+          <span className="flex items-center gap-2">
+            {buttonType === 'addToBag' && (
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                />
+              </svg>
+            )}
+            {buttonText}
+          </span>
           {buttonType === 'addToBag' && !isButtonDisabled && (
             <span>{displayPrice}</span>
           )}
