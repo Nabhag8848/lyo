@@ -187,24 +187,17 @@ function App() {
               </div>
               <style>{`
                 .size-scroll::-webkit-scrollbar {
-                  height: 4px;
+                  display: none;
                 }
-                .size-scroll::-webkit-scrollbar-track {
-                  background: transparent;
-                }
-                .size-scroll::-webkit-scrollbar-thumb {
-                  background: #d6d3d1;
-                  border-radius: 2px;
-                }
-                .size-scroll::-webkit-scrollbar-thumb:hover {
-                  background: #a8a29e;
+                .size-scroll {
+                  -ms-overflow-style: none;
+                  scrollbar-width: none;
                 }
               `}</style>
               <div
                 className="flex gap-2 overflow-x-auto pb-2 -mx-2 px-2 size-scroll"
                 style={{
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: '#d6d3d1 transparent',
+                  scrollbarWidth: 'none',
                 }}
               >
                 {sizes.map((sizeOption: SizeOption) => {
