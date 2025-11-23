@@ -6,8 +6,7 @@
 
 @theme inline {
   --font-sans: 'Manrope', sans-serif;
-  --font-display: 'Tenor Sans', sans-serif;
-  --font-myntra: 'Assistant', -apple-system, 'system-ui', 'Segoe UI', Roboto,
+  --font-display: 'Assistant', -apple-system, 'system-ui', 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
 
   --color-brand-pink: #ff3f6c;

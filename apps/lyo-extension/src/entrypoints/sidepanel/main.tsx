@@ -1,8 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.js";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.js';
 
-ReactDOM.createRoot(document.getElementById("root") ?? document.body).render(
+// Send message when side panel opens
+browser.runtime.sendMessage({ type: 'sidePanelOpened' });
+
+// Send message when side panel closes - use multiple events for reliability
+const sendCloseMessage = () => {
+  browser.runtime.sendMessage({ type: 'sidePanelClosed' });
+};
+
+window.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    sendCloseMessage();
+  }
+});
+
+ReactDOM.createRoot(document.getElementById('root') ?? document.body).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
