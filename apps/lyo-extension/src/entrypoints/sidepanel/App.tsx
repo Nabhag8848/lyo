@@ -207,26 +207,31 @@ function App() {
                   scrollbarColor: '#d6d3d1 transparent',
                 }}
               >
-                {sizes.map((sizeOption: SizeOption) => (
-                  <button
-                    key={sizeOption.size}
-                    onClick={() => {
-                      if (sizeOption.available) {
-                        handleSizeClick(sizeOption.size);
-                      }
-                    }}
-                    disabled={!sizeOption.available}
-                    className={`w-12 h-12 rounded-full border text-xs font-bold transition-colors shrink-0 ${
-                      selectedSize === sizeOption.size
-                        ? 'border-brand-pink text-black bg-white'
-                        : sizeOption.available
-                        ? 'border-stone-300 text-stone-500 hover:border-brand-pink hover:text-brand-pink'
-                        : 'border-stone-200 text-stone-300 cursor-not-allowed opacity-50'
-                    }`}
-                  >
-                    {sizeOption.size}
-                  </button>
-                ))}
+                {sizes.map((sizeOption: SizeOption) => {
+                  // Extract just the size part (e.g., "M" from "M Rs. 799")
+                  const displaySize = sizeOption.size.split(/\s+/)[0];
+
+                  return (
+                    <button
+                      key={sizeOption.size}
+                      onClick={() => {
+                        if (sizeOption.available) {
+                          handleSizeClick(sizeOption.size);
+                        }
+                      }}
+                      disabled={!sizeOption.available}
+                      className={`w-12 h-12 rounded-full border text-xs font-bold transition-colors shrink-0 ${
+                        selectedSize === sizeOption.size
+                          ? 'border-brand-pink text-black bg-white'
+                          : sizeOption.available
+                          ? 'border-stone-300 text-stone-500 hover:border-brand-pink hover:text-brand-pink'
+                          : 'border-stone-200 text-stone-300 cursor-not-allowed opacity-50'
+                      }`}
+                    >
+                      {displaySize}
+                    </button>
+                  );
+                })}
               </div>
               {sizes.some((s) => !s.available) && (
                 <p className="text-[9px] text-stone-400 mt-2">
