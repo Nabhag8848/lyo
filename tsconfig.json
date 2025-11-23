@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./apps/lyo-website"
+    },
+    {
+      "path": "./apps/lyo-server"
     }
   ]
 }
