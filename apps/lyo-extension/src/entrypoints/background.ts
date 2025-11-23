@@ -82,6 +82,50 @@ export default defineBackground(() => {
       }
     } else if (message.type === 'sidePanelClosed') {
       await browser.storage.local.set({ sidePanelOpen: false });
+    } else if (message.type === 'clickAddToBag') {
+      try {
+        const tabs = await browser.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        if (tabs[0]?.id) {
+          await browser.tabs.sendMessage(tabs[0].id, {
+            type: 'clickAddToBag',
+            buttonType: message.buttonType,
+          });
+        }
+
+        await browser.storage.local.set({ sidePanelOpen: false });
+        // Send message to side panel to close itself
+        browser.runtime.sendMessage({ type: 'closeSidePanel' }).catch(() => {
+          // Ignore errors if side panel is not open
+        });
+      } catch (error) {
+        console.error('LYO: Error clicking add to bag:', error);
+      }
+    } else if (message.type === 'selectSize') {
+      // Forward size selection to content script
+      try {
+        const tabs = await browser.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        if (tabs[0]?.id) {
+          await browser.tabs.sendMessage(tabs[0].id, {
+            type: 'selectSize',
+            size: message.size,
+          });
+        }
+      } catch (error) {
+        console.error('LYO: Error selecting size:', error);
+      }
+    } else if (message.type === 'updateProductData') {
+      // Update product data when size changes
+      if (message.productData) {
+        await browser.storage.local.set({ productData: message.productData });
+      }
     }
   });
 });

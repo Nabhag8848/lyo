@@ -10,6 +10,13 @@ const sendCloseMessage = () => {
   browser.runtime.sendMessage({ type: 'sidePanelClosed' });
 };
 
+browser.runtime.onMessage.addListener((message) => {
+  if (message.type === 'closeSidePanel') {
+    sendCloseMessage();
+    window.close();
+  }
+});
+
 window.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     sendCloseMessage();

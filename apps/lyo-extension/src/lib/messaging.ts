@@ -1,4 +1,9 @@
-import { defineExtensionMessaging } from "@webext-core/messaging";
+import { defineExtensionMessaging } from '@webext-core/messaging';
+
+export interface SizeOption {
+  size: string;
+  available: boolean;
+}
 
 export interface ProductData {
   brand: string;
@@ -9,6 +14,9 @@ export interface ProductData {
   discountPercent: string;
   description: string;
   imageUrl: string;
+  buttonType: 'addToBag' | 'goToBag';
+  sizes: SizeOption[];
+  selectedSize?: string | null;
 }
 
 interface ProtocolMap {

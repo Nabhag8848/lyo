@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
-import type { ProductData } from '@/lib/messaging';
+import type { ProductData, SizeOption } from '@/lib/messaging';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [productData, setProductData] = useState<ProductData | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   // Load product data from storage when component mounts
   useEffect(() => {
     browser.storage.local.get('productData').then(({ productData: data }) => {
       if (data) {
         setProductData(data);
+        // Don't set selected size from product data - start with no selection
       } else {
         console.warn('LYO Side Panel: No product data found in storage');
       }
@@ -20,7 +22,9 @@ function App() {
       changes: Record<string, { newValue?: unknown; oldValue?: unknown }>
     ) => {
       if (changes.productData && changes.productData.newValue) {
-        setProductData(changes.productData.newValue as ProductData);
+        const newData = changes.productData.newValue as ProductData;
+        setProductData(newData);
+        // Don't update selected size from product data changes
       }
     };
     browser.storage.onChanged.addListener(listener);
@@ -54,6 +58,23 @@ function App() {
   const displayDescription =
     productData?.description ||
     'A modern, form-fitting tube top with sculpted design. Perfect for layering or wearing solo. Made with premium stretch fabric for ultimate comfort and style.';
+  const buttonType = productData?.buttonType || 'addToBag';
+  const buttonText = buttonType === 'goToBag' ? 'Go to Bag' : 'Add to Bag';
+  const sizes = productData?.sizes || [];
+
+  // Determine if button should be disabled
+  // - "Go to Bag" is always enabled (item already in bag)
+  // - "Add to Bag" is only enabled if size is selected (or if no sizes exist)
+  const isButtonDisabled =
+    buttonType === 'addToBag' && sizes.length > 0 && selectedSize === null;
+
+  const handleSizeClick = async (size: string) => {
+    setSelectedSize(size);
+    await browser.runtime.sendMessage({
+      type: 'selectSize',
+      size,
+    });
+  };
 
   return (
     <div className="flex flex-col h-screen bg-white">
@@ -70,9 +91,35 @@ function App() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col p-8 bg-white overflow-hidden">
+      <style>{`
+        .content-scroll::-webkit-scrollbar {
+          width: 3px;
+        }
+        .content-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .content-scroll::-webkit-scrollbar-thumb {
+          background: rgba(214, 211, 209, 0.4);
+          border-radius: 2px;
+          min-height: 20px;
+        }
+        .content-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(214, 211, 209, 0.7);
+        }
+        .content-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(214, 211, 209, 0.4) transparent;
+        }
+      `}</style>
+      <div
+        className="flex-1 flex flex-col p-8 bg-white overflow-y-auto min-h-0 content-scroll"
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(214, 211, 209, 0.4) transparent',
+        }}
+      >
         {/* Image Container */}
-        <div className="flex-1 relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200 min-h-[300px]">
+        <div className="relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200 h-[300px] shrink-0">
           {/* Loading Animation */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">
@@ -129,13 +176,104 @@ function App() {
               </div>
             )}
           </div>
+
+          {/* Size Selector */}
+          {sizes.length > 0 && (
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[9px] font-bold text-stone-400 uppercase tracking-[0.2em]">
+                  Select Size
+                </span>
+              </div>
+              <style>{`
+                .size-scroll::-webkit-scrollbar {
+                  height: 4px;
+                }
+                .size-scroll::-webkit-scrollbar-track {
+                  background: transparent;
+                }
+                .size-scroll::-webkit-scrollbar-thumb {
+                  background: #d6d3d1;
+                  border-radius: 2px;
+                }
+                .size-scroll::-webkit-scrollbar-thumb:hover {
+                  background: #a8a29e;
+                }
+              `}</style>
+              <div
+                className="flex gap-2 overflow-x-auto pb-2 -mx-2 px-2 size-scroll"
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#d6d3d1 transparent',
+                }}
+              >
+                {sizes.map((sizeOption: SizeOption) => (
+                  <button
+                    key={sizeOption.size}
+                    onClick={() => {
+                      if (sizeOption.available) {
+                        handleSizeClick(sizeOption.size);
+                      }
+                    }}
+                    disabled={!sizeOption.available}
+                    className={`w-12 h-12 rounded-full border text-xs font-bold transition-colors shrink-0 ${
+                      selectedSize === sizeOption.size
+                        ? 'border-brand-pink text-black bg-white'
+                        : sizeOption.available
+                        ? 'border-stone-300 text-stone-500 hover:border-brand-pink hover:text-brand-pink'
+                        : 'border-stone-200 text-stone-300 cursor-not-allowed opacity-50'
+                    }`}
+                  >
+                    {sizeOption.size}
+                  </button>
+                ))}
+              </div>
+              {sizes.some((s) => !s.available) && (
+                <p className="text-[9px] text-stone-400 mt-2">
+                  * Some sizes may not be available
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="p-6 border-t border-stone-100 bg-white shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <button className="w-full py-4 bg-brand-pink text-white text-xs font-bold tracking-[0.25em] uppercase hover:bg-rose-600 transition-all shadow-lg hover:shadow-rose-200 flex justify-between px-8 rounded">
-          <span>Add to Bag</span>
-          <span>{displayPrice}</span>
+        <button
+          onClick={async () => {
+            if (!isButtonDisabled) {
+              await browser.runtime.sendMessage({
+                type: 'clickAddToBag',
+                buttonType,
+              });
+            }
+          }}
+          disabled={isButtonDisabled}
+          className={`w-full py-4 text-xs font-bold tracking-[0.25em] uppercase transition-all flex justify-between px-8 rounded ${
+            isButtonDisabled
+              ? 'bg-stone-300 text-stone-500 cursor-not-allowed shadow-none'
+              : 'bg-brand-pink text-white hover:bg-rose-600 shadow-lg hover:shadow-rose-200'
+          }`}
+        >
+          <span>{buttonText}</span>
+          {buttonType === 'addToBag' && !isButtonDisabled && (
+            <span>{displayPrice}</span>
+          )}
+          {buttonType === 'goToBag' && (
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          )}
         </button>
       </div>
     </div>
