@@ -112,14 +112,14 @@ function App() {
         }
       `}</style>
       <div
-        className="flex-1 flex flex-col p-8 bg-white overflow-y-auto min-h-0 content-scroll"
+        className="flex-1 flex flex-col p-8 pb-0 bg-white overflow-y-auto min-h-0 content-scroll"
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: 'rgba(214, 211, 209, 0.4) transparent',
         }}
       >
         {/* Image Container */}
-        <div className="relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200 h-[300px] shrink-0">
+        <div className="relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200 h-[370px] shrink-0">
           {/* Loading Animation */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">
