@@ -20,7 +20,6 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   private async createConnection(): Promise<void> {
     const redisConfig = createRedisConfig(this.configService);
     this.redis = new Redis(redisConfig);
-    await this.redis.connect();
   }
 
   getClient(): Redis {
