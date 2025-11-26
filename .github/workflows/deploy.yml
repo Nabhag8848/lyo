@@ -37,6 +37,7 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           source: 'apps/lyo-server/dist/*'
           target: '/home/bitnami/app'
+          strip_components: 3
 
       - name: Start or Reload PM2
         uses: appleboy/ssh-action@v1.1.0
@@ -45,7 +46,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
-            cd home/bitnami/app
+            cd /home/bitnami/app
             pnpm install --production || true
             pm2 start main.js --name lyo-server -i max || pm2 reload lyo-server
             pm2 save
