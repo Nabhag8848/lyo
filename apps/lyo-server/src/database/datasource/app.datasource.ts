@@ -19,7 +19,7 @@ export const createTypeOrmOptions = (): TypeOrmModuleOptions => {
     port: parseInt(process.env.POSTGRES_PORT || '5432'),
     username: process.env.POSTGRES_USER || 'user',
     password: process.env.POSTGRES_PASSWORD || 'password',
-    database: process.env.POSTGRES_NAME || 'postgres',
+    database: process.env.POSTGRES_NAME || undefined,
 
     entities: [join(databaseRoot, 'entities', '**', '*.entity.{ts,js}')],
     migrations: [join(databaseRoot, 'migrations', '**', '*.{ts,js}')],
