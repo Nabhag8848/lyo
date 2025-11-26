@@ -48,5 +48,5 @@ jobs:
           script: |
             cd /home/bitnami/app
             pnpm install --production || true
-            pm2 start main.js --name lyo-server -i max || pm2 reload lyo-server
+            pm2 start main.js --name lyo-server || pm2 reload lyo-server
             pm2 save
