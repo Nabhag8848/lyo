@@ -25,8 +25,12 @@ export const createTypeOrmOptions = (): TypeOrmModuleOptions => {
     migrations: [join(databaseRoot, 'migrations', '**', '*.{ts,js}')],
     migrationsTableName: '__migrations__',
     migrationsRun: false,
+    ssl: true,
     extra: {
       options: '-c search_path=public,core',
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     synchronize: false,
   };
