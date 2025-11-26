@@ -21,8 +21,8 @@ export const createTypeOrmOptions = (): TypeOrmModuleOptions => {
     password: process.env.POSTGRES_PASSWORD || 'password',
     database: process.env.POSTGRES_NAME || 'postgres',
 
-    entities: [join(databaseRoot, 'entities', '**', '*.entity.{ts,js}')],
-    migrations: [join(databaseRoot, 'migrations', '**', '*.{ts,js}')],
+    entities: [join(databaseRoot, 'entities', '**', '*.entity.{js}')],
+    migrations: [join(databaseRoot, 'migrations', '**', '*.{js}')],
     migrationsTableName: '__migrations__',
     migrationsRun: false,
     ssl: true,
