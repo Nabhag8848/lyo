@@ -1,0 +1,51 @@
+name: Deploy to Lightsail
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.23.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Build Server
+        run: npx nx build lyo-server
+
+      - name: Upload build to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          source: 'apps/lyo-server/dist/*'
+          target: '/home/bitnami/app'
+
+      - name: Start or Reload PM2
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            cd home/bitnami/app
+            pnpm install --production || true
+            pm2 start main.js --name lyo-server -i max || pm2 reload lyo-server
+            pm2 save
