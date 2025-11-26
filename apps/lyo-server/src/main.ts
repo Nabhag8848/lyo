@@ -12,9 +12,10 @@ async function bootstrap() {
   const globalPrefix = 'v1';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+  const hostname = process.env.HOST || '0.0.0.0';
+  await app.listen(port, hostname);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://${hostname}:${port}/${globalPrefix}`
   );
 }
 
