@@ -1,15 +1,10 @@
 import { Column, Entity, Index } from 'typeorm';
 import { AbstractBaseEntity } from '../base.entity';
-
-export enum AuthProvider {
-  GOOGLE = 'google',
-  LOCAL = 'local',
-}
+import { AuthProvider } from '../../types';
 
 @Entity({ name: 'user', schema: 'core' })
 export class UserEntity extends AbstractBaseEntity {
-  @Column({ type: 'varchar', length: 255 })
-  @Index()
+  @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })

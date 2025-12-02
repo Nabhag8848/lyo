@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "module": "nodenext",
-    "types": ["node"],
+    "typeRoots": ["./src/@types", "../../node_modules/@types"],
+    "types": ["node", "express"],
     "rootDir": "src",
     "moduleResolution": "nodenext",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",

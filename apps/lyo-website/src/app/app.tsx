@@ -1,17 +1,38 @@
-import { Navbar } from '../components/Navbar';
+import { Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Navbar, NavbarSkeleton } from '../components/Navbar';
 import { Hero } from '../components/Hero';
 import { HowItWorks } from '../components/HowItWorks';
 import { Pricing } from '../components/Pricing';
 import { Footer } from '../components/Footer';
+import { Dashboard, DashboardSkeleton } from '../pages';
+
+const Home = () => (
+  <>
+    <Suspense fallback={<NavbarSkeleton />}>
+      <Navbar />
+    </Suspense>
+    <Hero />
+    <HowItWorks />
+    <Pricing />
+    <Footer />
+  </>
+);
 
 const App = () => {
   return (
     <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <HowItWorks />
-      <Pricing />
-      <Footer />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Suspense fallback={<DashboardSkeleton />}>
+              <Dashboard />
+            </Suspense>
+          }
+        />
+      </Routes>
     </div>
   );
 };
