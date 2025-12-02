@@ -37,9 +37,8 @@ export class AuthController {
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? ('strict' as const) : ('lax' as const),
+      sameSite: isProduction ? ('none' as const) : ('lax' as const),
       path: '/',
-      domain: isProduction ? undefined : 'localhost',
     };
 
     res.cookie('access_token', authResponse.accessToken, {
@@ -58,10 +57,9 @@ export class AuthController {
     const clearCookieOptions = {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'strict' as const,
+      sameSite: isProduction ? ('none' as const) : ('lax' as const),
       maxAge: 0,
       path: '/',
-      domain: isProduction ? undefined : 'localhost',
     };
 
     res.cookie('access_token', '', clearCookieOptions);
