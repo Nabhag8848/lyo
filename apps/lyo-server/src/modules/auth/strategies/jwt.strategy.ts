@@ -4,13 +4,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthUserDto } from '@/modules/user/dtos';
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  iat?: number;
-  exp?: number;
-}
-
 const cookieExtractor = (req: {
   cookies?: { access_token?: string };
 }): string | null => {
@@ -30,7 +23,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<AuthUserDto> {
+  async validate(payload: {
+    sub: string;
+    email: string;
+  }): Promise<AuthUserDto> {
     if (!payload.sub || !payload.email) {
       throw new UnauthorizedException('Invalid token payload');
     }
