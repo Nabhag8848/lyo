@@ -9,14 +9,19 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
+import { getAllowedOrigins } from './utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  const frontUrl = configService.get<string>('FRONT_URL') ?? 'http://localhost:4200';
+  const isProduction = configService.get<string>('NODE_ENV') === 'production';
+  const allowedOrigins = getAllowedOrigins(frontUrl, isProduction);
+
   // Enable CORS for frontend
   app.enableCors({
-    origin: configService.get<string>('FRONT_URL') || 'http://localhost:4200',
+    origin: allowedOrigins,
     credentials: true,
   });
 
