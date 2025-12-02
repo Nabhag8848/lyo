@@ -26,7 +26,8 @@ export class AuthService {
   }
 
   async generateTokens(userId: string, email: string): Promise<TokenPayload> {
-    const payload = { sub: userId, email };
+    const jti = crypto.randomUUID();
+    const payload = { sub: userId, email, jti };
 
     const accessExpiresIn = parseExpiration(
       this.configService.get<string>('JWT_ACCESS_EXPIRATION') || '15m'
