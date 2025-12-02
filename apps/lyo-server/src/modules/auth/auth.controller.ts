@@ -1,6 +1,6 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards';
 import { GoogleUser } from './decorators';
@@ -65,7 +65,6 @@ export class AuthController {
     };
 
     res.cookie('access_token', '', clearCookieOptions);
-    res.cookie('refresh_token', '', clearCookieOptions);
 
     return res.json({ message: 'Logged out successfully' });
   }

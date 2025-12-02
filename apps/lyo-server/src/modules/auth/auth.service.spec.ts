@@ -72,9 +72,7 @@ describe('AuthService', () => {
     it('should upsert user and generate tokens', async () => {
       userService.upsertGoogleUser.mockResolvedValue(mockUser);
       configService.get.mockReturnValue('15m');
-      jwtService.signAsync
-        .mockResolvedValueOnce('access-token')
-        .mockResolvedValueOnce('refresh-token');
+      jwtService.signAsync.mockResolvedValueOnce('access-token');
 
       const result = await service.validateGoogleUser(mockGoogleUser);
 
@@ -87,28 +85,20 @@ describe('AuthService', () => {
   });
 
   describe('generateTokens', () => {
-    it('should generate access and refresh tokens with correct expiration', async () => {
-      configService.get
-        .mockReturnValueOnce('15m') // JWT_ACCESS_EXPIRATION
-        .mockReturnValueOnce('7d'); // JWT_REFRESH_EXPIRATION
+    it('should generate access token with correct expiration', async () => {
+      configService.get.mockReturnValueOnce('15m'); // JWT_ACCESS_EXPIRATION
 
-      jwtService.signAsync
-        .mockResolvedValueOnce('access-token')
-        .mockResolvedValueOnce('refresh-token');
+      jwtService.signAsync.mockResolvedValueOnce('access-token');
 
       const result = await service.generateTokens(
         'user-123',
         'test@example.com'
       );
 
-      expect(jwtService.signAsync).toHaveBeenCalledTimes(2);
+      expect(jwtService.signAsync).toHaveBeenCalledTimes(1);
       expect(jwtService.signAsync).toHaveBeenCalledWith(
         { sub: 'user-123', email: 'test@example.com' },
         { expiresIn: 900 }
-      );
-      expect(jwtService.signAsync).toHaveBeenCalledWith(
-        { sub: 'user-123', email: 'test@example.com' },
-        { expiresIn: 604800 } // 7 days in seconds
       );
       expect(result).toEqual({
         accessToken: 'access-token',
@@ -118,12 +108,11 @@ describe('AuthService', () => {
 
     it('should use default expiration if config is missing', async () => {
       configService.get.mockReturnValue(undefined);
-      jwtService.signAsync
-        .mockResolvedValueOnce('access-token')
-        .mockResolvedValueOnce('refresh-token');
+      jwtService.signAsync.mockResolvedValueOnce('access-token');
 
       await service.generateTokens('user-123', 'test@example.com');
 
+      expect(jwtService.signAsync).toHaveBeenCalledTimes(1);
       expect(jwtService.signAsync).toHaveBeenCalledWith(
         expect.any(Object),
         { expiresIn: 900 } // default 15m
