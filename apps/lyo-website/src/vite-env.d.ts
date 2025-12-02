@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly SECRET_KEY: string;
+  readonly SERVER_URL: string;
 }
 
 interface ImportMeta {
