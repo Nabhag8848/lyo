@@ -32,18 +32,11 @@ export class AuthController {
     const isProduction =
       this.configService.get<string>('NODE_ENV') === 'production';
 
-    // For cross-origin cookies in development, use sameSite: 'none' with secure
-    // In production, use strict sameSite
-    const cookieOptions = {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? ('none' as const) : ('lax' as const),
-      path: '/',
-    };
+    const cookieOptions = this.getCookieOptions(frontendUrl, isProduction);
 
     res.cookie('access_token', authResponse.accessToken, {
       ...cookieOptions,
-      maxAge: authResponse.expiresIn * 1000,
+      maxAge: authResponse.expiresIn * 1000, // Convert seconds to milliseconds
     });
 
     return res.redirect(`${frontendUrl}/dashboard`);
@@ -51,19 +44,66 @@ export class AuthController {
 
   @Get('logout')
   async logout(@Res() res: Response) {
+    const frontendUrl =
+      this.configService.get<string>('FRONT_URL') || 'http://localhost:4200';
     const isProduction =
       this.configService.get<string>('NODE_ENV') === 'production';
 
+    // Use same cookie options as login to ensure proper deletion
+    // Must match exact same domain, path, and sameSite to delete cookie
     const clearCookieOptions = {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? ('none' as const) : ('lax' as const),
-      maxAge: 0,
-      path: '/',
+      ...this.getCookieOptions(frontendUrl, isProduction),
+      maxAge: 0, // Delete cookie immediately
     };
 
     res.cookie('access_token', '', clearCookieOptions);
 
     return res.json({ message: 'Logged out successfully' });
+  }
+
+  /**
+   * Extract root domain for subdomain cookie sharing
+   * Returns domain with leading dot (e.g., '.example.com') for subdomain sharing
+   * Returns undefined for localhost, IP addresses, or in development
+   */
+  private getCookieDomain(
+    frontendUrl: string,
+    isProduction: boolean
+  ): string | undefined {
+    if (!isProduction) return undefined; // localhost doesn't support domain option
+
+    try {
+      const url = new URL(frontendUrl);
+      const hostname = url.hostname;
+
+      // For IP addresses or localhost, don't set domain
+      if (hostname === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+        return undefined;
+      }
+
+      const parts = hostname.split('.');
+      if (parts.length >= 2) {
+        // Return root domain with leading dot for subdomain sharing
+        return `.${parts.slice(-2).join('.')}`;
+      }
+
+      return undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  /**
+   * Get cookie options for authentication tokens
+   * Configured for cross-domain and subdomain support
+   */
+  private getCookieOptions(frontendUrl: string, isProduction: boolean) {
+    return {
+      httpOnly: true, // Prevent JS access (XSS protection)
+      secure: isProduction, // HTTPS only in production (required for sameSite: 'none')
+      sameSite: isProduction ? ('none' as const) : ('lax' as const), // Cross-domain in prod, same-domain in dev
+      domain: this.getCookieDomain(frontendUrl, isProduction), // Share across subdomains (e.g., .example.com)
+      path: '/', // Available on all paths
+    };
   }
 }
