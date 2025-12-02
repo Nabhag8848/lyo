@@ -63,8 +63,8 @@ export class AuthController {
 
   /**
    * Extract root domain for subdomain cookie sharing
-   * Returns domain with leading dot (e.g., '.example.com') for subdomain sharing
-   * Returns undefined for localhost, IP addresses, or in development
+   * Returns domain with leading dot (e.g., '.example.com') for custom domains only
+   * Returns undefined for localhost, IP addresses, third-party hosting (e.g., vercel.app), or in development
    */
   private getCookieDomain(
     frontendUrl: string,
@@ -81,7 +81,23 @@ export class AuthController {
         return undefined;
       }
 
+      // Don't set domain for third-party hosting platforms (e.g., vercel.app, netlify.app, github.io)
+      // This ensures cookies only work for the specific subdomain, not all subdomains of the platform
+      const thirdPartyHostingPatterns = [
+        /\.vercel\.app$/,
+        /\.netlify\.app$/,
+        /\.github\.io$/,
+        /\.pages\.dev$/,
+        /\.cloudflare\.pages\.dev$/,
+      ];
+
+      if (thirdPartyHostingPatterns.some((pattern) => pattern.test(hostname))) {
+        return undefined;
+      }
+
       const parts = hostname.split('.');
+      // Only apply root domain logic for custom domains with at least 2 parts
+      // This allows subdomain sharing for your own domain (e.g., .lyo-ai.com)
       if (parts.length >= 2) {
         // Return root domain with leading dot for subdomain sharing
         return `.${parts.slice(-2).join('.')}`;
