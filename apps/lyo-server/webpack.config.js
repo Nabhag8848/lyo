@@ -15,11 +15,15 @@ module.exports = {
     },
   },
   externals: (context, request, callback) => {
+
+    // Bundle tslib (TypeScript helpers) - it's small and needed
+    if (request === 'tslib') {
+      return callback();
+    }
     // Keep node_modules external
     if (!request.startsWith('.') && !request.startsWith('/')) {
       return callback(null, `commonjs ${request}`);
     }
-    callback();
   },
   plugins: [
     new NxAppWebpackPlugin({
