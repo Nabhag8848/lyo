@@ -58,7 +58,7 @@ export class AuthController {
 
     res.cookie('access_token', '', clearCookieOptions);
 
-    return res.json({ message: 'Logged out successfully' });
+    return res.redirect(frontendUrl);
   }
 
   /**

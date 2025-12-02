@@ -1,12 +1,11 @@
 const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000/v1';
 
 export interface User {
-  id: string;
   email: string;
   firstName?: string;
   lastName?: string;
   picture?: string;
-  createdAt?: string;
+  createdAt: string;
 }
 
 // Cache for the user promise to avoid refetching
@@ -35,4 +34,3 @@ export const logout = async () => {
   await fetch(`${API_URL}/auth/logout`, { credentials: 'include' });
   invalidateUser();
 };
-

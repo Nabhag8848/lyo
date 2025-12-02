@@ -93,12 +93,10 @@ export const Dashboard = () => {
                     Member Since
                   </span>
                   <span className="text-stone-700 font-medium">
-                    {user.createdAt
-                      ? new Date(user.createdAt).toLocaleDateString('en-US', {
-                          month: 'long',
-                          year: 'numeric',
-                        })
-                      : 'N/A'}
+                    {new Date(user.createdAt).toLocaleDateString('en-US', {
+                      month: 'long',
+                      year: 'numeric',
+                    })}
                   </span>
                 </div>
                 <div>
@@ -122,7 +120,9 @@ export const Dashboard = () => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-stone-900 mb-1">Try On Clothes</h3>
+                  <h3 className="font-bold text-stone-900 mb-1">
+                    Try On Clothes
+                  </h3>
                   <p className="text-sm text-stone-500">
                     Browse and virtually try on outfits
                   </p>
@@ -141,7 +141,9 @@ export const Dashboard = () => {
                   <h3 className="font-bold text-stone-900 group-hover:text-red-600 mb-1">
                     Sign Out
                   </h3>
-                  <p className="text-sm text-stone-500">Sign out of your account</p>
+                  <p className="text-sm text-stone-500">
+                    Sign out of your account
+                  </p>
                 </div>
                 <span className="text-stone-300 group-hover:text-red-400 transition-all text-xl">
                   ↗
