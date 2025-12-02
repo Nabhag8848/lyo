@@ -81,7 +81,6 @@ describe('AuthService', () => {
       expect(userService.upsertGoogleUser).toHaveBeenCalledWith(mockGoogleUser);
       expect(result).toEqual({
         accessToken: 'access-token',
-        refreshToken: 'refresh-token',
         expiresIn: 900, // 15 minutes in seconds
       });
     });
@@ -113,7 +112,6 @@ describe('AuthService', () => {
       );
       expect(result).toEqual({
         accessToken: 'access-token',
-        refreshToken: 'refresh-token',
         expiresIn: 900,
       });
     });
@@ -129,47 +127,6 @@ describe('AuthService', () => {
       expect(jwtService.signAsync).toHaveBeenCalledWith(
         expect.any(Object),
         { expiresIn: 900 } // default 15m
-      );
-    });
-  });
-
-  describe('refreshTokens', () => {
-    it('should generate new tokens from valid refresh token', async () => {
-      const validPayload = { sub: 'user-123', email: 'test@example.com' };
-      jwtService.verifyAsync.mockResolvedValue(validPayload);
-      configService.get.mockReturnValueOnce('15m').mockReturnValueOnce('7d');
-      jwtService.signAsync
-        .mockResolvedValueOnce('new-access-token')
-        .mockResolvedValueOnce('new-refresh-token');
-
-      const result = await service.refreshTokens('valid-refresh-token');
-
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(
-        'valid-refresh-token'
-      );
-      expect(result).toEqual({
-        accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
-        expiresIn: 900,
-      });
-    });
-
-    it('should throw UnauthorizedException for invalid refresh token', async () => {
-      jwtService.verifyAsync.mockRejectedValue(new Error('Invalid token'));
-
-      await expect(service.refreshTokens('invalid-token')).rejects.toThrow(
-        UnauthorizedException
-      );
-      await expect(service.refreshTokens('invalid-token')).rejects.toThrow(
-        'Invalid or expired refresh token'
-      );
-    });
-
-    it('should throw UnauthorizedException for expired refresh token', async () => {
-      jwtService.verifyAsync.mockRejectedValue(new Error('Token expired'));
-
-      await expect(service.refreshTokens('expired-token')).rejects.toThrow(
-        UnauthorizedException
       );
     });
   });

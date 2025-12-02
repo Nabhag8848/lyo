@@ -47,45 +47,7 @@ export class AuthController {
       maxAge: authResponse.expiresIn * 1000,
     });
 
-    res.cookie('refresh_token', authResponse.refreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     return res.redirect(`${frontendUrl}/dashboard`);
-  }
-
-  @Get('refresh')
-  async refreshToken(@Req() req: Request, @Res() res: Response) {
-    const refreshToken = req.cookies.refresh_token;
-
-    if (!refreshToken) {
-      return res.status(401).json({ error: 'Refresh token required' });
-    }
-
-    const tokens = await this.authService.refreshTokens(refreshToken);
-    const isProduction =
-      this.configService.get<string>('NODE_ENV') === 'production';
-
-    const cookieOptions = {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? ('strict' as const) : ('lax' as const),
-      path: '/',
-      domain: isProduction ? undefined : 'localhost',
-    };
-
-    res.cookie('access_token', tokens.accessToken, {
-      ...cookieOptions,
-      maxAge: tokens.expiresIn * 1000,
-    });
-
-    res.cookie('refresh_token', tokens.refreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    return res.json({ message: 'Token refreshed successfully' });
   }
 
   @Get('logout')
