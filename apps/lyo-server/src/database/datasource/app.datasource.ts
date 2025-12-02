@@ -6,13 +6,7 @@ import { config } from 'dotenv';
 config();
 
 export const createTypeOrmOptions = (): TypeOrmModuleOptions => {
-  const databaseRoot = join(
-    process.cwd(),
-    'apps',
-    'lyo-server',
-    'src',
-    'database'
-  );
+  const databaseRoot = join(process.cwd(), 'src', 'database');
   return {
     type: 'postgres',
     host: process.env.POSTGRES_HOST || 'localhost',
@@ -21,16 +15,19 @@ export const createTypeOrmOptions = (): TypeOrmModuleOptions => {
     password: process.env.POSTGRES_PASSWORD || 'password',
     database: process.env.POSTGRES_NAME || 'postgres',
 
-    entities: [join(databaseRoot, 'entities', '**', '*.entity.{js}')],
-    migrations: [join(databaseRoot, 'migrations', '**', '*.{js}')],
+    entities: [join(databaseRoot, 'entities', '**', '*.entity.{ts,js}')],
+    migrations: [join(databaseRoot, 'migrations', '**', '*.{ts,js}')],
     migrationsTableName: '__migrations__',
     migrationsRun: false,
-    ssl: true,
+    ssl: process.env.NODE_ENV === 'production' ? true : false,
     extra: {
       options: '-c search_path=public,core',
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ssl:
+        process.env.NODE_ENV === 'production'
+          ? {
+              rejectUnauthorized: false,
+            }
+          : undefined,
     },
     synchronize: false,
   };
