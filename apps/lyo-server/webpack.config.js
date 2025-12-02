@@ -14,6 +14,13 @@ module.exports = {
       '@': join(__dirname, 'src'),
     },
   },
+  externals: (context, request, callback) => {
+    // Keep node_modules external
+    if (!request.startsWith('.') && !request.startsWith('/')) {
+      return callback(null, `commonjs ${request}`);
+    }
+    callback();
+  },
   plugins: [
     new NxAppWebpackPlugin({
       target: 'node',
