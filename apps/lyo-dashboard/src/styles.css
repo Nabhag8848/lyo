@@ -1,0 +1,322 @@
+@import 'tailwindcss';
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+  --font-sans: 'Manrope', sans-serif;
+  --font-display: 'Tenor Sans', sans-serif;
+
+  --color-brand-pink: #ff3f6c;
+
+  --animate-fade-in: fadeIn 1s ease-out forwards;
+  --animate-slide-up: slideUp 0.8s ease-out forwards;
+  --animate-s1-cursor: s1Cursor 8s ease-in-out infinite;
+  --animate-s1-prompt: s1Prompt 8s ease-in-out infinite;
+  --animate-s1-loader: s1Loader 8s ease-in-out infinite;
+  --animate-s1-photo: s1Photo 8s ease-in-out infinite;
+  --animate-s1-scan: s1Scan 8s ease-in-out infinite;
+  --animate-step2-cursor: clickBtn 4s ease-in-out infinite;
+  --animate-step2-btn: btnPress 4s ease-in-out infinite;
+  --animate-step3-loader: s3Loader 6s ease-in-out infinite;
+  --animate-step3-image: s3Image 6s ease-in-out infinite;
+  --animate-step3-badge: s3Badge 6s ease-in-out infinite;
+}
+
+/* Utility Styles */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Hero Interactive Elements */
+@layer components {
+  .color-layer {
+    mix-blend-mode: multiply;
+    transition: background-color 0.3s ease;
+  }
+  .panel-transition {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .panel-closed {
+    transform: translateX(100%);
+  }
+  .panel-open {
+    transform: translateX(0);
+  }
+  .sidepanel-loader {
+    animation: sidepanelLoader 1.2s ease-out forwards;
+  }
+  .sidepanel-image {
+    animation: sidepanelImage 1.2s ease-out forwards;
+  }
+}
+
+@keyframes sidepanelLoader {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+  }
+}
+
+@keyframes sidepanelImage {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Animation Classes - Step 1 */
+.s1-cursor {
+  animation: s1Cursor 8s ease-in-out infinite;
+}
+
+.s1-prompt {
+  animation: s1Prompt 8s ease-in-out infinite;
+}
+
+.s1-loader {
+  animation: s1Loader 8s ease-in-out infinite;
+}
+
+.s1-photo {
+  animation: s1Photo 8s ease-in-out infinite;
+}
+
+.s1-scan {
+  animation: s1Scan 8s ease-in-out infinite;
+}
+
+/* Animation Classes - Step 2 */
+.step2-cursor {
+  animation: clickBtn 4s ease-in-out infinite;
+}
+
+.step2-btn {
+  animation: btnPress 4s ease-in-out infinite;
+}
+
+/* Animation Classes - Step 3 */
+.step3-loader {
+  animation: s3Loader 6s ease-in-out infinite;
+}
+
+.step3-image {
+  animation: s3Image 6s ease-in-out infinite;
+}
+
+.step3-badge {
+  animation: s3Badge 6s ease-in-out infinite;
+}
+
+/* Keyframes - Step 1 */
+@keyframes s1Cursor {
+  0% {
+    opacity: 0;
+    transform: translate(30px, 30px);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: scale(0.9);
+  }
+  20% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes s1Prompt {
+  0%,
+  15% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  20%,
+  90% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes s1Loader {
+  0%,
+  20% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  25%,
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  45%,
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes s1Photo {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  45%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes s1Scan {
+  0%,
+  50% {
+    top: 0%;
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  85% {
+    top: 100%;
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+    top: 100%;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Keyframes - Step 2 */
+@keyframes clickBtn {
+  0% {
+    transform: translate(30px, 30px);
+  }
+  35% {
+    transform: translate(0, 0);
+  }
+  45% {
+    transform: scale(0.9) translate(0, 0);
+  }
+  55% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: translate(30px, 30px);
+  }
+}
+
+@keyframes btnPress {
+  0%,
+  35% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.95);
+  }
+  55% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Keyframes - Step 3 */
+@keyframes s3Loader {
+  0%,
+  25% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes s3Image {
+  0%,
+  25% {
+    opacity: 0;
+  }
+  30%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes s3Badge {
+  0%,
+  35% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  40%,
+  85% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Global Styles */
+body {
+  @apply font-sans text-stone-900 bg-white antialiased;
+}
+
+::selection {
+  @apply bg-brand-pink text-white;
+}

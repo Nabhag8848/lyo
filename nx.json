@@ -65,6 +65,13 @@
       "options": {
         "targetName": "test"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "vitest:test",
+        "ciTargetName": "test-ci"
+      }
     }
   ],
   "targetDefaults": {
