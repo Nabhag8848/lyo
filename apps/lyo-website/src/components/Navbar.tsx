@@ -42,15 +42,7 @@ export const Navbar = () => {
         {user ? (
           <div className="flex items-center gap-4">
             <a
-              href={
-                import.meta.env.VITE_APP_URL ||
-                (import.meta.env.DEV
-                  ? 'http://localhost:3001'
-                  : `https://app.${window.location.hostname.replace(
-                      /^www\./,
-                      ''
-                    )}`)
-              }
+              href={import.meta.env.VITE_APP_URL}
               className="flex items-center gap-3 hover:bg-stone-50 px-3 py-2 rounded-lg transition-colors"
             >
               {user.picture ? (
