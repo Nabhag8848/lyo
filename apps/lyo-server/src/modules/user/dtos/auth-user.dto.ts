@@ -7,4 +7,7 @@ export class AuthUserDto {
 
   @IsEmail()
   email: string;
+
+  @IsString()
+  googleAccessToken: string;
 }

@@ -22,12 +22,21 @@ export class AuthService {
     googleUser: GoogleOAuthUserDto
   ): Promise<TokenPayload> {
     const user = await this.userService.upsertGoogleUser(googleUser);
-    return this.generateTokens(user.id, user.email);
+    return this.generateTokens(user.id, user.email, googleUser.accessToken);
   }
 
-  async generateTokens(userId: string, email: string): Promise<TokenPayload> {
+  async generateTokens(
+    userId: string,
+    email: string,
+    googleAccessToken: string
+  ): Promise<TokenPayload> {
     const jti = crypto.randomUUID();
-    const payload = { sub: userId, email, jti };
+    const payload: {
+      sub: string;
+      email: string;
+      jti: string;
+      googleAccessToken: string;
+    } = { sub: userId, email, jti, googleAccessToken };
 
     const accessExpiresIn = parseExpiration(
       this.configService.get<string>('JWT_ACCESS_EXPIRATION') || '15m'
@@ -38,5 +47,18 @@ export class AuthService {
     ]);
 
     return { accessToken, expiresIn: accessExpiresIn };
+  }
+
+  /**
+   * Revoke Google OAuth token
+   * This is a fire-and-forget operation that doesn't block the caller
+   */
+  async revokeGoogleToken(googleAccessToken: string): Promise<void> {
+    await fetch(
+      `https://oauth2.googleapis.com/revoke?token=${googleAccessToken}`,
+      {
+        method: 'POST',
+      }
+    );
   }
 }

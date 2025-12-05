@@ -28,4 +28,7 @@ export class UserEntity extends AbstractBaseEntity {
 
   @Column({ type: 'timestamp', nullable: true })
   lastLoginAt: Date;
+
+  @Column({ type: 'varchar', length: 512, nullable: true })
+  googleAccessToken: string | null;
 }

@@ -16,6 +16,13 @@ export class UserService {
     return this.userRepository.findOneOrFail({ where: { id } });
   }
 
+  async clearGoogleToken(userId: string): Promise<void> {
+    await this.userRepository.update(
+      { id: userId },
+      { googleAccessToken: null }
+    );
+  }
+
   async upsertGoogleUser(dto: GoogleOAuthUserDto): Promise<UserEntity> {
     await this.userRepository.upsert(
       {
@@ -26,6 +33,7 @@ export class UserService {
         providerId: dto.googleId,
         provider: AuthProvider.GOOGLE,
         lastLoginAt: new Date(),
+        googleAccessToken: dto.accessToken,
       },
       ['email']
     );

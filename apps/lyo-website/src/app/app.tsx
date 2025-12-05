@@ -5,7 +5,6 @@ import { Hero } from '../components/Hero';
 import { HowItWorks } from '../components/HowItWorks';
 import { Pricing } from '../components/Pricing';
 import { Footer } from '../components/Footer';
-import { Dashboard, DashboardSkeleton } from '../pages';
 
 const Home = () => (
   <>
@@ -24,14 +23,6 @@ const App = () => {
     <div className="min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/dashboard"
-          element={
-            <Suspense fallback={<DashboardSkeleton />}>
-              <Dashboard />
-            </Suspense>
-          }
-        />
       </Routes>
     </div>
   );
