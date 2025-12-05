@@ -6,6 +6,11 @@ import path from 'path';
 export default defineConfig({
   srcDir: 'src',
   outDir: 'dist',
+  dev: {
+    server: {
+      port: 5000,
+    },
+  },
   modules: ['@wxt-dev/module-react'],
   alias: {
     '@': path.resolve(__dirname, './src'),

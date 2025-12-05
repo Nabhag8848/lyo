@@ -23,14 +23,16 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     sub: string;
     email: string;
     jti: string;
+    googleAccessToken: string;
   }): Promise<AuthUserDto> {
-    if (!payload.sub || !payload.email) {
+    if (!payload.sub || !payload.email || !payload.googleAccessToken) {
       throw new UnauthorizedException('Invalid token payload');
     }
 
     return {
       id: payload.sub,
       email: payload.email,
+      googleAccessToken: payload.googleAccessToken,
     };
   }
 }

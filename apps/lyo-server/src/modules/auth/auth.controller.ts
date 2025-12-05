@@ -1,16 +1,19 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Req, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
-import { GoogleAuthGuard } from './guards';
-import { GoogleUser } from './decorators';
+import { GoogleAuthGuard, JwtAuthGuard } from './guards';
+import { CurrentUser, GoogleUser } from './decorators';
 import { GoogleOAuthUserDto } from './dtos';
+import { UserService } from '@/modules/user/user.service';
+import { AuthUserDto } from '@/modules/user/dtos';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private userService: UserService
   ) {}
 
   @Get('google')
@@ -29,9 +32,12 @@ export class AuthController {
 
     const frontendUrl =
       this.configService.get<string>('FRONT_URL') || 'http://localhost:4200';
+    const appUrl =
+      this.configService.get<string>('APP_URL') || 'http://localhost:3001';
     const isProduction =
       this.configService.get<string>('NODE_ENV') === 'production';
 
+    // Use frontendUrl for cookie domain (to share across subdomains)
     const cookieOptions = this.getCookieOptions(frontendUrl, isProduction);
 
     res.cookie('access_token', authResponse.accessToken, {
@@ -39,18 +45,26 @@ export class AuthController {
       maxAge: authResponse.expiresIn * 1000, // Convert seconds to milliseconds
     });
 
-    return res.redirect(`${frontendUrl}/dashboard`);
+    // Redirect to app subdomain (app.<domain>)
+    return res.redirect(appUrl);
   }
 
   @Get('logout')
-  async logout(@Res() res: Response) {
+  @UseGuards(JwtAuthGuard)
+  async logout(@Res() res: Response, @CurrentUser() authUser: AuthUserDto) {
     const frontendUrl =
       this.configService.get<string>('FRONT_URL') || 'http://localhost:4200';
     const isProduction =
       this.configService.get<string>('NODE_ENV') === 'production';
 
+    const { googleAccessToken, id: userId } = authUser;
+
+    await Promise.all([
+      this.authService.revokeGoogleToken(googleAccessToken),
+      this.userService.clearGoogleToken(userId),
+    ]);
+
     // Use same cookie options as login to ensure proper deletion
-    // Must match exact same domain, path, and sameSite to delete cookie
     const clearCookieOptions = {
       ...this.getCookieOptions(frontendUrl, isProduction),
       maxAge: 0, // Delete cookie immediately

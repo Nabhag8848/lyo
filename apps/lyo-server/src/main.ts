@@ -16,8 +16,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const frontUrl = configService.get<string>('FRONT_URL') ?? 'http://localhost:4200';
+  const appUrl = configService.get<string>('APP_URL') ?? 'http://localhost:3001';
   const isProduction = configService.get<string>('NODE_ENV') === 'production';
-  const allowedOrigins = getAllowedOrigins(frontUrl, isProduction);
+  const allowedOrigins = getAllowedOrigins(frontUrl, appUrl, isProduction);
 
   // Enable CORS for frontend
   app.enableCors({
