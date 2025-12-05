@@ -1,5 +1,5 @@
 import { use, Suspense } from 'react';
-import { fetchUser, logout, invalidateUser } from '../lib/auth';
+import { fetchUser, logout, invalidateUser } from '@/lib/auth';
 
 const Dashboard = () => {
   const user = use(fetchUser());

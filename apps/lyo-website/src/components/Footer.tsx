@@ -41,7 +41,10 @@ export const Footer = () => {
               </a>
             </li>
             <li>
-              <a href="#how-it-works" className="hover:text-black transition-colors">
+              <a
+                href="#how-it-works"
+                className="hover:text-black transition-colors"
+              >
                 How it Works
               </a>
             </li>
@@ -113,4 +116,3 @@ export const Footer = () => {
     </footer>
   );
 };
-

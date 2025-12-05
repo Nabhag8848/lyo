@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
+import { join } from 'path';
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -13,6 +14,11 @@ export default defineConfig(() => ({
   preview: {
     port: 3001,
     host: 'localhost',
+  },
+  resolve: {
+    alias: {
+      '@': join(__dirname, 'src'),
+    },
   },
   plugins: [react(), tailwindcss()],
   build: {

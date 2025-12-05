@@ -8,29 +8,24 @@ export interface User {
   createdAt: string;
 }
 
-// Cache for the user promise to avoid refetching
-let userPromise: Promise<User | null> | null = null;
-
-export const fetchUser = (): Promise<User | null> => {
-  if (!userPromise) {
-    userPromise = fetch(`${API_URL}/user/profile`, {
-      credentials: 'include',
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .catch(() => null);
+// SWR fetcher function for user profile
+export const fetchUser = async (): Promise<User | null> => {
+  const res = await fetch(`${API_URL}/user/profile`, {
+    credentials: 'include',
+  });
+  if (!res.ok) {
+    return null;
   }
-  return userPromise;
+  return res.json();
 };
 
-export const invalidateUser = () => {
-  userPromise = null;
-};
+// SWR key for user profile
+export const userKey = '/user/profile';
 
 export const loginWithGoogle = () => {
-  window.location.href = `${API_URL}/auth/google`;
+  window.location.assign(`${API_URL}/auth/google`);
 };
 
 export const logout = async () => {
   await fetch(`${API_URL}/auth/logout`, { credentials: 'include' });
-  invalidateUser();
 };

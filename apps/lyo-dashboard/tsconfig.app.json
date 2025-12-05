@@ -12,7 +12,11 @@
       "vite/client",
       "vitest/importMeta"
     ],
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "exclude": [
     "out-tsc",

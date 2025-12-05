@@ -1,31 +1,28 @@
-import { use } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  fetchUser,
-  loginWithGoogle,
-  logout,
-  invalidateUser,
-} from '../lib/auth';
+import { useNavigate, Link } from 'react-router-dom';
+import useSWR from 'swr';
+import { fetchUser, userKey, loginWithGoogle, logout } from '@/lib/auth';
 
 export const Navbar = () => {
-  const user = use(fetchUser());
+  const { data: user, mutate } = useSWR(userKey, fetchUser, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
-    invalidateUser();
+    mutate(null, false);
     navigate('/');
-    window.location.reload();
   };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-stone-100">
       <div className="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-1 cursor-pointer group">
+        <Link to="/" className="flex items-center gap-1 cursor-pointer group">
           <span className="font-display text-3xl tracking-wide font-normal group-hover:text-stone-600 transition-colors">
             LYO.
           </span>
-        </a>
+        </Link>
 
         <div className="hidden md:flex items-center gap-10 text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
           <a
