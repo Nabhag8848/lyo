@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 import { AbstractBaseEntity } from '../base.entity';
-import { AuthProvider } from '../../types';
+import { AuthProvider } from '../../@types';
 
 @Entity({ name: 'user', schema: 'core' })
 export class UserEntity extends AbstractBaseEntity {

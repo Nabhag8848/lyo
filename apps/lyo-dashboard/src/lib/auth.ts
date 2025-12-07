@@ -1,12 +1,6 @@
-const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000/v1';
+import { User } from '@/@types';
 
-export interface User {
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  picture?: string;
-  createdAt: string;
-}
+const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000/v1';
 
 // Cache for the user promise to avoid refetching
 let userPromise: Promise<User | null> | null = null;
