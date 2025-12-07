@@ -1,24 +1,22 @@
-import { fetchUser, invalidateUser, logout } from '@/lib/auth';
-import { use } from 'react';
+import { getWebsiteUrl } from '@/app/utils';
+import { useSignOutWithGoogle } from '@/modules/auth/hooks';
+import { useUser } from '@/modules/user/hooks';
 
 export const Dashboard = () => {
-  const user = use(fetchUser());
+  const { data: user, isLoading } = useUser();
+  const { mutate: signOutWithGoogle } = useSignOutWithGoogle();
 
-  // Get main website URL helper
-  const getMainWebsiteUrl = () =>
-    import.meta.env.VITE_FRONT_URL ?? 'http://localhost:4200';
-
-  // Redirect if not authenticated - redirect to main website
-  if (!user) {
-    window.location.href = getMainWebsiteUrl();
+  if (!isLoading && !user) {
+    window.open(getWebsiteUrl(), '_self');
     return null;
   }
 
-  const handleLogout = async () => {
-    await logout();
-    invalidateUser();
-    // Redirect to main website after logout
-    window.location.href = getMainWebsiteUrl();
+  if (isLoading || !user) {
+    return null;
+  }
+
+  const handleLogout = () => {
+    signOutWithGoogle();
   };
 
   return (
@@ -27,7 +25,7 @@ export const Dashboard = () => {
       <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-stone-100">
         <div className="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
           <a
-            href={getMainWebsiteUrl()}
+            href={getWebsiteUrl()}
             className="flex items-center gap-1 cursor-pointer group"
           >
             <span className="font-display text-3xl tracking-wide font-normal group-hover:text-stone-600 transition-colors">
@@ -121,7 +119,7 @@ export const Dashboard = () => {
           {/* Quick Actions */}
           <div className="grid sm:grid-cols-2 gap-4">
             <a
-              href={getMainWebsiteUrl()}
+              href={getWebsiteUrl()}
               className="bg-white rounded-xl border border-stone-200 p-6 hover:border-stone-300 hover:shadow-sm transition-all group"
             >
               <div className="flex items-center justify-between">
