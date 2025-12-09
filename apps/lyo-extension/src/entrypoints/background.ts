@@ -10,9 +10,10 @@ export default defineBackground(() => {
         await browser.sidePanel.setOptions({
           tabId,
           enabled: false,
+          path: 'sidepanel.html',
         });
 
-        await browser.storage.local.set({ sidePanelOpen: false });
+        await browser.storage.session.set({ sidePanelOpen: false });
       }
     }
   });
@@ -35,7 +36,7 @@ export default defineBackground(() => {
           tabId,
           enabled: false,
         });
-        await browser.storage.local.set({ sidePanelOpen: false });
+        await browser.storage.session.set({ sidePanelOpen: false });
       }
     }
   });
@@ -44,7 +45,7 @@ export default defineBackground(() => {
     await browser.sidePanel.open({
       tabId: sender.tab?.id,
     });
-    await browser.storage.local.set({ sidePanelOpen: true });
+    await browser.storage.session.set({ sidePanelOpen: true });
 
     // Extract product data immediately when side panel is opened
     if (sender.tab?.id) {
@@ -53,7 +54,7 @@ export default defineBackground(() => {
           type: 'getProductData',
         });
         if (response) {
-          await browser.storage.local.set({ productData: response });
+          await browser.storage.session.set({ productData: response });
         } else {
           console.warn('LYO: No product data extracted');
         }
@@ -65,7 +66,7 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener(async (message, sender) => {
     if (message.type === 'sidePanelOpened') {
-      await browser.storage.local.set({ sidePanelOpen: true });
+      await browser.storage.session.set({ sidePanelOpen: true });
 
       // Extract product data from content script and store it
       if (sender.tab?.id) {
@@ -74,14 +75,14 @@ export default defineBackground(() => {
             type: 'getProductData',
           });
           if (response) {
-            await browser.storage.local.set({ productData: response });
+            await browser.storage.session.set({ productData: response });
           }
         } catch (error) {
           console.error('LYO: Error getting product data:', error);
         }
       }
     } else if (message.type === 'sidePanelClosed') {
-      await browser.storage.local.set({ sidePanelOpen: false });
+      await browser.storage.session.set({ sidePanelOpen: false });
     } else if (message.type === 'clickAddToBag') {
       try {
         const tabs = await browser.tabs.query({
@@ -96,7 +97,7 @@ export default defineBackground(() => {
           });
         }
 
-        await browser.storage.local.set({ sidePanelOpen: false });
+        await browser.storage.session.set({ sidePanelOpen: false });
         // Send message to side panel to close itself
         browser.runtime.sendMessage({ type: 'closeSidePanel' }).catch(() => {
           // Ignore errors if side panel is not open
@@ -124,7 +125,7 @@ export default defineBackground(() => {
     } else if (message.type === 'updateProductData') {
       // Update product data when size changes
       if (message.productData) {
-        await browser.storage.local.set({ productData: message.productData });
+        await browser.storage.session.set({ productData: message.productData });
       }
     }
   });

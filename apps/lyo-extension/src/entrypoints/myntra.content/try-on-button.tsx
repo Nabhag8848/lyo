@@ -1,23 +1,31 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { sendMessage } from '@/lib/messaging';
 
 const TryNowButton = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const listenerSetupRef = useRef(false);
 
-  if (!listenerSetupRef.current) {
-    listenerSetupRef.current = true;
-
-    browser.storage.local.get('sidePanelOpen').then(({ sidePanelOpen }) => {
+  useEffect(() => {
+    // Initial check
+    browser.storage.session.get('sidePanelOpen').then(({ sidePanelOpen }) => {
       setIsPanelOpen(sidePanelOpen || false);
     });
 
-    browser.storage.onChanged.addListener((changes) => {
+    // Listen for storage changes
+    const listener = (
+      changes: Record<string, { newValue?: unknown; oldValue?: unknown }>
+    ) => {
       if (changes.sidePanelOpen) {
-        setIsPanelOpen(changes.sidePanelOpen.newValue || false);
+        setIsPanelOpen((changes.sidePanelOpen.newValue as boolean) || false);
       }
-    });
-  }
+    };
+
+    browser.storage.onChanged.addListener(listener);
+
+    // Cleanup listener on unmount
+    return () => {
+      browser.storage.onChanged.removeListener(listener);
+    };
+  }, []);
 
   if (isPanelOpen) {
     return null;

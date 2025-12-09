@@ -8,7 +8,7 @@ function App() {
 
   // Load product data from storage when component mounts
   useEffect(() => {
-    browser.storage.local.get('productData').then(({ productData: data }) => {
+    browser.storage.session.get('productData').then(({ productData: data }) => {
       if (data) {
         setProductData(data);
         // Don't set selected size from product data - start with no selection
@@ -55,9 +55,9 @@ function App() {
   const displayDiscount = productData?.discount || '';
   const displayBrand = productData?.brand || 'H&M';
   const displayName = productData?.name || 'Sculpt Tube Top';
-  const displayDescription =
-    productData?.description ||
-    'A modern, form-fitting tube top with sculpted design. Perfect for layering or wearing solo. Made with premium stretch fabric for ultimate comfort and style.';
+  // const displayDescription =
+  //   productData?.description ||
+  //   'A modern, form-fitting tube top with sculpted design. Perfect for layering or wearing solo. Made with premium stretch fabric for ultimate comfort and style.';
   const buttonType = productData?.buttonType || 'addToBag';
   const buttonText = buttonType === 'goToBag' ? 'Go to Bag' : 'Add to Bag';
   const sizes = productData?.sizes || [];
@@ -168,13 +168,13 @@ function App() {
               </div>
             </div>
             {/* Product Description */}
-            {displayDescription && (
+            {/* {displayDescription && (
               <div className="bg-stone-50 p-4 rounded border border-stone-200">
                 <p className="text-xs leading-relaxed text-stone-600 font-medium">
                   {displayDescription}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Size Selector */}
