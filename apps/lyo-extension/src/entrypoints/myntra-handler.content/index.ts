@@ -5,6 +5,46 @@ export default defineContentScript({
   matches: [MATCHES.MYNTRA_BASE],
   runAt: 'document_end',
   main() {
+    const sizeButtonRoot = document.querySelectorAll(
+      'button.size-buttons-size-button'
+    );
+
+    sizeButtonRoot.forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        if (!event.isTrusted) return;
+
+        const size = (event.target as HTMLElement).textContent?.trim();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        const goToBagButton = document.querySelector(
+          'a.pdp-goToCart.pdp-add-to-bag'
+        );
+
+        const buttonType: 'addToBag' | 'goToBag' = goToBagButton
+          ? 'goToBag'
+          : 'addToBag';
+
+        await browser.runtime.sendMessage({
+          type: 'updateSizeAndButtonType',
+          size,
+          buttonType,
+        });
+      });
+    });
+
+    const addToBagButton = document.querySelector(
+      'div.pdp-add-to-bag.pdp-button.pdp-flex.pdp-center'
+    ) as HTMLElement;
+
+    if (addToBagButton) {
+      addToBagButton.addEventListener('click', async (event) => {
+        if (!event.isTrusted) return;
+        await browser.runtime.sendMessage({
+          type: 'updateButtonType',
+          buttonType: 'goToBag',
+        });
+      });
+    }
+
     const listener = (
       message: {
         type?: string;

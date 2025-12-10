@@ -139,6 +139,33 @@ export default defineBackground(() => {
 
         break;
       }
+
+      case 'updateSizeAndButtonType': {
+        const productData = await browser.storage.session.get('productData');
+        if (productData && productData.productData) {
+          await browser.storage.session.set({
+            productData: {
+              ...productData.productData,
+              selectedSize: message.size,
+              buttonType: message.buttonType,
+            },
+          });
+        }
+        break;
+      }
+
+      case 'updateButtonType': {
+        const productData = await browser.storage.session.get('productData');
+        if (productData && productData.productData) {
+          await browser.storage.session.set({
+            productData: {
+              ...productData.productData,
+              buttonType: message.buttonType,
+            },
+          });
+        }
+        break;
+      }
     }
   });
 });
