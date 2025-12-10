@@ -4,10 +4,13 @@ import type { Browser } from 'wxt/browser';
 type OpenOptions = Browser.sidePanel.OpenOptions;
 
 export default defineBackground(() => {
-  const closeSidePanel = async (tabId?: number) => {
+  const closeSidePanel = async (tabId?: number, url?: string) => {
     if (tabId) {
       await browser.storage.session.set({ [`sidePanelOpen_${tabId}`]: false });
-      await browser.runtime.sendMessage({ type: 'closeSidePanel' });
+      if (url && !url.includes('myntra.com')) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await browser.runtime.sendMessage({ type: 'closeSidePanel' });
+      }
     }
   };
 
@@ -17,6 +20,17 @@ export default defineBackground(() => {
       await browser.storage.session.set({
         [`sidePanelOpen_${options.tabId}`]: true,
       });
+
+      const response = await browser.tabs.sendMessage<
+        { type: 'getProductData' },
+        ProductData
+      >(options.tabId, {
+        type: 'getProductData',
+      });
+
+      if (response) {
+        await browser.storage.session.set({ productData: response });
+      }
     }
   };
 
@@ -36,12 +50,13 @@ export default defineBackground(() => {
           openPanelOnActionClick: true,
         });
       } else {
+        const tab = await browser.tabs.get(tabId);
+        const { url } = tab;
         await browser.sidePanel.setOptions({
           tabId,
           enabled: false,
         });
-
-        await closeSidePanel(tabId);
+        await closeSidePanel(tabId, url);
       }
     }
   });
@@ -65,27 +80,7 @@ export default defineBackground(() => {
         tabId,
         enabled: false,
       });
-
-      await closeSidePanel(tabId);
-    }
-  });
-
-  browser.sidePanel.onOpened.addListener(async (info) => {
-    if (info.tabId) {
-      await browser.storage.session.set({
-        [`sidePanelOpen_${info.tabId}`]: true,
-      });
-
-      const response = await browser.tabs.sendMessage<
-        { type: 'getProductData' },
-        ProductData
-      >(info.tabId, {
-        type: 'getProductData',
-      });
-
-      if (response) {
-        await browser.storage.session.set({ productData: response });
-      }
+      await closeSidePanel(tab.id, url);
     }
   });
 
