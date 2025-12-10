@@ -4,15 +4,18 @@ import { PageTitle } from '@/app/utils';
 import { HelmetProvider } from 'react-helmet-async';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClientProvider } from '@/app/context/query-client';
+import { AuthProvider } from '@/modules/auth/context';
 
 export const AppRouterProviders = () => {
   return (
     <StrictMode>
       <HelmetProvider>
         <QueryClientProvider>
-          <PageTitle />
-          <Outlet />
-          <ReactQueryDevtools initialIsOpen={false} />
+          <AuthProvider>
+            <PageTitle />
+            <Outlet />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </AuthProvider>
         </QueryClientProvider>
       </HelmetProvider>
     </StrictMode>

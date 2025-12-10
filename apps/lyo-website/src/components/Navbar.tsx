@@ -1,6 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import useSWR from 'swr';
-import { fetchUser, userKey, loginWithGoogle, logout } from '@/lib/auth';
+import { fetchUser, userKey, loginWithGoogle, signOut } from '@/lib/auth';
 
 export const Navbar = () => {
   const { data: user, mutate } = useSWR(userKey, fetchUser, {
@@ -9,8 +9,8 @@ export const Navbar = () => {
   });
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
+  const handleSignOut = async () => {
+    await signOut();
     mutate(null, false);
     navigate('/');
   };
@@ -57,7 +57,7 @@ export const Navbar = () => {
               </span>
             </a>
             <button
-              onClick={handleLogout}
+              onClick={handleSignOut}
               className="text-[10px] font-bold tracking-[0.2em] text-stone-400 hover:text-stone-600 transition-colors uppercase"
             >
               Sign Out

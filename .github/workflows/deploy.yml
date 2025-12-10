@@ -51,6 +51,6 @@ jobs:
             if pm2 describe lyo-server > /dev/null; then
               pm2 reload lyo-server --update-env
             else
-              pm2 start main.js --name lyo-server --update-env
+              pm2 start main.js --name lyo-server --update-env -i max
             fi
             pm2 save
