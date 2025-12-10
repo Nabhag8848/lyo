@@ -1,26 +1,30 @@
-import { onMessage } from '@/lib/messaging';
+import { ProductData } from '@/lib/messaging';
+import type { Browser } from 'wxt/browser';
+
+type OpenOptions = Browser.sidePanel.OpenOptions;
 
 export default defineBackground(() => {
+  const closeSidePanel = async (tabId?: number) => {
+    if (tabId) {
+      await browser.storage.session.set({ [`sidePanelOpen_${tabId}`]: false });
+      await browser.runtime.sendMessage({ type: 'closeSidePanel' });
+    }
+  };
+
+  const openSidePanel = async (options: OpenOptions) => {
+    await browser.sidePanel.open(options);
+    if (options.tabId) {
+      await browser.storage.session.set({
+        [`sidePanelOpen_${options.tabId}`]: true,
+      });
+    }
+  };
+
   browser.tabs.onActivated.addListener(async ({ tabId }) => {
     if (tabId) {
       const tab = await browser.tabs.get(tabId);
       const { url } = tab;
 
-      if (!url?.includes('myntra.com')) {
-        await browser.sidePanel.setOptions({
-          tabId,
-          enabled: false,
-          path: 'sidepanel.html',
-        });
-
-        await browser.storage.session.set({ sidePanelOpen: false });
-      }
-    }
-  });
-
-  browser.tabs.onUpdated.addListener(async (tabId, _changeInfo, tab) => {
-    if (tabId) {
-      const { url } = tab;
       if (url?.includes('myntra.com')) {
         await browser.sidePanel.setOptions({
           path: 'sidepanel.html',
@@ -36,55 +40,64 @@ export default defineBackground(() => {
           tabId,
           enabled: false,
         });
-        await browser.storage.session.set({ sidePanelOpen: false });
+
+        await closeSidePanel(tabId);
       }
     }
   });
 
-  onMessage('openSidePanel', async ({ sender }) => {
-    await browser.sidePanel.open({
-      tabId: sender.tab?.id,
-    });
-    await browser.storage.session.set({ sidePanelOpen: true });
+  browser.tabs.onUpdated.addListener(async (tabId, _changeInfo, tab) => {
+    const url = tab.url;
+    if (!url) return;
 
-    // Extract product data immediately when side panel is opened
-    if (sender.tab?.id) {
-      try {
-        const response = await browser.tabs.sendMessage(sender.tab.id, {
-          type: 'getProductData',
-        });
-        if (response) {
-          await browser.storage.session.set({ productData: response });
-        } else {
-          console.warn('LYO: No product data extracted');
-        }
-      } catch (error) {
-        console.error('LYO: Error getting product data:', error);
+    if (url.includes('myntra.com')) {
+      await browser.sidePanel.setOptions({
+        tabId,
+        path: 'sidepanel.html',
+        enabled: true,
+      });
+
+      await browser.sidePanel.setPanelBehavior({
+        openPanelOnActionClick: true,
+      });
+    } else {
+      await browser.sidePanel.setOptions({
+        tabId,
+        enabled: false,
+      });
+
+      await closeSidePanel(tabId);
+    }
+  });
+
+  browser.sidePanel.onOpened.addListener(async (info) => {
+    if (info.tabId) {
+      await browser.storage.session.set({
+        [`sidePanelOpen_${info.tabId}`]: true,
+      });
+
+      const response = await browser.tabs.sendMessage<
+        { type: 'getProductData' },
+        ProductData
+      >(info.tabId, {
+        type: 'getProductData',
+      });
+
+      if (response) {
+        await browser.storage.session.set({ productData: response });
       }
     }
   });
 
   browser.runtime.onMessage.addListener(async (message, sender) => {
-    if (message.type === 'sidePanelOpened') {
-      await browser.storage.session.set({ sidePanelOpen: true });
-
-      // Extract product data from content script and store it
-      if (sender.tab?.id) {
-        try {
-          const response = await browser.tabs.sendMessage(sender.tab.id, {
-            type: 'getProductData',
-          });
-          if (response) {
-            await browser.storage.session.set({ productData: response });
-          }
-        } catch (error) {
-          console.error('LYO: Error getting product data:', error);
-        }
+    switch (message.type) {
+      case 'openSidePanel': {
+        await openSidePanel({
+          tabId: sender.tab?.id,
+        } as OpenOptions);
+        break;
       }
-    } else if (message.type === 'sidePanelClosed') {
-      await browser.storage.session.set({ sidePanelOpen: false });
-    } else if (message.type === 'clickAddToBag') {
-      try {
+      case 'clickAddToBag': {
         const tabs = await browser.tabs.query({
           active: true,
           currentWindow: true,
@@ -97,17 +110,12 @@ export default defineBackground(() => {
           });
         }
 
-        await browser.storage.session.set({ sidePanelOpen: false });
-        // Send message to side panel to close itself
-        browser.runtime.sendMessage({ type: 'closeSidePanel' }).catch(() => {
-          // Ignore errors if side panel is not open
-        });
-      } catch (error) {
-        console.error('LYO: Error clicking add to bag:', error);
+        await closeSidePanel(tabs[0]?.id);
+        break;
       }
-    } else if (message.type === 'selectSize') {
-      // Forward size selection to content script
-      try {
+
+      case 'selectSize': {
+        // Forward size selection to content script
         const tabs = await browser.tabs.query({
           active: true,
           currentWindow: true,
@@ -119,13 +127,17 @@ export default defineBackground(() => {
             size: message.size,
           });
         }
-      } catch (error) {
-        console.error('LYO: Error selecting size:', error);
+
+        break;
       }
-    } else if (message.type === 'updateProductData') {
-      // Update product data when size changes
-      if (message.productData) {
-        await browser.storage.session.set({ productData: message.productData });
+
+      case 'updateProductData': {
+        if (message.productData) {
+          await browser.storage.session.set({
+            productData: message.productData,
+          });
+        }
+        break;
       }
     }
   });

@@ -1,41 +1,12 @@
-import { useState, useEffect } from 'react';
-import { sendMessage } from '@/lib/messaging';
 
 const TryNowButton = () => {
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
-
-  useEffect(() => {
-    // Initial check
-    browser.storage.session.get('sidePanelOpen').then(({ sidePanelOpen }) => {
-      setIsPanelOpen(sidePanelOpen || false);
-    });
-
-    // Listen for storage changes
-    const listener = (
-      changes: Record<string, { newValue?: unknown; oldValue?: unknown }>
-    ) => {
-      if (changes.sidePanelOpen) {
-        setIsPanelOpen((changes.sidePanelOpen.newValue as boolean) || false);
-      }
-    };
-
-    browser.storage.onChanged.addListener(listener);
-
-    // Cleanup listener on unmount
-    return () => {
-      browser.storage.onChanged.removeListener(listener);
-    };
-  }, []);
-
-  if (isPanelOpen) {
-    return null;
-  }
-
   return (
     <main className="mr-4">
       <button
         className="myntra-button text-base font-bold w-full relative overflow-hidden bg-yellow-400 text-black px-6 py-5 rounded-[2px] shadow-md uppercase tracking-[0.2em] hover:bg-yellow-300 transition-all flex items-center justify-center gap-3 group ring-2 ring-yellow-100 duration-300"
-        onClick={async () => await sendMessage('openSidePanel')}
+        onClick={async () =>
+          await browser.runtime.sendMessage({ type: 'openSidePanel' })
+        }
       >
         <span className="bg-black text-white px-2 py-0.5 text-[9px] rounded-sm font-bold">
           LYO
