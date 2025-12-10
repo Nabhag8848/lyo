@@ -3,7 +3,7 @@ import { getServerEndpointUrl, getWebsiteUrl } from '@/app/utils';
 
 export const useSignOutWithGoogle = () => {
   const signOutWithGoogle = async (): Promise<void> => {
-    await fetch(getServerEndpointUrl('auth/logout'), {
+    await fetch(getServerEndpointUrl('auth/signout'), {
       credentials: 'include',
     });
   };

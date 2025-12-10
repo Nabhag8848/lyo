@@ -49,9 +49,9 @@ export class AuthController {
     return res.redirect(appUrl);
   }
 
-  @Get('logout')
+  @Get('signout')
   @UseGuards(JwtAuthGuard)
-  async logout(@Res() res: Response, @CurrentUser() authUser: AuthUserDto) {
+  async signOut(@Res() res: Response, @CurrentUser() authUser: AuthUserDto) {
     const frontendUrl =
       this.configService.get<string>('FRONT_URL') || 'http://localhost:4200';
     const isProduction =

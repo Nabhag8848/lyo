@@ -1,12 +1,10 @@
 import { getWebsiteUrl } from '@/app/utils';
-import { useSignOutWithGoogle } from '@/modules/auth/hooks';
-import { useUser } from '@/modules/user/hooks';
+import { useAuth } from '@/modules/auth/context';
 
 export const Dashboard = () => {
-  const { data: user, isLoading } = useUser();
-  const { mutate: signOutWithGoogle } = useSignOutWithGoogle();
+  const { user, isLoading, isAuthenticated, signOut } = useAuth();
 
-  if (!isLoading && !user) {
+  if (!isLoading && !isAuthenticated) {
     window.open(getWebsiteUrl(), '_self');
     return null;
   }
@@ -15,8 +13,8 @@ export const Dashboard = () => {
     return null;
   }
 
-  const handleLogout = () => {
-    signOutWithGoogle();
+  const handleSignOut = () => {
+    signOut();
   };
 
   return (
@@ -33,7 +31,7 @@ export const Dashboard = () => {
             </span>
           </a>
           <button
-            onClick={handleLogout}
+            onClick={handleSignOut}
             className="text-[10px] font-bold tracking-[0.2em] text-stone-500 hover:text-black transition-colors uppercase"
           >
             Sign Out
@@ -137,7 +135,7 @@ export const Dashboard = () => {
               </div>
             </a>
             <button
-              onClick={handleLogout}
+              onClick={handleSignOut}
               className="bg-white rounded-xl border border-stone-200 p-6 hover:border-red-200 hover:bg-red-50 transition-all group text-left"
             >
               <div className="flex items-center justify-between">

@@ -20,6 +20,6 @@ export const loginWithGoogle = () => {
   window.location.assign(`${API_URL}/auth/google`);
 };
 
-export const logout = async () => {
-  await fetch(`${API_URL}/auth/logout`, { credentials: 'include' });
+export const signOut = async () => {
+  await fetch(`${API_URL}/auth/signout`, { credentials: 'include' });
 };
