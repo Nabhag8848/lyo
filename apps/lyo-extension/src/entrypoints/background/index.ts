@@ -14,22 +14,26 @@ export default defineBackground(() => {
     }
   };
 
-  const openSidePanel = async (options: OpenOptions) => {
-    await browser.sidePanel.open(options);
+  const forceCloseSidePanel = async (tabId?: number) => {
+    if (tabId) {
+      await browser.storage.session.set({ [`sidePanelOpen_${tabId}`]: false });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      await browser.runtime.sendMessage({ type: 'closeSidePanel' });
+    }
+  };
+
+  const openSidePanel = async (
+    options: OpenOptions,
+    productData: ProductData | null
+  ) => {
     if (options.tabId) {
+      await browser.sidePanel.open(options);
       await browser.storage.session.set({
         [`sidePanelOpen_${options.tabId}`]: true,
       });
 
-      const response = await browser.tabs.sendMessage<
-        { type: 'getProductData' },
-        ProductData
-      >(options.tabId, {
-        type: 'getProductData',
-      });
-
-      if (response) {
-        await browser.storage.session.set({ productData: response });
+      if (productData) {
+        await browser.storage.session.set({ productData });
       }
     }
   };
@@ -87,9 +91,13 @@ export default defineBackground(() => {
   browser.runtime.onMessage.addListener(async (message, sender) => {
     switch (message.type) {
       case 'openSidePanel': {
-        await openSidePanel({
-          tabId: sender.tab?.id,
-        } as OpenOptions);
+        const productData: ProductData | null = message.productData;
+        await openSidePanel(
+          {
+            tabId: sender.tab?.id,
+          } as OpenOptions,
+          productData
+        );
         break;
       }
       case 'clickAddToBag': {
@@ -103,9 +111,8 @@ export default defineBackground(() => {
             type: 'clickAddToBag',
             buttonType: message.buttonType,
           });
+          await forceCloseSidePanel(tabs[0]?.id);
         }
-
-        await closeSidePanel(tabs[0]?.id);
         break;
       }
 
@@ -117,21 +124,19 @@ export default defineBackground(() => {
         });
 
         if (tabs[0]?.id) {
-          await browser.tabs.sendMessage(tabs[0].id, {
+          const productData = await browser.tabs.sendMessage<
+            { type: 'selectSize'; size: string },
+            ProductData
+          >(tabs[0].id, {
             type: 'selectSize',
             size: message.size,
           });
-        }
 
-        break;
-      }
-
-      case 'updateProductData': {
-        if (message.productData) {
           await browser.storage.session.set({
-            productData: message.productData,
+            productData,
           });
         }
+
         break;
       }
     }

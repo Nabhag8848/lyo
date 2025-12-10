@@ -1,12 +1,20 @@
+import { ProductData } from '@/lib/messaging';
+import { extractProductData } from './extract-product-data';
 
 const TryNowButton = () => {
   return (
     <main className="mr-4">
       <button
         className="myntra-button text-base font-bold w-full relative overflow-hidden bg-yellow-400 text-black px-6 py-5 rounded-[2px] shadow-md uppercase tracking-[0.2em] hover:bg-yellow-300 transition-all flex items-center justify-center gap-3 group ring-2 ring-yellow-100 duration-300"
-        onClick={async () =>
-          await browser.runtime.sendMessage({ type: 'openSidePanel' })
-        }
+        onClick={async () => {
+          const productData = extractProductData();
+          if (productData) {
+            await browser.runtime.sendMessage<
+              { type: 'openSidePanel'; productData: ProductData },
+              void
+            >({ type: 'openSidePanel', productData });
+          }
+        }}
       >
         <span className="bg-black text-white px-2 py-0.5 text-[9px] rounded-sm font-bold">
           LYO

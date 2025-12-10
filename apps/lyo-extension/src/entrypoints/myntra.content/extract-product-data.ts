@@ -66,20 +66,11 @@ export function extractProductData(): ProductData | null {
         const available = !isDisabled && !hasStrike;
 
         // Check if this size is currently selected
-        // Check for aria-selected, data attributes, or visual indicators
-        const computedStyle = window.getComputedStyle(button);
-        const borderColor = computedStyle.borderColor;
+        // Primary check: size-buttons-size-button-selected class (most reliable)
         const isSelected =
-          button.getAttribute('aria-selected') === 'true' ||
           button.classList.contains('size-buttons-size-button-selected') ||
-          button.getAttribute('data-selected') === 'true' ||
-          // Check if border color indicates selection (not gray/stone colors)
-          (borderColor &&
-            !borderColor.includes('rgb(214, 211, 209)') && // stone-300
-            !borderColor.includes('rgb(231, 229, 228)') && // stone-200
-            !borderColor.includes('rgb(245, 245, 244)') && // stone-100
-            borderColor !== 'rgba(0, 0, 0, 0)' &&
-            borderColor !== 'transparent');
+          button.getAttribute('aria-selected') === 'true' ||
+          button.getAttribute('data-selected') === 'true';
 
         if (size) {
           sizes.push({ size, available });

@@ -1,28 +1,19 @@
-import { useEffect } from 'react';
-import { extractProductData } from './extract-product-data';
+import { MATCHES } from '@/lib/matches';
+import { extractProductData } from '@/entrypoints/myntra.content/extract-product-data';
 
-export const ContentScriptMessageHandler = () => {
-  useEffect(() => {
+export default defineContentScript({
+  matches: [MATCHES.MYNTRA_BASE],
+  runAt: 'document_end',
+  main() {
     const listener = (
-      message: { type?: string; buttonType?: string; size?: string },
+      message: {
+        type?: string;
+        buttonType?: string;
+        size?: string;
+      },
       _sender: unknown,
       sendResponse: (response?: unknown) => void
     ) => {
-      if (message.type === 'getProductData') {
-        let productData = extractProductData();
-
-        if (!productData) {
-          setTimeout(() => {
-            productData = extractProductData();
-            sendResponse(productData);
-          }, 500);
-        } else {
-          sendResponse(productData);
-        }
-
-        return true;
-      }
-
       if (message.type === 'clickAddToBag') {
         const buttonType = message.buttonType || 'addToBag';
 
@@ -32,8 +23,6 @@ export const ContentScriptMessageHandler = () => {
           ) as HTMLElement;
           if (goToBagButton) {
             goToBagButton.click();
-          } else {
-            console.warn('LYO: Go to Bag button not found');
           }
         } else {
           let addToBagButton = document.querySelector(
@@ -46,8 +35,6 @@ export const ContentScriptMessageHandler = () => {
           }
           if (addToBagButton) {
             addToBagButton.click();
-          } else {
-            console.warn('LYO: Add to Bag button not found');
           }
         }
       }
@@ -67,28 +54,18 @@ export const ContentScriptMessageHandler = () => {
           }
         });
 
-        // Wait for DOM to update after size selection, then re-extract product data
-        setTimeout(() => {
-          const updatedProductData = extractProductData();
-          if (updatedProductData) {
-            // Ensure selectedSize is set to the size we just clicked
-            updatedProductData.selectedSize = size || null;
-            // Send updated product data to background script
-            browser.runtime.sendMessage({
-              type: 'updateProductData',
-              productData: updatedProductData,
-            });
-          }
-        }, 100);
+        const updatedProductData = extractProductData();
+
+        if (updatedProductData) {
+          updatedProductData.selectedSize = size || null;
+          sendResponse(updatedProductData);
+        }
       }
     };
 
     browser.runtime.onMessage.addListener(listener);
-
     return () => {
       browser.runtime.onMessage.removeListener(listener);
     };
-  }, []);
-
-  return null;
-};
+  },
+});

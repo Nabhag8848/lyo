@@ -11,9 +11,7 @@ function App() {
     browser.storage.session.get('productData').then(({ productData: data }) => {
       if (data) {
         setProductData(data);
-        // Don't set selected size from product data - start with no selection
-      } else {
-        console.warn('LYO Side Panel: No product data found in storage');
+        setSelectedSize(data.selectedSize || null);
       }
     });
 
@@ -24,9 +22,10 @@ function App() {
       if (changes.productData && changes.productData.newValue) {
         const newData = changes.productData.newValue as ProductData;
         setProductData(newData);
-        // Don't update selected size from product data changes
+        setSelectedSize(newData.selectedSize || null);
       }
     };
+
     browser.storage.onChanged.addListener(listener);
 
     return () => {
@@ -38,7 +37,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1200);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -55,9 +54,6 @@ function App() {
   const displayDiscount = productData?.discount || '';
   const displayBrand = productData?.brand || 'H&M';
   const displayName = productData?.name || 'Sculpt Tube Top';
-  // const displayDescription =
-  //   productData?.description ||
-  //   'A modern, form-fitting tube top with sculpted design. Perfect for layering or wearing solo. Made with premium stretch fabric for ultimate comfort and style.';
   const buttonType = productData?.buttonType || 'addToBag';
   const buttonText = buttonType === 'goToBag' ? 'Go to Bag' : 'Add to Bag';
   const sizes = productData?.sizes || [];
@@ -69,7 +65,6 @@ function App() {
     buttonType === 'addToBag' && sizes.length > 0 && selectedSize === null;
 
   const handleSizeClick = async (size: string) => {
-    setSelectedSize(size);
     await browser.runtime.sendMessage({
       type: 'selectSize',
       size,
@@ -167,14 +162,6 @@ function App() {
                 )}
               </div>
             </div>
-            {/* Product Description */}
-            {/* {displayDescription && (
-              <div className="bg-stone-50 p-4 rounded border border-stone-200">
-                <p className="text-xs leading-relaxed text-stone-600 font-medium">
-                  {displayDescription}
-                </p>
-              </div>
-            )} */}
           </div>
 
           {/* Size Selector */}
