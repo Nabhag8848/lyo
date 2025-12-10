@@ -1,5 +1,3 @@
-import { defineExtensionMessaging } from '@webext-core/messaging';
-
 export interface SizeOption {
   size: string;
   available: boolean;
@@ -18,10 +16,3 @@ export interface ProductData {
   sizes: SizeOption[];
   selectedSize?: string | null;
 }
-
-interface ProtocolMap {
-  openSidePanel(): void;
-}
-
-export const { sendMessage, onMessage } =
-  defineExtensionMessaging<ProtocolMap>();

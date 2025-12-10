@@ -20,12 +20,6 @@ export default defineConfig({
   }),
   manifest: {
     permissions: ['sidePanel', 'storage'],
-    side_panel: {
-      default_path: 'sidepanel.html',
-    },
-    action: {
-      default_title: 'Open Sidepanel',
-    },
   },
   webExt: {
     disabled: true,

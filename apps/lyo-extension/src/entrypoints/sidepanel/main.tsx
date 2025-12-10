@@ -1,30 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.js';
 
-// Send message when side panel opens
-browser.runtime.sendMessage({ type: 'sidePanelOpened' });
+// Component to handle side panel close messages
+const SidePanelMessageHandler = () => {
+  useEffect(() => {
+    const listener = (message: { type?: string }) => {
+      if (message.type === 'closeSidePanel') {
+        window.close();
+      }
+    };
 
-// Send message when side panel closes - use multiple events for reliability
-const sendCloseMessage = () => {
-  browser.runtime.sendMessage({ type: 'sidePanelClosed' });
+    browser.runtime.onMessage.addListener(listener);
+
+    return () => {
+      browser.runtime.onMessage.removeListener(listener);
+    };
+  }, []);
+
+  return null;
 };
-
-browser.runtime.onMessage.addListener((message) => {
-  if (message.type === 'closeSidePanel') {
-    sendCloseMessage();
-    window.close();
-  }
-});
-
-window.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    sendCloseMessage();
-  }
-});
 
 ReactDOM.createRoot(document.getElementById('root') ?? document.body).render(
   <React.StrictMode>
+    <SidePanelMessageHandler />
     <App />
   </React.StrictMode>
 );
