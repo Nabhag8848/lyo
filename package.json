@@ -74,6 +74,7 @@
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.21",
+    "@types/multer": "^2.0.0",
     "@types/node": "20.19.9",
     "@types/passport-google-oauth20": "^2.0.17",
     "@types/passport-jwt": "^4.0.1",
