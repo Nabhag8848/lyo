@@ -73,7 +73,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen bg-white">
-      {/* Header */}
+      {/* Header
       <div className="h-16 border-b border-stone-100 flex items-center justify-between px-8 shrink-0 bg-stone-50">
         <div className="flex items-center gap-2">
           <span className="font-display text-2xl tracking-wide text-black">
@@ -83,7 +83,7 @@ function App() {
             BETA
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* Content */}
       <style>{`
@@ -114,7 +114,7 @@ function App() {
         }}
       >
         {/* Image Container */}
-        <div className="relative bg-stone-100 rounded shadow-sm overflow-hidden mb-6 group border border-stone-200 h-[370px] shrink-0">
+        <div className="relative bg-stone-100 rounded overflow-hidden mb-6 group h-[450px] w-full shrink-0">
           {/* Loading Animation */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">
