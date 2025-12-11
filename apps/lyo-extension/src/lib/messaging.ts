@@ -3,7 +3,7 @@ export interface SizeOption {
   available: boolean;
 }
 
-export interface ProductData {
+export interface Product {
   brand: string;
   name: string;
   price: string;
@@ -12,7 +12,7 @@ export interface ProductData {
   discountPercent: string;
   description: string;
   imageUrl: string;
-  buttonType: 'addToBag' | 'goToBag';
+  buttonType: 'add_to_bag' | 'go_to_bag';
   sizes: SizeOption[];
   selectedSize?: string | null;
 }

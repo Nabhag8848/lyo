@@ -1,4 +1,4 @@
-import { ProductData } from '@/lib/messaging';
+import { Product } from '@/lib/messaging';
 import type { Browser } from 'wxt/browser';
 
 type OpenOptions = Browser.sidePanel.OpenOptions;
@@ -24,7 +24,7 @@ export default defineBackground(() => {
 
   const openSidePanel = async (
     options: OpenOptions,
-    productData: ProductData | null
+    product: Product | null
   ) => {
     if (options.tabId) {
       await browser.sidePanel.open(options);
@@ -32,8 +32,8 @@ export default defineBackground(() => {
         [`sidePanelOpen_${options.tabId}`]: true,
       });
 
-      if (productData) {
-        await browser.storage.session.set({ productData });
+      if (product) {
+        await browser.storage.session.set({ current_product_view: product });
       }
     }
   };
@@ -91,12 +91,12 @@ export default defineBackground(() => {
   browser.runtime.onMessage.addListener(async (message, sender) => {
     switch (message.type) {
       case 'openSidePanel': {
-        const productData: ProductData | null = message.productData;
+        const product: Product | null = message.current_product_view;
         await openSidePanel(
           {
             tabId: sender.tab?.id,
           } as OpenOptions,
-          productData
+          product
         );
         break;
       }
@@ -124,16 +124,16 @@ export default defineBackground(() => {
         });
 
         if (tabs[0]?.id) {
-          const productData = await browser.tabs.sendMessage<
+          const product = await browser.tabs.sendMessage<
             { type: 'selectSize'; size: string },
-            ProductData
+            Product
           >(tabs[0].id, {
             type: 'selectSize',
             size: message.size,
           });
 
           await browser.storage.session.set({
-            productData,
+            current_product_view: product,
           });
         }
 
@@ -141,11 +141,13 @@ export default defineBackground(() => {
       }
 
       case 'updateSizeAndButtonType': {
-        const productData = await browser.storage.session.get('productData');
-        if (productData && productData.productData) {
+        const product = await browser.storage.session.get(
+          'current_product_view'
+        );
+        if (product && product.current_product_view) {
           await browser.storage.session.set({
-            productData: {
-              ...productData.productData,
+            current_product_view: {
+              ...product.current_product_view,
               selectedSize: message.size,
               buttonType: message.buttonType,
             },
@@ -155,11 +157,13 @@ export default defineBackground(() => {
       }
 
       case 'updateButtonType': {
-        const productData = await browser.storage.session.get('productData');
-        if (productData && productData.productData) {
+        const product = await browser.storage.session.get(
+          'current_product_view'
+        );
+        if (product && product.current_product_view) {
           await browser.storage.session.set({
-            productData: {
-              ...productData.productData,
+            current_product_view: {
+              ...product.current_product_view,
               buttonType: message.buttonType,
             },
           });

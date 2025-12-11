@@ -19,9 +19,9 @@ export default defineContentScript({
           'a.pdp-goToCart.pdp-add-to-bag'
         );
 
-        const buttonType: 'addToBag' | 'goToBag' = goToBagButton
-          ? 'goToBag'
-          : 'addToBag';
+        const buttonType: 'add_to_bag' | 'go_to_bag' = goToBagButton
+          ? 'go_to_bag'
+          : 'add_to_bag';
 
         await browser.runtime.sendMessage({
           type: 'updateSizeAndButtonType',
@@ -40,7 +40,7 @@ export default defineContentScript({
         if (!event.isTrusted) return;
         await browser.runtime.sendMessage({
           type: 'updateButtonType',
-          buttonType: 'goToBag',
+          buttonType: 'go_to_bag',
         });
       });
     }
@@ -55,9 +55,9 @@ export default defineContentScript({
       sendResponse: (response?: unknown) => void
     ) => {
       if (message.type === 'clickAddToBag') {
-        const buttonType = message.buttonType || 'addToBag';
+        const buttonType = message.buttonType || 'add_to_bag';
 
-        if (buttonType === 'goToBag') {
+        if (buttonType === 'go_to_bag') {
           const goToBagButton = document.querySelector(
             'a.pdp-goToCart.pdp-add-to-bag'
           ) as HTMLElement;

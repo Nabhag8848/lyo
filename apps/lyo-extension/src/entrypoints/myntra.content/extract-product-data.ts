@@ -1,6 +1,6 @@
-import { ProductData, SizeOption } from '@/lib/messaging';
+import { Product, SizeOption } from '@/lib/messaging';
 
-export function extractProductData(): ProductData | null {
+export function extractProductData(): Product | null {
   try {
     const brandElement = document.querySelector('h1.pdp-title');
     const brand = brandElement?.textContent?.trim() || '';
@@ -41,9 +41,9 @@ export function extractProductData(): ProductData | null {
     // const addToBagButton = document.querySelector(
     //   'div.pdp-add-to-bag.pdp-button.pdp-flex.pdp-center'
     // );
-    const buttonType: 'addToBag' | 'goToBag' = goToBagButton
-      ? 'goToBag'
-      : 'addToBag';
+    const buttonType: 'add_to_bag' | 'go_to_bag' = goToBagButton
+      ? 'go_to_bag'
+      : 'add_to_bag';
 
     // Extract available sizes and detect currently selected size
     const sizeButtons = document.querySelectorAll(
@@ -85,7 +85,7 @@ export function extractProductData(): ProductData | null {
       return null;
     }
 
-    const productData: ProductData = {
+    const product: Product = {
       brand,
       name,
       price,
@@ -99,7 +99,7 @@ export function extractProductData(): ProductData | null {
       selectedSize,
     };
 
-    return productData;
+    return product;
   } catch (error) {
     console.error('LYO: Error extracting product data:', error);
     return null;

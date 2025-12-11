@@ -1,27 +1,32 @@
 import { useState, useEffect } from 'react';
-import type { ProductData, SizeOption } from '@/lib/messaging';
+import type { Product, SizeOption } from '@/lib/messaging';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [productData, setProductData] = useState<ProductData | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   // Load product data from storage when component mounts
   useEffect(() => {
-    browser.storage.session.get('productData').then(({ productData: data }) => {
-      if (data) {
-        setProductData(data);
-        setSelectedSize(data.selectedSize || null);
-      }
-    });
+    browser.storage.session
+      .get('current_product_view')
+      .then(({ current_product_view: data }) => {
+        if (data) {
+          setProduct(data);
+          setSelectedSize(data.selectedSize || null);
+        }
+      });
 
     // Also listen for storage changes
     const listener = (
       changes: Record<string, { newValue?: unknown; oldValue?: unknown }>
     ) => {
-      if (changes.productData && changes.productData.newValue) {
-        const newData = changes.productData.newValue as ProductData;
-        setProductData(newData);
+      if (
+        changes.current_product_view &&
+        changes.current_product_view.newValue
+      ) {
+        const newData = changes.current_product_view.newValue as Product;
+        setProduct(newData);
         setSelectedSize(newData.selectedSize || null);
       }
     };
@@ -44,25 +49,25 @@ function App() {
   const getImageSrc = () => {
     // Use product image if available, otherwise fallback
     return (
-      productData?.imageUrl ||
+      product?.imageUrl ||
       'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400'
     );
   };
 
-  const displayPrice = productData?.price || '₹1,499';
-  const displayMrp = productData?.mrp || '';
-  const displayDiscount = productData?.discount || '';
-  const displayBrand = productData?.brand || 'H&M';
-  const displayName = productData?.name || 'Sculpt Tube Top';
-  const buttonType = productData?.buttonType || 'addToBag';
-  const buttonText = buttonType === 'goToBag' ? 'Go to Bag' : 'Add to Bag';
-  const sizes = productData?.sizes || [];
+  const displayPrice = product?.price || '₹1,499';
+  const displayMrp = product?.mrp || '';
+  const displayDiscount = product?.discount || '';
+  const displayBrand = product?.brand || 'H&M';
+  const displayName = product?.name || 'Sculpt Tube Top';
+  const buttonType = product?.buttonType || 'add_to_bag';
+  const buttonText = buttonType === 'go_to_bag' ? 'Go to Bag' : 'Add to Bag';
+  const sizes = product?.sizes || [];
 
   // Determine if button should be disabled
   // - "Go to Bag" is always enabled (item already in bag)
   // - "Add to Bag" is only enabled if size is selected (or if no sizes exist)
   const isButtonDisabled =
-    buttonType === 'addToBag' && sizes.length > 0 && selectedSize === null;
+    buttonType === 'add_to_bag' && sizes.length > 0 && selectedSize === null;
 
   const handleSizeClick = async (size: string) => {
     await browser.runtime.sendMessage({
@@ -241,7 +246,7 @@ function App() {
           }`}
         >
           <span className="flex items-center gap-2">
-            {buttonType === 'addToBag' && (
+            {buttonType === 'add_to_bag' && (
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -258,10 +263,10 @@ function App() {
             )}
             {buttonText}
           </span>
-          {buttonType === 'addToBag' && !isButtonDisabled && (
+          {buttonType === 'add_to_bag' && !isButtonDisabled && (
             <span>{displayPrice}</span>
           )}
-          {buttonType === 'goToBag' && (
+          {buttonType === 'go_to_bag' && (
             <svg
               className="w-4 h-4"
               fill="none"
