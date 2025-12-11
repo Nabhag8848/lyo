@@ -1,4 +1,5 @@
 import { Product } from '@/lib/messaging';
+import { currentProductView } from '@/lib/storage';
 import type { Browser } from 'wxt/browser';
 
 type OpenOptions = Browser.sidePanel.OpenOptions;
@@ -6,7 +7,6 @@ type OpenOptions = Browser.sidePanel.OpenOptions;
 export default defineBackground(() => {
   const closeSidePanel = async (tabId?: number, url?: string) => {
     if (tabId) {
-      await browser.storage.session.set({ [`sidePanelOpen_${tabId}`]: false });
       if (url && !url.includes('myntra.com')) {
         await new Promise((resolve) => setTimeout(resolve, 0));
         await browser.runtime.sendMessage({ type: 'closeSidePanel' });
@@ -16,7 +16,6 @@ export default defineBackground(() => {
 
   const forceCloseSidePanel = async (tabId?: number) => {
     if (tabId) {
-      await browser.storage.session.set({ [`sidePanelOpen_${tabId}`]: false });
       await new Promise((resolve) => setTimeout(resolve, 0));
       await browser.runtime.sendMessage({ type: 'closeSidePanel' });
     }
@@ -28,12 +27,9 @@ export default defineBackground(() => {
   ) => {
     if (options.tabId) {
       await browser.sidePanel.open(options);
-      await browser.storage.session.set({
-        [`sidePanelOpen_${options.tabId}`]: true,
-      });
 
       if (product) {
-        await browser.storage.session.set({ current_product_view: product });
+        await currentProductView.setValue(product);
       }
     }
   };
@@ -132,40 +128,30 @@ export default defineBackground(() => {
             size: message.size,
           });
 
-          await browser.storage.session.set({
-            current_product_view: product,
-          });
+          await currentProductView.setValue(product);
         }
 
         break;
       }
 
       case 'updateSizeAndButtonType': {
-        const product = await browser.storage.session.get(
-          'current_product_view'
-        );
-        if (product && product.current_product_view) {
-          await browser.storage.session.set({
-            current_product_view: {
-              ...product.current_product_view,
-              selectedSize: message.size,
-              buttonType: message.buttonType,
-            },
+        const product = await currentProductView.getValue();
+        if (product) {
+          await currentProductView.setValue({
+            ...product,
+            selectedSize: message.size,
+            buttonType: message.buttonType,
           });
         }
         break;
       }
 
       case 'updateButtonType': {
-        const product = await browser.storage.session.get(
-          'current_product_view'
-        );
-        if (product && product.current_product_view) {
-          await browser.storage.session.set({
-            current_product_view: {
-              ...product.current_product_view,
-              buttonType: message.buttonType,
-            },
+        const product = await currentProductView.getValue();
+        if (product) {
+          await currentProductView.setValue({
+            ...product,
+            buttonType: message.buttonType,
           });
         }
         break;

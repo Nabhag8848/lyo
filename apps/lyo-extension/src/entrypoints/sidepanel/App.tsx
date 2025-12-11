@@ -1,42 +1,12 @@
 import { useState, useEffect } from 'react';
-import type { Product, SizeOption } from '@/lib/messaging';
+import type { SizeOption } from '@/lib/messaging';
+import { useProduct } from './hooks/use-product';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [product, setProduct] = useState<Product | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
-  // Load product data from storage when component mounts
-  useEffect(() => {
-    browser.storage.session
-      .get('current_product_view')
-      .then(({ current_product_view: data }) => {
-        if (data) {
-          setProduct(data);
-          setSelectedSize(data.selectedSize || null);
-        }
-      });
-
-    // Also listen for storage changes
-    const listener = (
-      changes: Record<string, { newValue?: unknown; oldValue?: unknown }>
-    ) => {
-      if (
-        changes.current_product_view &&
-        changes.current_product_view.newValue
-      ) {
-        const newData = changes.current_product_view.newValue as Product;
-        setProduct(newData);
-        setSelectedSize(newData.selectedSize || null);
-      }
-    };
-
-    browser.storage.onChanged.addListener(listener);
-
-    return () => {
-      browser.storage.onChanged.removeListener(listener);
-    };
-  }, []);
+  const product = useProduct();
+  const selectedSize = product?.selectedSize ?? null;
 
   // Simulate loading animation
   useEffect(() => {
