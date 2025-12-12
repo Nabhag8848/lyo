@@ -1,1 +1,2 @@
-export * from './dashboard';
+export * from './avatar-onboarding';
+export * from './avatar-selector';
