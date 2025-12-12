@@ -1,4 +1,4 @@
-import { Route } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 import { Suspense } from 'react';
 import {
   createBrowserRouter,
@@ -6,7 +6,8 @@ import {
 } from 'react-router-dom';
 import { DefaultLayout } from '@/app/layout/components';
 import { AppRouterProviders } from '@/app/components';
-import { Dashboard } from '@/modules/dashboard/components';
+import { AvatarOnboarding } from '@/modules/dashboard/components';
+import { Settings } from '@/modules/settings/components';
 import { AppPath } from '@/app/utils/title';
 import { DashboardSkeleton } from '@/modules/dashboard/skeleton';
 
@@ -17,9 +18,21 @@ export const useCreateRouter = (): ReturnType<typeof createBrowserRouter> => {
         <Route element={<DefaultLayout />}>
           <Route
             path={AppPath.ROOT}
+            element={<Navigate to={AppPath.ONBOARDING} replace />}
+          />
+          <Route
+            path={AppPath.ONBOARDING}
             element={
               <Suspense fallback={<DashboardSkeleton />}>
-                <Dashboard />
+                <AvatarOnboarding />
+              </Suspense>
+            }
+          />
+          <Route
+            path={AppPath.SETTINGS}
+            element={
+              <Suspense fallback={<DashboardSkeleton />}>
+                <Settings />
               </Suspense>
             }
           />

@@ -1,16 +1,21 @@
+import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/modules/auth/context';
 import { getWebsiteUrl } from '@/app/utils';
+import { AppPath } from '@/app/utils/title';
 
-interface SidebarProps {
-  activeItem?: string;
-}
-
-export const Sidebar = ({ activeItem = 'onboarding' }: SidebarProps) => {
+export const Sidebar = () => {
   const { user, signOut } = useAuth();
 
   const handleSignOut = () => {
     signOut();
   };
+
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `flex items-center gap-3 px-3 py-2 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors ${
+      isActive
+        ? 'bg-stone-100 text-stone-900'
+        : 'text-stone-500 hover:bg-stone-50 hover:text-stone-900'
+    }`;
 
   return (
     <div className="w-64 min-h-screen bg-white text-stone-900 flex flex-col border-r border-stone-200">
@@ -29,14 +34,7 @@ export const Sidebar = ({ activeItem = 'onboarding' }: SidebarProps) => {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
-        <a
-          href="#"
-          className={`flex items-center gap-3 px-3 py-2 text-[11px] font-bold tracking-[0.15em] uppercase transition-colors ${
-            activeItem === 'onboarding'
-              ? 'bg-stone-100 text-stone-900'
-              : 'text-stone-500 hover:bg-stone-50 hover:text-stone-900'
-          }`}
-        >
+        <NavLink to={AppPath.ONBOARDING} className={navLinkClass}>
           <svg
             className="w-5 h-5"
             fill="none"
@@ -51,12 +49,9 @@ export const Sidebar = ({ activeItem = 'onboarding' }: SidebarProps) => {
             />
           </svg>
           <span>Onboarding</span>
-        </a>
+        </NavLink>
 
-        <a
-          href="#"
-          className="flex items-center gap-3 px-3 py-2 text-[11px] font-bold tracking-[0.15em] uppercase text-stone-500 hover:bg-stone-50 hover:text-stone-900 transition-colors"
-        >
+        <NavLink to={AppPath.SETTINGS} className={navLinkClass}>
           <svg
             className="w-5 h-5"
             fill="none"
@@ -77,7 +72,7 @@ export const Sidebar = ({ activeItem = 'onboarding' }: SidebarProps) => {
             />
           </svg>
           <span>Settings</span>
-        </a>
+        </NavLink>
 
         <a
           href={getWebsiteUrl()}
