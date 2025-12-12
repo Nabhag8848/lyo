@@ -15,8 +15,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  const frontUrl = configService.get<string>('FRONT_URL') ?? 'http://localhost:4200';
-  const appUrl = configService.get<string>('APP_URL') ?? 'http://localhost:3001';
+  const frontUrl =
+    configService.get<string>('FRONT_URL') ?? 'http://localhost:4200';
+  const appUrl =
+    configService.get<string>('APP_URL') ?? 'http://localhost:3001';
   const isProduction = configService.get<string>('NODE_ENV') === 'production';
   const allowedOrigins = getAllowedOrigins(frontUrl, appUrl, isProduction);
 
@@ -39,7 +41,8 @@ async function bootstrap() {
   const hostname = configService.get<string>('SERVER_HOST', '0.0.0.0');
   await app.listen(port, hostname);
   Logger.log(
-    `🚀 Application is running on: http://${hostname}:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://${hostname}:${port}/${globalPrefix}`,
+    `${process.pid}`
   );
 }
 
