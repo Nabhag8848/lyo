@@ -79,8 +79,8 @@ export const AvatarOnboarding = () => {
   };
 
   return (
-    <div className="flex-1 bg-stone-50 text-stone-900 overflow-y-auto">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="bg-stone-50 text-stone-900 h-full flex flex-col">
+      <div className="mx-auto px-6 py-6 max-w-auto ml-10 mr-10 flex-1 flex flex-col min-h-0">
         {/* File input - always available for both upload states */}
         <input
           ref={fileInputRef}
@@ -89,10 +89,10 @@ export const AvatarOnboarding = () => {
           onChange={handleFileSelect}
           className="hidden"
         />
-        <h1 className="font-display text-3xl lg:text-4xl leading-[1.1] text-black mb-2 uppercase tracking-wide">
+        <h1 className="font-display text-3xl lg:text-4xl leading-[1.1] text-black mb-2 uppercase tracking-wide shrink-0">
           Create Your Avatar
         </h1>
-        <p className="text-base text-stone-600 mb-8 font-light">
+        <p className="text-base text-stone-600 mb-6 font-light shrink-0">
           Upload your photo to generate lookalike avatars
         </p>
 
@@ -124,49 +124,82 @@ export const AvatarOnboarding = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {/* Main Avatar Display - Changes based on selection */}
-            <div className="flex justify-center mb-6">
-              <div className="w-[300px] h-[380px] rounded-xl overflow-hidden  flex items-center justify-center">
-                <img
-                  src={getDisplayAvatarUrl()}
-                  alt="Selected Avatar"
-                  className="max-w-full max-h-full object-contain"
-                />
+          <div className="flex gap-8 flex-1 min-h-0">
+            {/* Left Side - Main Avatar Display */}
+            <div className="flex-1 flex items-center justify-center min-w-0 min-h-0">
+              <div className="w-full h-full flex items-center justify-center p-6">
+                {isGenerating ? (
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <img
+                      src={uploadedImage || ''}
+                      alt="Uploaded"
+                      className="w-full h-full object-contain opacity-50"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-stone-50/50">
+                      <div className="text-center">
+                        <div className="w-8 h-8 border-2 border-stone-300 border-t-stone-600 rounded-full animate-spin mx-auto mb-2" />
+                        <p className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+                          Generating...
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={getDisplayAvatarUrl() || ''}
+                    alt="Selected Avatar"
+                    className="w-full h-full object-contain"
+                  />
+                )}
               </div>
             </div>
 
-            {/* Avatar Selector */}
-            {avatars.length > 0 && (
-              <div className="mb-6">
-                <AvatarSelector
-                  avatars={avatars}
-                  selectedAvatarId={selectedAvatarId || undefined}
-                  onSelectAvatar={handleSelectAvatar}
-                  isLoading={isGenerating}
-                />
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex items-center justify-center gap-4 pt-2">
-              <button
-                onClick={handleUploadClick}
-                className="px-10 py-4 border border-stone-200 text-stone-700 hover:bg-stone-100 hover:border-stone-300 transition-colors text-xs font-bold tracking-[0.2em] uppercase"
-              >
-                Upload Different Photo
-              </button>
-              {selectedAvatarId && (
-                <button
-                  onClick={handleUseAvatar}
-                  className="bg-black text-white px-10 py-4 text-xs font-bold tracking-[0.2em] hover:bg-stone-800 transition-all shadow-xl hover:-translate-y-1 duration-300 uppercase flex items-center gap-3 group"
-                >
-                  Use This Avatar
-                  <span className="group-hover:translate-x-1 transition-transform text-lg">
-                    →
-                  </span>
-                </button>
-              )}
+            {/* Right Side - Scrollable Avatars and Buttons */}
+            <div className="w-[800px] shrink-0 flex flex-col">
+              {isGenerating ? (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-8 h-8 border-2 border-stone-300 border-t-stone-600 rounded-full animate-spin mx-auto mb-2" />
+                    <p className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+                      Generating avatars...
+                    </p>
+                  </div>
+                </div>
+              ) : avatars.length > 0 ? (
+                <>
+                  {/* Avatar Selector */}
+                  <div className="flex-1"></div>
+                  <div className="shrink-0 mb-2" style={{ maxHeight: '60%' }}>
+                    <AvatarSelector
+                      avatars={avatars}
+                      selectedAvatarId={selectedAvatarId || undefined}
+                      onSelectAvatar={handleSelectAvatar}
+                      isLoading={isGenerating}
+                    />
+                  </div>
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 pt-2 border-t border-stone-200 shrink-0 mb-6">
+                    <button
+                      onClick={handleUploadClick}
+                      className="flex-1 px-6 py-3 border border-stone-200 text-stone-700 hover:bg-stone-100 hover:border-stone-300 transition-colors text-xs font-bold tracking-[0.2em] uppercase"
+                    >
+                      Upload Different Photo
+                    </button>
+                    {selectedAvatarId && (
+                      <button
+                        onClick={handleUseAvatar}
+                        className="flex-1 bg-black text-white px-6 py-3 text-xs font-bold tracking-[0.2em] hover:bg-stone-800 transition-all shadow-xl hover:-translate-y-1 duration-300 uppercase flex items-center justify-center gap-3 group"
+                      >
+                        Use This Avatar
+                        <span className="group-hover:translate-x-1 transition-transform text-lg">
+                          →
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex-1"></div>
+                </>
+              ) : null}
             </div>
           </div>
         )}

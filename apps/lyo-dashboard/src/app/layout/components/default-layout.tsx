@@ -16,14 +16,14 @@ export const DefaultLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 flex">
+    <div className="h-screen bg-stone-50 flex overflow-hidden">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Panel */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <div className="h-20 bg-white/95 backdrop-blur-xl border-b border-stone-100 flex items-center justify-between px-6">
+        <div className="h-20 bg-white/95 backdrop-blur-xl border-b border-stone-100 flex items-center justify-between px-6 shrink-0">
           <a
             href={getWebsiteUrl()}
             className="flex items-center gap-1 cursor-pointer group"
@@ -35,7 +35,9 @@ export const DefaultLayout = () => {
         </div>
 
         {/* Main Content */}
-        <Outlet />
+        <div className="flex-1 overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
