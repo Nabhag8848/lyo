@@ -29,7 +29,6 @@ export const Sidebar = () => {
         <div className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase mb-2">
           Pro Plan
         </div>
-        <div className="text-xs text-stone-500">{user?.email}</div>
       </div>
 
       {/* Navigation */}

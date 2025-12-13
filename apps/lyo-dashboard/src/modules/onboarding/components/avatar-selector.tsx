@@ -30,8 +30,13 @@ export const AvatarSelector = ({
         scrollContainerRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-      // Update padding width to allow centering
-      setPaddingWidth(clientWidth / 2 - 96);
+      // Update padding width to allow centering - adjust based on avatar size
+      // Avatar width: 96px (lg), 128px (md), 96px (sm), 96px (base)
+      const isLarge = window.matchMedia('(min-width: 1024px)').matches;
+      const isMedium = window.matchMedia('(min-width: 768px)').matches;
+      const isSmall = window.matchMedia('(min-width: 640px)').matches;
+      const avatarWidth = isLarge ? 192 : isMedium ? 160 : isSmall ? 128 : 96;
+      setPaddingWidth(clientWidth / 2 - avatarWidth / 2);
     }
   };
 
@@ -45,10 +50,11 @@ export const AvatarSelector = ({
     const containerRect = container.getBoundingClientRect();
     const containerCenter = containerRect.left + containerRect.width / 2;
 
-    let closestAvatar: { id: string; distance: number } | null = null;
+    type ClosestAvatar = { id: string; distance: number };
+    let closestAvatar: ClosestAvatar | null = null;
 
-    avatarRefs.current.forEach((element, avatarId) => {
-      if (!element) return;
+    for (const [avatarId, element] of avatarRefs.current.entries()) {
+      if (!element) continue;
 
       const rect = element.getBoundingClientRect();
       const avatarCenter = rect.left + rect.width / 2;
@@ -60,7 +66,7 @@ export const AvatarSelector = ({
           closestAvatar = { id: avatarId, distance };
         }
       }
-    });
+    }
 
     // Only update if we found a close avatar (within reasonable distance)
     if (
@@ -108,6 +114,7 @@ export const AvatarSelector = ({
         window.removeEventListener('resize', checkScrollability);
       };
     }
+    return undefined;
   }, [avatars, handleScroll, selectedAvatarId]);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -166,11 +173,11 @@ export const AvatarSelector = ({
       {canScrollLeft && (
         <button
           onClick={() => scroll('left')}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-stone-50 text-stone-900 p-3 shadow-lg transition-all border border-stone-200"
+          className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-stone-50 text-stone-900 p-2 sm:p-2.5 lg:p-3 shadow-lg transition-all border border-stone-200"
           aria-label="Scroll left"
         >
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -188,7 +195,7 @@ export const AvatarSelector = ({
       {/* Avatar container with horizontal scroll */}
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto no-scrollbar scroll-smooth py-4"
+        className="flex overflow-x-auto no-scrollbar scroll-smooth py-2 sm:py-3 lg:py-4"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -197,20 +204,13 @@ export const AvatarSelector = ({
       >
         {/* Left padding to allow first avatar to center */}
         <div
-          className="flex-shrink-0"
+          className="shrink-0"
           style={{ width: `${Math.max(0, paddingWidth)}px` }}
         />
 
         {avatars.map((avatar, index) => {
-          const isSelected = selectedAvatarId === avatar.id;
-          const selectedIndex = avatars.findIndex(
-            (a) => a.id === selectedAvatarId
-          );
-          const distanceFromSelected = Math.abs(
-            index - (selectedIndex !== -1 ? selectedIndex : 0)
-          );
-
           // Simple opacity and scale for selection feedback
+          const isSelected = avatar.id === selectedAvatarId;
           const scale = isSelected ? 1.05 : 1;
           const opacity = isSelected ? 1 : 0.6;
 
@@ -245,11 +245,12 @@ export const AvatarSelector = ({
                   });
                 }
               }}
-              className="flex-shrink-0 w-48 h-60 rounded-xl overflow-hidden transition-all duration-300 ease-out flex items-center justify-center"
+              className={`shrink-0 w-24 h-32 sm:w-32 sm:h-40 md:w-40 md:h-52 lg:w-48 lg:h-60 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
+                index === 0 ? '' : '-ml-4 sm:-ml-6 lg:-ml-8'
+              }`}
               style={{
                 transform: `scale(${scale})`,
                 opacity,
-                marginLeft: index === 0 ? 0 : '-32px',
                 zIndex: isSelected ? 10 : 1,
               }}
             >
@@ -264,7 +265,7 @@ export const AvatarSelector = ({
 
         {/* Right padding to allow last avatar to center */}
         <div
-          className="flex-shrink-0"
+          className="shrink-0"
           style={{ width: `${Math.max(0, paddingWidth)}px` }}
         />
       </div>
@@ -273,11 +274,11 @@ export const AvatarSelector = ({
       {canScrollRight && (
         <button
           onClick={() => scroll('right')}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-stone-50 text-stone-900 p-3 shadow-lg transition-all border border-stone-200"
+          className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-stone-50 text-stone-900 p-2 sm:p-2.5 lg:p-3 shadow-lg transition-all border border-stone-200"
           aria-label="Scroll right"
         >
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
