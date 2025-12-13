@@ -1,4 +1,3 @@
-import { User } from '@/@types';
 import { fetchUser } from '@/modules/user/api/fetch-user';
 import { useQuery } from '@tanstack/react-query';
 

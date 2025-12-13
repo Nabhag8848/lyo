@@ -1,5 +1,4 @@
 import { createContext, useContext, ReactNode } from 'react';
-import { User } from '@/@types';
 import { useUser } from '@/modules/user/hooks';
 import { useSignInWithGoogle } from '@/modules/auth/hooks/use-sigin-with-google';
 import { useSignOutWithGoogle } from '@/modules/auth/hooks/use-signout-with-google';

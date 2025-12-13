@@ -1,7 +1,6 @@
 import { getServerEndpointUrl } from '@/app/utils';
-
-export const fetchUser = async (): Promise<User | null> => {
-  const res = await fetch(getServerEndpointUrl('user/profile'), {
+export const fetchAvatar = async (): Promise<Avatar | null> => {
+  const res = await fetch(getServerEndpointUrl('avatar'), {
     credentials: 'include',
   });
   if (!res.ok) {

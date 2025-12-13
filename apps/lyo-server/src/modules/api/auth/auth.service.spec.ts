@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { GoogleOAuthUserDto } from './dtos';
-import { UserEntity } from '../../database/entities';
+import { UserEntity } from '../../../database/entities';
 
 describe('AuthService', () => {
   let service: AuthService;

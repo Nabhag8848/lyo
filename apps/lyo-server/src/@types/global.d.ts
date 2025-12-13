@@ -3,7 +3,7 @@
 import { GoogleOAuthUserDto } from '@/modules/auth/dtos';
 import { AuthUserDto } from '@/modules/user/dtos';
 
-interface AppCookies extends Record<string, string | undefined> {
+export interface AppCookies extends Record<string, string | undefined> {
   access_token: string | null;
 }
 
