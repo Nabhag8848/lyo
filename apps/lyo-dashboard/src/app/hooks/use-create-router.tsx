@@ -6,10 +6,10 @@ import {
 } from 'react-router-dom';
 import { DefaultLayout } from '@/app/layout/components';
 import { AppRouterProviders } from '@/app/components';
-import { AvatarOnboarding } from '@/modules/dashboard/components';
+import { AvatarOnboarding } from '@/modules/onboarding/components';
 import { Settings } from '@/modules/settings/components';
 import { AppPath } from '@/app/utils/title';
-import { DashboardSkeleton } from '@/modules/dashboard/skeleton';
+import { DashboardSkeleton } from '@/modules/onboarding/skeleton';
 
 export const useCreateRouter = (): ReturnType<typeof createBrowserRouter> => {
   return createBrowserRouter(
