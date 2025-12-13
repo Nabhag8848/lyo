@@ -14,6 +14,5 @@ export const uploadAvatar = async (file: File): Promise<Avatar | null> => {
     return null;
   }
 
-  const data = await response.json();
-  return data;
+  return response.json();
 };

@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { uploadAvatar } from '@/modules/onboarding/api';
+import { deleteAvatar } from '@/modules/onboarding/api';
 
-export const useUploadAvatar = () => {
+export const useDeleteAvatar = () => {
   const queryClient = useQueryClient();
-  return useMutation<Avatar | null, Error, File>({
-    mutationFn: (file: File) => uploadAvatar(file),
+
+  return useMutation<void, Error, void>({
+    mutationFn: () => deleteAvatar(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['avatar'] });
     },

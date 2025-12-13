@@ -1,6 +1,6 @@
 import '@tanstack/react-query';
 
-type QueryKey = ['dashboard', 'user', 'profile', ...ReadonlyArray<unknown>];
+type QueryKey = ['dashboard', 'user', 'profile'] | ['avatar'];
 
 declare module '@tanstack/react-query' {
   interface Register {

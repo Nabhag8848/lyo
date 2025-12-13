@@ -1,17 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-interface Avatar {
-  id: string;
-  url: string;
-}
-
-interface AvatarSelectorProps {
-  avatars: Avatar[];
-  selectedAvatarId?: string;
-  onSelectAvatar: (avatarId: string) => void;
-  isLoading?: boolean;
-}
-
 export const AvatarSelector = ({
   avatars,
   selectedAvatarId,

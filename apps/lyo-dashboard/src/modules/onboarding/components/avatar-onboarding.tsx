@@ -1,32 +1,35 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { AvatarSelector } from './avatar-selector';
 import { useUploadAvatar } from '@/modules/onboarding/hooks/use-upload-avatar';
+import { useAvatar } from '@/modules/onboarding/hooks/use-avatar';
+import { useDeleteAvatar } from '@/modules/onboarding/hooks/use-delete-avatar';
 
 export const AvatarOnboarding = () => {
   const [avatars, setAvatars] = useState<Avatar[]>([]);
   const [selectedAvatarId, setSelectedAvatarId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate: uploadAvatar, data: uploadedAvatar } = useUploadAvatar();
+  const { mutate: uploadAvatar } = useUploadAvatar();
+  const { data: alreadyUploadedAvatar, isLoading: isLoadingAvatar } =
+    useAvatar();
+  const { mutate: deleteAvatar, isPending: isDeletingAvatar } =
+    useDeleteAvatar();
 
-  const handleFileSelect = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      await uploadAvatar(file);
-
-      // Todo: Generate avatars later with a backend API call / SSE
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        generateAvatars(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      uploadAvatar(file);
     }
     if (file) {
       event.target.value = '';
     }
   };
+
+  useEffect(() => {
+    if (alreadyUploadedAvatar) {
+      generateAvatars(alreadyUploadedAvatar.url ?? '');
+    }
+  }, [alreadyUploadedAvatar]);
 
   const generateAvatars = async (imageUrl: string) => {
     setIsGenerating(true);
@@ -60,14 +63,22 @@ export const AvatarOnboarding = () => {
       const selected = avatars.find((a) => a.id === selectedAvatarId);
       return selected?.url;
     }
-    return uploadedAvatar?.url;
+    return alreadyUploadedAvatar?.url;
   };
 
   const handleUseAvatar = () => {
     if (selectedAvatarId) {
       // TODO: Call backend API to save selected avatar
-      console.log('Selected avatar:', selectedAvatarId);
     }
+  };
+
+  const handleDeleteAvatar = () => {
+    deleteAvatar(undefined, {
+      onSuccess: () => {
+        setAvatars([]);
+        setSelectedAvatarId(null);
+      },
+    });
   };
 
   return (
@@ -88,7 +99,16 @@ export const AvatarOnboarding = () => {
           Upload your photo to generate lookalike avatars
         </p>
 
-        {!uploadedAvatar ? (
+        {isLoadingAvatar ? (
+          <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-stone-200 rounded-xl bg-white shadow-sm">
+            <div className="mb-5">
+              <div className="w-16 h-16 border-2 border-stone-300 border-t-stone-600 rounded-full animate-spin mx-auto" />
+            </div>
+            <p className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+              Loading avatar...
+            </p>
+          </div>
+        ) : !alreadyUploadedAvatar ? (
           <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-stone-200 rounded-xl bg-white shadow-sm">
             <div className="mb-5">
               <svg
@@ -159,6 +179,13 @@ export const AvatarOnboarding = () => {
                     >
                       Upload Different Photo
                     </button>
+                    <button
+                      onClick={handleDeleteAvatar}
+                      disabled={isDeletingAvatar}
+                      className="px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 border border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] uppercase whitespace-nowrap"
+                    >
+                      {isDeletingAvatar ? 'Deleting...' : 'Delete'}
+                    </button>
                     {selectedAvatarId && (
                       <button
                         onClick={handleUseAvatar}
@@ -173,7 +200,30 @@ export const AvatarOnboarding = () => {
                   </div>
                   <div className="flex-1"></div>
                 </>
-              ) : null}
+              ) : (
+                /* Show upload button when there's an avatar but no generated avatars */
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="w-full">
+                    <div className="flex-1"></div>
+                    <div className="flex gap-2 sm:gap-3 md:gap-4 pt-2 sm:pt-3 border-t border-stone-200 shrink-0 mb-4 sm:mb-5 md:mb-6">
+                      <button
+                        onClick={handleUploadClick}
+                        className="flex-1 px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 border border-stone-200 text-stone-700 hover:bg-stone-100 hover:border-stone-300 transition-colors text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] uppercase whitespace-nowrap"
+                      >
+                        Upload Different Photo
+                      </button>
+                      <button
+                        onClick={handleDeleteAvatar}
+                        disabled={isDeletingAvatar}
+                        className="px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 border border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] uppercase whitespace-nowrap"
+                      >
+                        {isDeletingAvatar ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
+                    <div className="flex-1"></div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
