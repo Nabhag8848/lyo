@@ -1,36 +1,28 @@
 import { useState, useRef } from 'react';
 import { AvatarSelector } from './avatar-selector';
-
-interface Avatar {
-  id: string;
-  url: string;
-}
+import { useUploadAvatar } from '@/modules/onboarding/hooks/use-upload-avatar';
 
 export const AvatarOnboarding = () => {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [avatars, setAvatars] = useState<Avatar[]>([]);
   const [selectedAvatarId, setSelectedAvatarId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { mutate: uploadAvatar, data: uploadedAvatar } = useUploadAvatar();
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
+      await uploadAvatar(file);
+
+      // Todo: Generate avatars later with a backend API call / SSE
       const reader = new FileReader();
       reader.onloadend = () => {
-        const imageUrl = reader.result as string;
-        setUploadedImage(imageUrl);
-        // Reset avatars and selection when new image is uploaded
-        setAvatars([]);
-        setSelectedAvatarId(null);
-        // TODO: Call backend API to generate avatars
-        // For now, we'll simulate with placeholder avatars
-        generateAvatars(imageUrl);
+        generateAvatars(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
-    // Reset the input value so the same file can be selected again if needed
-    // Only reset if a file was actually selected
     if (file) {
       event.target.value = '';
     }
@@ -66,9 +58,9 @@ export const AvatarOnboarding = () => {
   const getDisplayAvatarUrl = () => {
     if (selectedAvatarId) {
       const selected = avatars.find((a) => a.id === selectedAvatarId);
-      return selected?.url || uploadedImage;
+      return selected?.url;
     }
-    return uploadedImage;
+    return uploadedAvatar?.url;
   };
 
   const handleUseAvatar = () => {
@@ -96,7 +88,7 @@ export const AvatarOnboarding = () => {
           Upload your photo to generate lookalike avatars
         </p>
 
-        {!uploadedImage ? (
+        {!uploadedAvatar ? (
           <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-stone-200 rounded-xl bg-white shadow-sm">
             <div className="mb-5">
               <svg

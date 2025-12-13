@@ -1,4 +1,3 @@
-import { User } from '@/@types';
 import { getServerEndpointUrl } from '@/app/utils';
 
 export const fetchUser = async (): Promise<User | null> => {

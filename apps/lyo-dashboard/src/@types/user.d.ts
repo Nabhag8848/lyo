@@ -1,4 +1,4 @@
-export interface User {
+declare interface User {
   email: string;
   firstName?: string;
   lastName?: string;
