@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from '@/modules/user/user.service';
+import { UserService } from '@/modules/api/user/user.service';
 import { GoogleOAuthUserDto } from './dtos';
 import { parseExpiration } from './utils';
 

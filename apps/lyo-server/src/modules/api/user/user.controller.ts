@@ -1,9 +1,9 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from '@/modules/auth/guards';
 import { AuthUserDto, UserProfileDto } from './dtos';
 import { CurrentUser } from './decorators';
 import { Serialize } from '@/app/decorators/serialize.decorator';
+import { JwtAuthGuard } from '@/modules/api/auth/guards';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)

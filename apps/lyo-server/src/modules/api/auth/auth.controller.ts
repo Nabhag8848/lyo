@@ -1,12 +1,12 @@
-import { Controller, Get, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard, JwtAuthGuard } from './guards';
 import { CurrentUser, GoogleUser } from './decorators';
 import { GoogleOAuthUserDto } from './dtos';
-import { UserService } from '@/modules/user/user.service';
-import { AuthUserDto } from '@/modules/user/dtos';
+import { UserService } from '@/modules/api/user/user.service';
+import { AuthUserDto } from '@/modules/api/user/dtos';
 
 @Controller('auth')
 export class AuthController {
