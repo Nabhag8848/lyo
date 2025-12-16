@@ -8,6 +8,8 @@ export interface AppCookies extends Record<string, string | undefined> {
 }
 
 declare global {
+  type MulterFile = Express.Multer.File;
+
   namespace Express {
     interface Request {
       user: AuthUserDto | GoogleOAuthUserDto;
