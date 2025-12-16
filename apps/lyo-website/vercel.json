@@ -1,6 +1,6 @@
 {
   "buildCommand": "pnpm nx build lyo-website",
-  "outputDirectory": "apps/lyo-website/dist",
+  "outputDirectory": "dist",
   "installCommand": "pnpm install",
   "framework": "vite",
   "rewrites": [
