@@ -1,6 +1,6 @@
 {
   "buildCommand": "pnpm nx build lyo-dashboard",
-  "outputDirectory": "apps/lyo-dashboard/dist",
+  "outputDirectory": "dist",
   "installCommand": "pnpm install",
   "framework": "vite",
   "rewrites": [
@@ -10,4 +10,3 @@
     }
   ]
 }
-
