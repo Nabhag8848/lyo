@@ -27,7 +27,7 @@ jobs:
         run: pnpm install
 
       - name: Build Server
-        run: npx nx build lyo-server
+        run: npx nx build lyo-server --configuration=production
 
       - name: Upload build to server
         uses: appleboy/scp-action@v0.1.4

@@ -7,14 +7,19 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "webpack-cli build",
-        "args": ["--node-env=production"],
         "cwd": "apps/lyo-server"
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"]
+          "args": ["--node-env=development"],
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "args": ["--node-env=production"],
+          "envFile": "apps/lyo-server/.env.production"
         }
       }
     },
@@ -68,44 +73,98 @@
     },
     "migration:deploy": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "typeorm-ts-node-commonjs migration:run -d src/database/datasource/app.datasource.ts",
         "cwd": "apps/lyo-server"
+      },
+      "configurations": {
+        "development": {
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:revert": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "typeorm-ts-node-commonjs migration:revert -d src/database/datasource/app.datasource.ts",
         "cwd": "apps/lyo-server"
+      },
+      "configurations": {
+        "development": {
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:generate": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "typeorm-ts-node-commonjs migration:generate src/database/migrations/{args.name} -d src/database/datasource/app.datasource.ts",
         "cwd": "apps/lyo-server"
+      },
+      "configurations": {
+        "development": {
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:create": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "typeorm-ts-node-commonjs migration:create src/database/migrations/{args.name}",
         "cwd": "apps/lyo-server"
+      },
+      "configurations": {
+        "development": {
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:show": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "typeorm-ts-node-commonjs migration:show -d src/database/datasource/app.datasource.ts",
         "cwd": "apps/lyo-server"
+      },
+      "configurations": {
+        "development": {
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:schema:sync": {
       "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
       "options": {
         "command": "typeorm-ts-node-commonjs schema:sync -d src/database/datasource/app.datasource.ts",
         "cwd": "apps/lyo-server"
+      },
+      "configurations": {
+        "development": {
+          "envFile": "apps/lyo-server/.env"
+        },
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     }
   }
