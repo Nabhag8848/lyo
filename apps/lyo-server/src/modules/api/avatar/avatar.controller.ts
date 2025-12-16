@@ -14,6 +14,7 @@ import { CurrentUser } from '@/modules/api/user/decorators';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 import { AvatarDto } from './dtos/avatar.dto';
 import { Serialize } from '@/app/decorators/serialize.decorator';
+import { ImageFilePipe } from './validator';
 
 @Controller('avatar')
 @UseGuards(JwtAuthGuard)
@@ -24,7 +25,8 @@ export class AvatarController {
   @Serialize(AvatarDto)
   @UseInterceptors(FileInterceptor('avatar'))
   async uploadAvatar(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(ImageFilePipe)
+    file: MulterFile,
     @CurrentUser() authUser: AuthUserDto
   ): Promise<AvatarDto> {
     return this.avatarService.uploadAvatar(file, authUser.id);

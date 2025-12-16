@@ -6,10 +6,7 @@ import { AvatarDto } from './dtos/avatar.dto';
 export class AvatarService {
   constructor(private s3ObjectService: S3ObjectService) {}
 
-  async uploadAvatar(
-    file: Express.Multer.File,
-    userId: string
-  ): Promise<AvatarDto> {
+  async uploadAvatar(file: MulterFile, userId: string): Promise<AvatarDto> {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
