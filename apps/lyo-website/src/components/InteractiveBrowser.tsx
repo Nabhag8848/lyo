@@ -374,7 +374,7 @@ export const InteractiveBrowser = () => {
                 {/* History */}
                 <div className="mt-0.5 lg:mt-0">
                   <span className="text-[0.35rem] md:text-[0.4rem] lg:text-[0.375rem] xl:text-[0.45rem] 2xl:text-[0.55rem] font-bold text-stone-400 uppercase tracking-[0.2em] block mb-0.5 md:mb-0.75 lg:mb-0.5 xl:mb-0.75 2xl:mb-1">
-                    History
+                    WARDROBE
                   </span>
                   <style>{`
                     .history-scroll::-webkit-scrollbar {
