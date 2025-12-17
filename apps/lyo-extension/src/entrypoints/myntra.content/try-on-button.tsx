@@ -1,4 +1,3 @@
-import { Product } from '@/lib/messaging';
 import { extractProductData } from './extract-product-data';
 
 const TryNowButton = () => {

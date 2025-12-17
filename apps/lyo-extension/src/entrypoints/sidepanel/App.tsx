@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import type { SizeOption } from '@/lib/messaging';
 import { useProduct } from './hooks/use-product';
 
 function App() {

@@ -31,4 +31,25 @@ declare module 'wxt/browser' {
   }
 }
 
+declare global {
+  type SizeOption = {
+    size: string;
+    available: boolean;
+  };
+
+  type Product = {
+    brand: string;
+    name: string;
+    price: string;
+    mrp: string;
+    discount: string;
+    discountPercent: string;
+    description: string;
+    imageUrl: string;
+    buttonType: 'add_to_bag' | 'go_to_bag';
+    sizes: SizeOption[];
+    selectedSize?: string | null;
+  };
+}
+
 export {};

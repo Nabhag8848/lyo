@@ -1,4 +1,3 @@
-import { Product } from '@/lib/messaging';
 import { currentProductView } from '@/lib/storage';
 import { useSyncExternalStore } from 'react';
 

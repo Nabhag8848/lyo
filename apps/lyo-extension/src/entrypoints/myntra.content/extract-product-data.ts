@@ -1,5 +1,3 @@
-import { Product, SizeOption } from '@/lib/messaging';
-
 export function extractProductData(): Product | null {
   try {
     const brandElement = document.querySelector('h1.pdp-title');
@@ -38,9 +36,7 @@ export function extractProductData(): Product | null {
     const goToBagButton = document.querySelector(
       'a.pdp-goToCart.pdp-add-to-bag'
     );
-    // const addToBagButton = document.querySelector(
-    //   'div.pdp-add-to-bag.pdp-button.pdp-flex.pdp-center'
-    // );
+
     const buttonType: 'add_to_bag' | 'go_to_bag' = goToBagButton
       ? 'go_to_bag'
       : 'add_to_bag';
