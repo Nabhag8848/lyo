@@ -79,12 +79,6 @@ export const HowItWorks = () => {
           {/* VISUAL 01 */}
           <div className="bg-stone-50 h-[450px] rounded-2xl border border-stone-200 flex items-center justify-center relative overflow-hidden shadow-inner">
             <div className="w-72 h-[380px] bg-white border border-stone-200 shadow-2xl rounded-lg flex flex-col overflow-hidden relative">
-              <div className="h-12 border-b border-stone-100 flex items-center justify-between px-5 bg-stone-50 shrink-0">
-                <span className="font-display text-xl tracking-wide">LYO.</span>
-                <span className="text-[9px] bg-black text-white px-2 py-1 rounded-full tracking-widest font-bold">
-                  SETUP
-                </span>
-              </div>
               <div className="flex-1 p-8 flex flex-col relative justify-center">
                 <div className="w-full aspect-[3/4] border-2 border-dashed border-stone-200 rounded-md bg-stone-50 relative flex items-center justify-center overflow-hidden">
                   <div className="absolute flex flex-col items-center gap-3 s1-prompt text-stone-400">
@@ -108,10 +102,10 @@ export const HowItWorks = () => {
                   <div className="absolute inset-0 flex items-center justify-center s1-loader">
                     <div className="w-10 h-10 border-2 border-stone-200 border-t-black rounded-full animate-spin"></div>
                   </div>
-                  <div className="absolute inset-0 s1-photo">
+                  <div className="absolute inset-0 s1-photo flex items-center justify-center">
                     <img
-                      src="/user-model-pic.png"
-                      className="w-full h-full object-cover opacity-80"
+                      src="https://tryonn.s3.ap-south-1.amazonaws.com/model.png"
+                      className="w-full h-full object-contain opacity-80"
                       alt="uploaded"
                     />
                     <div className="absolute w-full h-0.5 bg-green-500 shadow-[0_0_15px_rgba(34,197,94,1)] s1-scan z-20"></div>
@@ -151,8 +145,8 @@ export const HowItWorks = () => {
                 <div className="w-1/2 aspect-[3/4] bg-stone-200 rounded-sm relative overflow-hidden group">
                   <div className="absolute inset-0 flex items-center justify-center text-stone-400">
                     <img
-                      src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800"
-                      className="w-full h-full object-cover opacity-90"
+                      src="https://tryonn.s3.ap-south-1.amazonaws.com/new.png"
+                      className="w-full h-full object-contain opacity-90"
                       alt="Store Item"
                     />
                   </div>
@@ -288,29 +282,17 @@ export const HowItWorks = () => {
           {/* VISUAL 03 */}
           <div className="bg-stone-50 h-[450px] rounded-2xl border border-stone-200 flex items-center justify-center relative shadow-inner">
             <div className="w-72 h-[380px] bg-white border border-stone-200 shadow-2xl rounded-lg flex flex-col overflow-hidden relative">
-              <div className="h-12 border-b border-stone-100 flex items-center justify-between px-5 bg-stone-50 shrink-0">
-                <span className="font-display text-xl tracking-wide">LYO.</span>
-                <span className="text-stone-400 text-xl font-light">×</span>
-              </div>
               <div className="flex-1 p-5 flex flex-col relative">
-                <div className="flex-1 bg-stone-100 rounded-sm relative overflow-hidden flex items-center justify-center border border-stone-100">
+                <div className="flex-1 rounded-sm relative overflow-hidden flex items-center justify-center">
                   <div className="absolute inset-0 flex items-center justify-center step3-loader z-20 bg-stone-50">
                     <div className="w-10 h-10 border-2 border-stone-200 border-t-brand-pink rounded-full animate-spin"></div>
                   </div>
-                  <div className="absolute inset-0 step3-image z-10">
+                  <div className="absolute inset-0 step3-image z-10 flex items-center justify-center">
                     <img
-                      src="/user-model.png"
-                      className="w-full h-full object-cover"
+                      src="https://tryonn.s3.ap-south-1.amazonaws.com/model-1-removebg-preview.png"
+                      className="w-full h-full object-contain"
                       alt="Result"
                     />
-                    <div className="absolute top-3 left-3 bg-green-500 text-white px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.2em] rounded-sm shadow-sm">
-                      Live Render
-                    </div>
-                  </div>
-                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur px-3 py-1.5 rounded-sm shadow-lg border border-stone-200 step3-badge z-30">
-                    <div className="text-[9px] font-bold text-green-700 tracking-wider">
-                      98% MATCH
-                    </div>
                   </div>
                 </div>
                 <div className="mt-5 space-y-3">
