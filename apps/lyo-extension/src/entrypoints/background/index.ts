@@ -1,4 +1,3 @@
-import { Product } from '@/lib/messaging';
 import { currentProductView } from '@/lib/storage';
 import type { Browser } from 'wxt/browser';
 
@@ -34,6 +33,28 @@ export default defineBackground(() => {
     }
   };
 
+  browser.tabs.onCreated.addListener(async (tab) => {
+    const { id: tabId, url } = tab;
+    if (tabId) {
+      if (url?.includes('myntra.com')) {
+        await browser.sidePanel.setOptions({
+          path: 'sidepanel.html',
+          tabId,
+          enabled: true,
+        });
+
+        await browser.sidePanel.setPanelBehavior({
+          openPanelOnActionClick: true,
+        });
+      } else {
+        await browser.sidePanel.setOptions({
+          tabId,
+          enabled: false,
+        });
+      }
+    }
+  });
+
   browser.tabs.onActivated.addListener(async ({ tabId }) => {
     if (tabId) {
       const tab = await browser.tabs.get(tabId);
@@ -50,13 +71,10 @@ export default defineBackground(() => {
           openPanelOnActionClick: true,
         });
       } else {
-        const tab = await browser.tabs.get(tabId);
-        const { url } = tab;
         await browser.sidePanel.setOptions({
           tabId,
           enabled: false,
         });
-        await closeSidePanel(tabId, url);
       }
     }
   });

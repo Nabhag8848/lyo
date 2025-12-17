@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.js';
 
 // Component to handle side panel close messages
 const SidePanelMessageHandler = () => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const listener = (message: { type?: string }) => {
       if (message.type === 'closeSidePanel') {
         window.close();
