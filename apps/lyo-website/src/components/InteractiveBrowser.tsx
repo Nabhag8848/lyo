@@ -29,9 +29,10 @@ export const InteractiveBrowser = () => {
 
   const avatarImages = [
     'https://tryonn.s3.ap-south-1.amazonaws.com/model-1-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/model-4-removebg-preview.png',
     'https://tryonn.s3.ap-south-1.amazonaws.com/model-2-removebg-preview.png',
     'https://tryonn.s3.ap-south-1.amazonaws.com/model-3-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/model-4-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/model-5-removebg-preview.png',
   ];
 
   const getImageSrc = (): string => {
