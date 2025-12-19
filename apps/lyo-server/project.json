@@ -14,8 +14,7 @@
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"],
-          "envFile": "apps/lyo-server/.env"
+          "args": ["--node-env=development"]
         },
         "production": {
           "args": ["--node-env=production"]
