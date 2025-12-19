@@ -8,11 +8,13 @@ export const getAllowedOrigins = (
   isProduction: boolean
 ): string[] => {
   const origins = new Set<string>();
+  const fashnaiUrl = 'https://api.fashn.ai';
 
   // Always allow localhost for development
   origins.add('http://localhost:4200');
   origins.add('http://localhost:3001');
   origins.add('http://localhost:3000');
+  origins.add(fashnaiUrl);
   origins.add(frontUrl);
   origins.add(appUrl);
 
