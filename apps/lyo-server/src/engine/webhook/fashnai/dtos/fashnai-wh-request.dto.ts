@@ -5,14 +5,15 @@ import {
   IsEnum,
   IsNotEmpty,
   IsObject,
-  IsOptional,
   IsString,
   IsUUID,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FashnaiRequestErrorDto } from './fashnai-wh-error-request.dto';
 import { FashnaiWebhookStatus } from '@/engine/webhook/fashnai/enum';
+import { ValidateFieldByStatus } from '@/engine/webhook/fashnai/validator';
 
 export class FashnaiWebhookRequestDto {
   @IsString()
@@ -32,23 +33,40 @@ export class FashnaiWebhookRequestDto {
   })
   status: FashnaiWebhookStatus;
 
-  @IsOptional()
+  @ValidateIf(
+    (o: FashnaiWebhookRequestDto) => o.status === FashnaiWebhookStatus.COMPLETED
+  )
+  @IsNotEmpty()
   @IsArray()
   @IsDataURI({ each: true })
+  @ValidateFieldByStatus({
+    requiredWhen: FashnaiWebhookStatus.COMPLETED,
+    forbiddenWhen: FashnaiWebhookStatus.FAILED,
+    oppositeField: 'error',
+  })
   @ApiPropertyOptional({
     description:
-      'Array of base64-encoded images (data URIs) with try-on results. Up to 4 images.',
+      'Array of base64-encoded images (data URIs) with try-on results. Up to 4 images. Required when status is completed, must not be present when status is failed.',
     type: [String],
     example: ['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD...'],
   })
   output?: Array<string>;
 
-  @IsOptional()
+  @ValidateIf(
+    (o: FashnaiWebhookRequestDto) => o.status === FashnaiWebhookStatus.FAILED
+  )
+  @IsNotEmpty()
   @IsObject()
   @ValidateNested()
   @Type(() => FashnaiRequestErrorDto)
+  @ValidateFieldByStatus({
+    requiredWhen: FashnaiWebhookStatus.FAILED,
+    forbiddenWhen: FashnaiWebhookStatus.COMPLETED,
+    oppositeField: 'output',
+  })
   @ApiPropertyOptional({
-    description: 'Error information if the job failed',
+    description:
+      'Error information if the job failed. Required when status is failed, must not be present when status is completed.',
     type: FashnaiRequestErrorDto,
     nullable: true,
   })
