@@ -12,22 +12,22 @@ import { JwtAuthGuard } from '@/modules/api/auth/guards';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('profile')
+  @Get('me')
   @Serialize(UserProfileDto)
   @ApiOperation({
-    summary: 'Get user profile',
-    description: "Retrieves the authenticated user's profile information",
+    summary: 'Get current user',
+    description: "Retrieves the authenticated user's information",
   })
   @ApiResponse({
     status: 200,
-    description: 'User profile retrieved successfully',
+    description: 'Current user retrieved successfully',
     type: UserProfileDto,
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
   })
-  async getProfile(
+  async getCurrentUser(
     @CurrentUser() authUser: AuthUserDto
   ): Promise<UserProfileDto> {
     const user = await this.userService.findByIdOrFail(authUser.id);
