@@ -1,1 +1,1 @@
-export * from './validate-if-status.validator';
+export * from './field-by-status.validator';
