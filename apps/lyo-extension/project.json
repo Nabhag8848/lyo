@@ -37,13 +37,21 @@
         "cwd": "{projectRoot}"
       }
     },
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wxt prepare",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "wxt build",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "dependsOn": ["prepare"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "build:chrome": {
       "executor": "nx:run-commands",
@@ -51,7 +59,8 @@
         "command": "wxt build -b chrome",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "dependsOn": ["prepare"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "build:firefox": {
       "executor": "nx:run-commands",
@@ -59,7 +68,8 @@
         "command": "wxt build -b firefox",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "dependsOn": ["prepare"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "build:edge": {
       "executor": "nx:run-commands",
@@ -67,7 +77,8 @@
         "command": "wxt build -b edge",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "dependsOn": ["prepare"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "build:safari": {
       "executor": "nx:run-commands",
@@ -75,7 +86,8 @@
         "command": "wxt build -b safari",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "dependsOn": ["prepare"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "zip": {
       "executor": "nx:run-commands",
@@ -83,7 +95,7 @@
         "command": "wxt zip",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "outputs": ["{projectRoot}/dist"]
     },
     "zip:chrome": {
       "executor": "nx:run-commands",
@@ -91,7 +103,7 @@
         "command": "wxt zip -b chrome",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "outputs": ["{projectRoot}/dist"]
     },
     "zip:firefox": {
       "executor": "nx:run-commands",
@@ -99,7 +111,7 @@
         "command": "wxt zip -b firefox",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "outputs": ["{projectRoot}/dist"]
     },
     "zip:edge": {
       "executor": "nx:run-commands",
@@ -107,7 +119,7 @@
         "command": "wxt zip -b edge",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "outputs": ["{projectRoot}/dist"]
     },
     "zip:safari": {
       "executor": "nx:run-commands",
@@ -115,7 +127,7 @@
         "command": "wxt zip -b safari",
         "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/.output"]
+      "outputs": ["{projectRoot}/dist"]
     },
     "compile": {
       "executor": "nx:run-commands",

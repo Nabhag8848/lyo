@@ -12,7 +12,9 @@ export const Footer = () => {
           </p>
           <div className="flex gap-4 pt-2">
             <a
-              href="#"
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-600 hover:bg-black hover:text-white transition-all duration-300"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -20,7 +22,9 @@ export const Footer = () => {
               </svg>
             </a>
             <a
-              href="#"
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-600 hover:bg-black hover:text-white transition-all duration-300"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -36,7 +40,10 @@ export const Footer = () => {
           </h4>
           <ul className="space-y-5 text-xs text-stone-600 font-medium uppercase tracking-wider">
             <li>
-              <a href="#" className="hover:text-black transition-colors">
+              <a
+                href="/download"
+                className="hover:text-black transition-colors"
+              >
                 Download
               </a>
             </li>
@@ -62,17 +69,17 @@ export const Footer = () => {
           </h4>
           <ul className="space-y-5 text-xs text-stone-600 font-medium uppercase tracking-wider">
             <li>
-              <a href="#" className="hover:text-black transition-colors">
+              <a href="/help" className="hover:text-black transition-colors">
                 Help Center
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-black transition-colors">
+              <a href="/privacy" className="hover:text-black transition-colors">
                 Privacy
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-black transition-colors">
+              <a href="/terms" className="hover:text-black transition-colors">
                 Terms
               </a>
             </li>
@@ -105,10 +112,10 @@ export const Footer = () => {
           © 2025 LYO Technologies.
         </div>
         <div className="flex gap-8 text-[10px] text-stone-500 uppercase tracking-wider font-bold">
-          <a href="#" className="hover:text-black transition-colors">
+          <a href="/privacy" className="hover:text-black transition-colors">
             Privacy
           </a>
-          <a href="#" className="hover:text-black transition-colors">
+          <a href="/terms" className="hover:text-black transition-colors">
             Terms
           </a>
         </div>

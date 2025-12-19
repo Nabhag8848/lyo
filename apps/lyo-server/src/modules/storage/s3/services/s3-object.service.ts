@@ -36,7 +36,8 @@ export class S3ObjectService {
     body: Buffer,
     options?: S3ObjectService.PutObjectOptions
   ): Promise<void> {
-    const { urlExpiresIn, ...commandOptions } = options || {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { urlExpiresIn: _urlExpiresIn, ...commandOptions } = options || {};
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,

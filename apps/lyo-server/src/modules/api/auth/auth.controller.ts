@@ -1,4 +1,10 @@
 import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import {
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
@@ -8,6 +14,7 @@ import { GoogleOAuthUserDto } from './dtos';
 import { UserService } from '@/modules/api/user/user.service';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -18,12 +25,21 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleAuthGuard)
+  @ApiOperation({
+    summary: 'Initiate Google OAuth',
+    description: 'Redirects user to Google OAuth consent screen',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Redirects to Google OAuth',
+  })
   async googleAuth() {
     // Guard redirects to Google
   }
 
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
+  @ApiExcludeEndpoint()
   async googleAuthCallback(
     @GoogleUser() googleUser: GoogleOAuthUserDto,
     @Res() res: Response
@@ -51,6 +67,24 @@ export class AuthController {
 
   @Get('signout')
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Sign out',
+    description: 'Signs out the current user and revokes their Google token',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully signed out',
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Logged out successfully' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
   async signOut(@Res() res: Response, @CurrentUser() authUser: AuthUserDto) {
     const frontendUrl =
       this.configService.get<string>('FRONT_URL') || 'http://localhost:4200';

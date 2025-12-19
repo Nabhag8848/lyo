@@ -1,0 +1,1 @@
+export * from './fashnai-wh-secret.guard';
