@@ -36,7 +36,8 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
 
   // Swagger Configuration
-  const config = new DocumentBuilder()
+  const serverUrl = configService.get<string>('SERVER_URL');
+  const documentBuilder = new DocumentBuilder()
     .setTitle('Lyo API')
     .setDescription('API documentation for Lyo - Virtual Try-On Platform')
     .setVersion('1.0')
@@ -50,9 +51,13 @@ async function bootstrap() {
       type: 'apiKey',
       in: 'cookie',
       name: 'access_token',
-    })
-    .addServer('http://localhost:3000', 'Local development')
-    .build();
+    });
+
+  if (serverUrl) {
+    documentBuilder.addServer(serverUrl);
+  }
+
+  const config = documentBuilder.build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('v1/swagger', app, document, {
