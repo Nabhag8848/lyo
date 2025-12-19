@@ -3,8 +3,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
 import { UserEntity } from '../../../database/entities';
-import { AuthProvider } from '../../../database/@types';
 import { GoogleOAuthUserDto } from '../auth/dtos';
+import { AuthProvider } from '../../../database/@types';
 
 describe('UserService', () => {
   let service: UserService;

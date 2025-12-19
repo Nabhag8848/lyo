@@ -10,9 +10,12 @@ import { AppModule } from './app/app.module';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import { getAllowedOrigins } from './utils';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
   const configService = app.get(ConfigService);
 
   const frontUrl =
@@ -37,6 +40,8 @@ async function bootstrap() {
       whitelist: true,
     })
   );
+
+  app.useBodyParser('json', { limit: '10mb' });
   const port = configService.get<number>('SERVER_PORT', 3000);
   const hostname = configService.get<string>('SERVER_HOST', '0.0.0.0');
   await app.listen(port, hostname);
