@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import { getAllowedOrigins } from './utils';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -33,6 +34,36 @@ async function bootstrap() {
 
   const globalPrefix = 'v1';
   app.setGlobalPrefix(globalPrefix);
+
+  // Swagger Configuration
+  const config = new DocumentBuilder()
+    .setTitle('Lyo API')
+    .setDescription('API documentation for Lyo - Virtual Try-On Platform')
+    .setVersion('1.0')
+    .addTag('auth', 'Authentication endpoints')
+    .addTag('user', 'User management endpoints')
+    .addTag('avatar', 'Avatar management endpoints')
+    .addTag('tryon', 'Virtual try-on endpoints')
+    .addTag('webhook', 'Webhook endpoints')
+    .addTag('health', 'Health check endpoints')
+    .addCookieAuth('access_token', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'access_token',
+    })
+    .addServer('http://localhost:3000', 'Local development')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('v1/swagger', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
+    customSiteTitle: 'Lyo API Documentation',
+  });
+
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
