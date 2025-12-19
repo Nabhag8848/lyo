@@ -27,7 +27,7 @@ export class FashnaiWebhookSecretGuard implements CanActivate {
     }
 
     if (!secret || secret !== expectedSecret) {
-      throw new UnauthorizedException('Invalid webhook secret');
+      throw new UnauthorizedException('401 Unauthorized');
     }
 
     return true;

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, Query } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FashnaiWebhookRequestDto } from './dtos';
 import { FashnaiWebhookService } from './fashnai-wh.service';

@@ -74,7 +74,13 @@ describe('UserService', () => {
 
   describe('upsertGoogleUser', () => {
     it('should upsert user with correct data', async () => {
-      repository.upsert.mockResolvedValue({} as any);
+      repository.upsert.mockResolvedValue(
+        {} as unknown as {
+          identifiers: Array<{ email: string }>;
+          generatedMaps: Array<Partial<UserEntity>>;
+          raw: Array<Partial<UserEntity>>;
+        }
+      );
       repository.findOneOrFail.mockResolvedValue(mockUser);
 
       const result = await service.upsertGoogleUser(mockGoogleUser);
@@ -99,7 +105,13 @@ describe('UserService', () => {
 
     it('should update existing user when email matches', async () => {
       const updatedUser = { ...mockUser, firstName: 'Jane' } as UserEntity;
-      repository.upsert.mockResolvedValue({} as any);
+      repository.upsert.mockResolvedValue(
+        {} as unknown as {
+          identifiers: Array<{ email: string }>;
+          generatedMaps: Array<Partial<UserEntity>>;
+          raw: Array<Partial<UserEntity>>;
+        }
+      );
       repository.findOneOrFail.mockResolvedValue(updatedUser);
 
       const result = await service.upsertGoogleUser({

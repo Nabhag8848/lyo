@@ -39,9 +39,7 @@ export class FashnaiWebhookRequestDto {
     description:
       'Array of base64-encoded images (data URIs) with try-on results. Up to 4 images.',
     type: [String],
-    example: [
-      'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD...',
-    ],
+    example: ['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD...'],
   })
   output?: Array<string>;
 
