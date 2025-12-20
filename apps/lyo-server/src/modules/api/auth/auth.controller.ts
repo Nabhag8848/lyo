@@ -7,6 +7,7 @@ import {
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
+import { SkipThrottle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard, JwtAuthGuard } from './guards';
 import { CurrentUser, GoogleUser } from './decorators';
@@ -24,6 +25,7 @@ export class AuthController {
   ) {}
 
   @Get('google')
+  @SkipThrottle()
   @UseGuards(GoogleAuthGuard)
   @ApiOperation({
     summary: 'Initiate Google OAuth',
