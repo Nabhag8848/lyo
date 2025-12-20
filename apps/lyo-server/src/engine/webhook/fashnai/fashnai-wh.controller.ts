@@ -1,11 +1,13 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { FashnaiWebhookRequestDto } from './dtos';
 import { FashnaiWebhookService } from './fashnai-wh.service';
 import { FashnaiWebhookSecretGuard } from './guards';
 
 @ApiTags('webhook')
 @Controller('webhook/fashnai')
+@SkipThrottle()
 @UseGuards(FashnaiWebhookSecretGuard)
 export class FashnaiWebhookController {
   constructor(private readonly fashnaiWebhookService: FashnaiWebhookService) {}
