@@ -67,6 +67,34 @@ export class AuthController {
     return res.redirect(appUrl);
   }
 
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: 'Get current user',
+    description: 'Returns the currently authenticated user information',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Current user information',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', example: '123e4567-e89b-12d3-a456-426614174000' },
+        email: { type: 'string', example: 'user@example.com' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  async getMe(@CurrentUser() authUser: AuthUserDto) {
+    return {
+      id: authUser.id,
+      email: authUser.email,
+    };
+  }
+
   @Get('signout')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
