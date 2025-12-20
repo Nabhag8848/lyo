@@ -58,8 +58,15 @@ export class FashnaiService {
       },
     };
 
+    const serverUrl = this.configService.get<string>('SERVER_URL');
+
+    if (!serverUrl) {
+      throw new Error('SERVER_URL is not configured');
+    }
+
+    const webhookUrl = `${serverUrl}/v1/webhook/fashnai?secret=${this.webhookSecret}`;
     const url = new URL(`${this.baseUrl}/run`);
-    url.searchParams.set('secret', this.webhookSecret);
+    url.searchParams.set('webhook_url', webhookUrl);
 
     const response = await firstValueFrom(
       this.httpService.post<FashnaiTryonResponse, FashnaiTryonRequest>(
