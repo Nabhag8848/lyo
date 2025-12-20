@@ -104,7 +104,7 @@ export const HowItWorks = () => {
                   </div>
                   <div className="absolute inset-0 s1-photo flex items-center justify-center">
                     <img
-                      src="https://tryonn.s3.ap-south-1.amazonaws.com/model.png"
+                      src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model.png"
                       className="w-full h-full object-contain opacity-80"
                       alt="uploaded"
                     />
@@ -145,7 +145,7 @@ export const HowItWorks = () => {
                 <div className="w-1/2 aspect-[3/4] bg-stone-200 rounded-sm relative overflow-hidden group">
                   <div className="absolute inset-0 flex items-center justify-center text-stone-400">
                     <img
-                      src="https://tryonn.s3.ap-south-1.amazonaws.com/new.png"
+                      src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
                       className="w-full h-full object-contain opacity-90"
                       alt="Store Item"
                     />
@@ -289,7 +289,7 @@ export const HowItWorks = () => {
                   </div>
                   <div className="absolute inset-0 step3-image z-10 flex items-center justify-center">
                     <img
-                      src="https://tryonn.s3.ap-south-1.amazonaws.com/model-1-removebg-preview.png"
+                      src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png"
                       className="w-full h-full object-contain"
                       alt="Result"
                     />
