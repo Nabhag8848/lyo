@@ -8,6 +8,7 @@ import { firstValueFrom } from 'rxjs';
 export class FashnaiService {
   private readonly apiKey: string;
   private readonly baseUrl = 'https://api.fashn.ai/v1';
+  private readonly webhookSecret: string;
 
   constructor(
     private readonly configService: ConfigService,
@@ -20,6 +21,16 @@ export class FashnaiService {
     }
 
     this.apiKey = apiKey;
+
+    const webhookSecret = this.configService.get<string>(
+      'FASHNAI_WEBHOOK_SECRET'
+    );
+
+    if (!webhookSecret) {
+      throw new Error('Webhook secret is not configured');
+    }
+
+    this.webhookSecret = webhookSecret;
   }
 
   async startTryon({
@@ -47,9 +58,12 @@ export class FashnaiService {
       },
     };
 
+    const url = new URL(`${this.baseUrl}/run`);
+    url.searchParams.set('secret', this.webhookSecret);
+
     const response = await firstValueFrom(
       this.httpService.post<FashnaiTryonResponse, FashnaiTryonRequest>(
-        `${this.baseUrl}/run`,
+        url.toString(),
         requestData,
         config
       )
