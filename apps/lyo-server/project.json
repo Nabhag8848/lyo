@@ -47,20 +47,22 @@
       "executor": "nx:noop"
     },
     "serve": {
-      "continuous": true,
-      "executor": "@nx/js:node",
+      "executor": "nx:run-commands",
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "@lyo/lyo-server:build",
-        "runBuildTargetDependencies": false
+        "command": "nodemon --watch src --ext ts --ignore 'src/**/*.spec.ts' --exec \"node dist/main.js\"",
+        "cwd": "apps/lyo-server"
       },
       "configurations": {
         "development": {
-          "buildTarget": "@lyo/lyo-server:build:development"
+          "buildTarget": "@lyo/lyo-server:build:development",
+          "command": "nodemon --watch src --ext ts --ignore 'src/**/*.spec.ts' --exec \"node dist/main.js\""
         },
         "production": {
-          "buildTarget": "@lyo/lyo-server:build:production"
+          "buildTarget": "@lyo/lyo-server:build:production",
+          "command": "node dist/main.js"
         }
       }
     },
