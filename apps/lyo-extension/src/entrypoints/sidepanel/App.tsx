@@ -19,7 +19,7 @@ function App() {
     // Use product image if available, otherwise fallback
     return (
       product?.imageUrl ||
-      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400'
+      'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png'
     );
   };
 
@@ -88,7 +88,7 @@ function App() {
         }}
       >
         {/* Image Container */}
-        <div className="relative bg-stone-100 rounded overflow-hidden mb-6 group h-[450px] w-full shrink-0">
+        <div className="relative rounded overflow-hidden mb-6 group h-3/5 w-full shrink-0">
           {/* Loading Animation */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">
