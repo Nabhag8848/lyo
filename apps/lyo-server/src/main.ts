@@ -12,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import { getAllowedOrigins } from './utils';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -26,6 +27,7 @@ async function bootstrap() {
   const isProduction = configService.get<string>('NODE_ENV') === 'production';
   const allowedOrigins = getAllowedOrigins(frontUrl, appUrl, isProduction);
 
+  app.use(helmet());
   // Enable CORS for frontend
   app.enableCors({
     origin: allowedOrigins,
