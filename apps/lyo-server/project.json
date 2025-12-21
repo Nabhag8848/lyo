@@ -82,7 +82,9 @@
         "development": {
           "envFile": "apps/lyo-server/.env"
         },
-        "production": {}
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:revert": {
@@ -96,7 +98,9 @@
         "development": {
           "envFile": "apps/lyo-server/.env"
         },
-        "production": {}
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:generate": {
@@ -110,7 +114,9 @@
         "development": {
           "envFile": "apps/lyo-server/.env"
         },
-        "production": {}
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:create": {
@@ -124,7 +130,9 @@
         "development": {
           "envFile": "apps/lyo-server/.env"
         },
-        "production": {}
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:show": {
@@ -138,7 +146,9 @@
         "development": {
           "envFile": "apps/lyo-server/.env"
         },
-        "production": {}
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     },
     "migration:schema:sync": {
@@ -152,7 +162,9 @@
         "development": {
           "envFile": "apps/lyo-server/.env"
         },
-        "production": {}
+        "production": {
+          "envFile": "apps/lyo-server/.env.production"
+        }
       }
     }
   }
