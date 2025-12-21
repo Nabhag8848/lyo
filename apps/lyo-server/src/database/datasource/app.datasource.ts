@@ -2,7 +2,13 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'path';
 import { config } from 'dotenv';
-import { UserEntity } from '../entities';
+import {
+  UserEntity,
+  ReferencePhotoEntity,
+  AvatarEntity,
+  GarmentEntity,
+  GenerationEntity,
+} from '../entities';
 
 config();
 
@@ -30,7 +36,13 @@ const getBaseConfig = () => ({
 // For NestJS runtime - use explicit entity imports (webpack compatible)
 export const createTypeOrmOptions = (): TypeOrmModuleOptions => ({
   ...getBaseConfig(),
-  entities: [UserEntity],
+  entities: [
+    UserEntity,
+    ReferencePhotoEntity,
+    AvatarEntity,
+    GarmentEntity,
+    GenerationEntity,
+  ],
 });
 
 // For TypeORM CLI - use glob patterns (works with ts-node)

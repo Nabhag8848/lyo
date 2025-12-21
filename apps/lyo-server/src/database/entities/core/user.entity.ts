@@ -1,6 +1,10 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { AbstractBaseEntity } from '../base.entity';
 import { AuthProvider } from '../../@types';
+import { ReferencePhotoEntity } from './reference-photo.entity';
+import { GarmentEntity } from './garment.entity';
+import { AvatarEntity } from './avatar.entity';
+import { GenerationEntity } from './generation.entity';
 
 @Entity({ name: 'user', schema: 'core' })
 export class UserEntity extends AbstractBaseEntity {
@@ -31,4 +35,19 @@ export class UserEntity extends AbstractBaseEntity {
 
   @Column({ type: 'varchar', length: 512, nullable: true })
   googleAccessToken: string | null;
+
+  @OneToMany(
+    () => ReferencePhotoEntity,
+    (referencePhoto) => referencePhoto.user
+  )
+  referencePhotos: ReferencePhotoEntity[];
+
+  @OneToMany(() => GarmentEntity, (garment) => garment.user)
+  garments: GarmentEntity[];
+
+  @OneToMany(() => AvatarEntity, (avatar) => avatar.user)
+  avatars: AvatarEntity[];
+
+  @OneToMany(() => GenerationEntity, (generation) => generation.user)
+  generations: GenerationEntity[];
 }
