@@ -3,6 +3,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FashnaiWebhookService } from './fashnai-wh.service';
 import { FashnaiWebhookSecretGuard } from './guards';
 import { CurrentUserId } from './decorators';
+import { FashnaiWebhookRequestDto } from './dtos';
 
 @ApiTags('webhook')
 @Controller('webhook/fashnai')

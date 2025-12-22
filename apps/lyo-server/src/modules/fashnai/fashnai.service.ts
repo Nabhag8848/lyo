@@ -47,9 +47,9 @@ export class FashnaiService {
       inputs: {
         model_image: modelImageUrl,
         garment_image: garmentImageUrl,
+        output_format: 'jpeg',
+        return_base64: true,
       },
-      output_format: 'jpeg',
-      return_base64: true,
     };
 
     const config: AxiosRequestConfig<FashnaiTryonRequest> = {

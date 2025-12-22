@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FashnaiWebhookStatus } from './enum';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
+import { FashnaiWebhookRequestDto } from './dtos';
 
 @Injectable()
 export class FashnaiWebhookService {
