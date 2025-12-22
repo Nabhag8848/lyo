@@ -1,7 +1,7 @@
 import { getServerEndpointUrl } from '@/app/utils';
 
 export const deleteReferencePhoto = async (): Promise<void> => {
-  const response = await fetch(getServerEndpointUrl('reference-photo'), {
+  const response = await fetch(getServerEndpointUrl('reference-photo/active'), {
     method: 'DELETE',
     credentials: 'include',
   });

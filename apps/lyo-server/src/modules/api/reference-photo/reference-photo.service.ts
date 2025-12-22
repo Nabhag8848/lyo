@@ -1,66 +1,172 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
 import { RedisService } from '@/database/redis/redis.service';
 import { ReferencePhotoDto } from './dtos/reference-photo.dto';
+import { randomUUID } from 'crypto';
+import { ReferencePhotoEntity } from '@/database/entities';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { S3BucketService } from '@/modules/storage/s3/services/s3-bucket.service';
+import { CachedReferencePhotoSchema } from './schema';
+import { parseJson, stringifyJson } from './utils';
 
 @Injectable()
 export class ReferencePhotoService {
   private readonly CACHE_TTL = 3600;
-  private readonly CACHE_KEY_PREFIX = 'reference-photo:';
+  private readonly getCacheKey = (userId: string) => {
+    return `users:${userId}:reference-photo:active`;
+  };
 
   constructor(
     private s3ObjectService: S3ObjectService,
-    private redisService: RedisService
+    private redisService: RedisService,
+    private s3BucketService: S3BucketService,
+    @InjectRepository(ReferencePhotoEntity)
+    private referencePhotoRepository: Repository<ReferencePhotoEntity>,
+    private readonly dataSource: DataSource
   ) {}
 
-  async uploadReferencePhoto(file: MulterFile, userId: string): Promise<ReferencePhotoDto> {
-    if (!file) {
-      throw new BadRequestException('No file provided');
-    }
-    const key = `users/${userId}/reference-photo/uploaded_reference_photo`;
+  async uploadReferencePhoto(
+    file: MulterFile,
+    userId: string
+  ): Promise<ReferencePhotoDto> {
+    // File validation is handled by ImageFilePipe in the controller
+    const photoId = randomUUID();
+    const key = `users/${userId}/reference-photo/${photoId}`;
+    const bucketName = this.s3BucketService.getBucketName();
     await this.s3ObjectService.put(key, file.buffer, {
       ContentType: file.mimetype,
+    });
+    const contentType = file.mimetype;
+    let referencePhotoId!: string;
+
+    await this.dataSource.transaction(async (manager) => {
+      const referencePhotoRepository =
+        manager.getRepository(ReferencePhotoEntity);
+      await referencePhotoRepository.update(
+        {
+          user: { id: userId },
+          isActive: true,
+        },
+        {
+          isActive: false,
+        }
+      );
+      const referencePhoto = await referencePhotoRepository.insert({
+        user: { id: userId },
+        key,
+        bucketName,
+        contentType,
+      });
+
+      referencePhotoId = referencePhoto.identifiers[0]?.id;
     });
 
     await this.invalidateCache(userId);
 
     return {
-      id: userId,
+      id: referencePhotoId,
     };
   }
 
-  async getReferencePhoto(userId: string): Promise<ReferencePhotoDto> {
-    const cacheKey = `${this.CACHE_KEY_PREFIX}${userId}`;
+  async getActiveReferencePhoto(userId: string): Promise<ReferencePhotoDto> {
+    const cacheKey = this.getCacheKey(userId);
     const redis = this.redisService.getClient();
 
-    const cachedUrl = await redis.get(cacheKey);
-    if (cachedUrl) {
+    const cachedActiveReferencePhoto = await redis.get(cacheKey);
+    const parseCachedActiveReferencePhoto = parseJson(
+      CachedReferencePhotoSchema,
+      cachedActiveReferencePhoto
+    );
+
+    if (parseCachedActiveReferencePhoto) {
+      const { photoId, accessUrl } = parseCachedActiveReferencePhoto;
       return {
-        id: userId,
-        url: cachedUrl,
+        id: photoId,
+        url: accessUrl,
       };
     }
 
-    const key = `users/${userId}/reference-photo/uploaded_reference_photo`;
+    const activeReferencePhoto = await this.referencePhotoRepository.findOne({
+      where: {
+        user: { id: userId },
+        isActive: true,
+      },
+    });
+
+    if (!activeReferencePhoto) {
+      throw new NotFoundException('No active reference photo found');
+    }
+
+    const photoId = activeReferencePhoto.id;
+    const key = activeReferencePhoto.key;
     const accessUrl = await this.s3ObjectService.get(key);
 
-    await redis.setex(cacheKey, this.CACHE_TTL, accessUrl);
+    // we have to store the photoId and the accessUrl in the cache
+    await redis.setex(
+      cacheKey,
+      this.CACHE_TTL,
+      stringifyJson(CachedReferencePhotoSchema, {
+        photoId,
+        key,
+        accessUrl,
+      })
+    );
 
     return {
-      id: userId,
+      id: photoId,
       url: accessUrl,
     };
   }
 
-  async deleteReferencePhoto(userId: string): Promise<void> {
-    const key = `users/${userId}/reference-photo/uploaded_reference_photo`;
-    await this.s3ObjectService.delete(key);
+  async deleteActiveReferencePhoto(userId: string): Promise<void> {
+    const cacheKey = this.getCacheKey(userId);
+    const redis = this.redisService.getClient();
 
-    await this.invalidateCache(userId);
+    const cachedActiveReferencePhoto = await redis.get(cacheKey);
+    const parseCachedActiveReferencePhoto = parseJson(
+      CachedReferencePhotoSchema,
+      cachedActiveReferencePhoto
+    );
+
+    if (parseCachedActiveReferencePhoto) {
+      const { photoId } = parseCachedActiveReferencePhoto;
+      await this.referencePhotoRepository.update(
+        {
+          id: photoId,
+        },
+        {
+          isActive: false,
+        }
+      );
+      await this.invalidateCache(userId);
+    } else {
+      const activeReferencePhoto = await this.referencePhotoRepository.findOne({
+        where: {
+          user: { id: userId },
+          isActive: true,
+        },
+      });
+
+      if (!activeReferencePhoto) {
+        throw new NotFoundException('No active reference photo found');
+      }
+
+      await this.referencePhotoRepository.update(
+        {
+          id: activeReferencePhoto.id,
+        },
+        {
+          isActive: false,
+        }
+      );
+
+      await this.invalidateCache(userId);
+    }
   }
 
   private async invalidateCache(userId: string): Promise<void> {
-    const cacheKey = `${this.CACHE_KEY_PREFIX}${userId}`;
+    const cacheKey = this.getCacheKey(userId);
     const redis = this.redisService.getClient();
     await redis.del(cacheKey);
   }

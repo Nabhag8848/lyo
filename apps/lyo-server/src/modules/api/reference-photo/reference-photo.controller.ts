@@ -21,7 +21,7 @@ import { ReferencePhotoService } from './reference-photo.service';
 import { JwtAuthGuard } from '@/modules/api/auth/guards';
 import { CurrentUser } from '@/modules/api/user/decorators';
 import { AuthUserDto } from '@/modules/api/user/dtos';
-import {ReferencePhotoDto} from './dtos/reference-photo.dto';
+import { ReferencePhotoDto } from './dtos/reference-photo.dto';
 import { Serialize } from '@/app/decorators/serialize.decorator';
 import { ImageFilePipe } from './validator';
 
@@ -61,7 +61,8 @@ export class ReferencePhotoController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Invalid file - File too large or wrong format',
+    description:
+      'Bad request - File too large (>10MB), or invalid file type (must be an image)',
   })
   @ApiResponse({
     status: 401,
@@ -75,39 +76,53 @@ export class ReferencePhotoController {
     return this.referencePhotoService.uploadReferencePhoto(file, authUser.id);
   }
 
-  @Get()
+  @Get('active')
   @Serialize(ReferencePhotoDto)
   @ApiOperation({
-    summary: 'Get user reference photo',
-    description: "Retrieves the authenticated user's reference photo information",
+    summary: 'Get current active reference photo',
+    description:
+      "Retrieves the authenticated user's current active reference photo information",
   })
   @ApiResponse({
     status: 200,
-    description: 'Reference photo retrieved successfully',
+    description: 'Current active reference photo retrieved successfully',
     type: ReferencePhotoDto,
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
   })
-  async getReferencePhoto(@CurrentUser() authUser: AuthUserDto): Promise<ReferencePhotoDto> {
-    return this.referencePhotoService.getReferencePhoto(authUser.id);
+  @ApiResponse({
+    status: 404,
+    description: 'No active reference photo found',
+  })
+  async getActiveReferencePhoto(
+    @CurrentUser() authUser: AuthUserDto
+  ): Promise<ReferencePhotoDto> {
+    return this.referencePhotoService.getActiveReferencePhoto(authUser.id);
   }
 
-  @Delete()
+  @Delete('active')
   @ApiOperation({
-    summary: 'Delete user reference photo',
-    description: "Deletes the authenticated user's reference photo",
+    summary: 'Delete current active reference photo',
+    description:
+      "Deletes the authenticated user's current active reference photo",
   })
   @ApiResponse({
     status: 200,
-    description: 'Reference photo deleted successfully',
+    description: 'Current active reference photo deleted successfully',
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
   })
-  async deleteReferencePhoto(@CurrentUser() authUser: AuthUserDto): Promise<void> {
-    return this.referencePhotoService.deleteReferencePhoto(authUser.id);
+  @ApiResponse({
+    status: 404,
+    description: 'No active reference photo found',
+  })
+  async deleteActiveReferencePhoto(
+    @CurrentUser() authUser: AuthUserDto
+  ): Promise<void> {
+    return this.referencePhotoService.deleteActiveReferencePhoto(authUser.id);
   }
 }
