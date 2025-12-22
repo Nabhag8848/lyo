@@ -36,9 +36,11 @@ export class FashnaiService {
   async startTryon({
     modelImageUrl,
     garmentImageUrl,
+    userId,
   }: {
     modelImageUrl: string;
     garmentImageUrl: string;
+    userId: string;
   }): Promise<FashnaiTryonResponse> {
     const requestData: FashnaiTryonRequest = {
       model_name: 'tryon-v1.6',
@@ -64,7 +66,7 @@ export class FashnaiService {
       throw new Error('SERVER_URL is not configured');
     }
 
-    const webhookUrl = `${serverUrl}/v1/webhook/fashnai?secret=${this.webhookSecret}`;
+    const webhookUrl = `${serverUrl}/v1/webhook/fashnai/gen?secret=${this.webhookSecret}&user_id=${userId}`;
     const url = new URL(`${this.baseUrl}/run`);
     url.searchParams.set('webhook_url', webhookUrl);
 

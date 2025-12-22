@@ -29,6 +29,7 @@ export class TryonService {
     const { id } = await this.fashnaiService.startTryon({
       modelImageUrl: url as string,
       garmentImageUrl,
+      userId,
     });
 
     return { id };
