@@ -1,23 +1,23 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
 import { RedisService } from '@/database/redis/redis.service';
-import { AvatarDto } from './dtos/avatar.dto';
+import { ReferencePhotoDto } from './dtos/reference-photo.dto';
 
 @Injectable()
-export class AvatarService {
+export class ReferencePhotoService {
   private readonly CACHE_TTL = 3600;
-  private readonly CACHE_KEY_PREFIX = 'avatar:';
+  private readonly CACHE_KEY_PREFIX = 'reference-photo:';
 
   constructor(
     private s3ObjectService: S3ObjectService,
     private redisService: RedisService
   ) {}
 
-  async uploadAvatar(file: MulterFile, userId: string): Promise<AvatarDto> {
+  async uploadReferencePhoto(file: MulterFile, userId: string): Promise<ReferencePhotoDto> {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
-    const key = `users/${userId}/avatar/uploaded_avatar`;
+    const key = `users/${userId}/reference-photo/uploaded_reference_photo`;
     await this.s3ObjectService.put(key, file.buffer, {
       ContentType: file.mimetype,
     });
@@ -29,7 +29,7 @@ export class AvatarService {
     };
   }
 
-  async getAvatar(userId: string): Promise<AvatarDto> {
+  async getReferencePhoto(userId: string): Promise<ReferencePhotoDto> {
     const cacheKey = `${this.CACHE_KEY_PREFIX}${userId}`;
     const redis = this.redisService.getClient();
 
@@ -41,7 +41,7 @@ export class AvatarService {
       };
     }
 
-    const key = `users/${userId}/avatar/uploaded_avatar`;
+    const key = `users/${userId}/reference-photo/uploaded_reference_photo`;
     const accessUrl = await this.s3ObjectService.get(key);
 
     await redis.setex(cacheKey, this.CACHE_TTL, accessUrl);
@@ -52,8 +52,8 @@ export class AvatarService {
     };
   }
 
-  async deleteAvatar(userId: string): Promise<void> {
-    const key = `users/${userId}/avatar/uploaded_avatar`;
+  async deleteReferencePhoto(userId: string): Promise<void> {
+    const key = `users/${userId}/reference-photo/uploaded_reference_photo`;
     await this.s3ObjectService.delete(key);
 
     await this.invalidateCache(userId);

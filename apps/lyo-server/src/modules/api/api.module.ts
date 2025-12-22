@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { AvatarModule } from './avatar/avatar.module';
+import { ReferencePhotoModule } from './reference-photo/reference-photo.module';
 import { TryonModule } from './tryon/tryon.module';
 
 @Module({
@@ -21,7 +21,7 @@ import { TryonModule } from './tryon/tryon.module';
     }),
     UserModule,
     AuthModule,
-    AvatarModule,
+    ReferencePhotoModule,
     TryonModule,
   ],
   providers: [

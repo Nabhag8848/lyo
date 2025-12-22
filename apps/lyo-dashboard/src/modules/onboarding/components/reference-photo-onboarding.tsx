@@ -1,24 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
-import { AvatarSelector } from './avatar-selector';
-import { useUploadAvatar } from '@/modules/onboarding/hooks/use-upload-avatar';
-import { useAvatar } from '@/modules/onboarding/hooks/use-avatar';
-import { useDeleteAvatar } from '@/modules/onboarding/hooks/use-delete-avatar';
+import { ReferencePhotoSelector } from './reference-photo-selector';
+import { useUploadReferencePhoto } from '@/modules/onboarding/hooks/use-upload-reference-photo';
+import { useReferencePhoto } from '@/modules/onboarding/hooks/use-reference-photo';
+import { useDeleteReferencePhoto } from '@/modules/onboarding/hooks/use-delete-reference-photo';
 
-export const AvatarOnboarding = () => {
-  const [avatars, setAvatars] = useState<Avatar[]>([]);
-  const [selectedAvatarId, setSelectedAvatarId] = useState<string | null>(null);
+export const ReferencePhotoOnboarding = () => {
+  const [referencePhotos, setReferencePhotos] = useState<ReferencePhoto[]>([]);
+  const [selectedReferencePhotoId, setSelectedReferencePhotoId] = useState<
+    string | null
+  >(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate: uploadAvatar } = useUploadAvatar();
-  const { data: alreadyUploadedAvatar, isLoading: isLoadingAvatar } =
-    useAvatar();
-  const { mutate: deleteAvatar, isPending: isDeletingAvatar } =
-    useDeleteAvatar();
+  const { mutate: uploadReferencePhoto } = useUploadReferencePhoto();
+  const {
+    data: alreadyUploadedReferencePhoto,
+    isLoading: isLoadingReferencePhoto,
+  } = useReferencePhoto();
+  const { mutate: deleteReferencePhoto, isPending: isDeletingReferencePhoto } =
+    useDeleteReferencePhoto();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      uploadAvatar(file);
+      uploadReferencePhoto(file);
     }
     if (file) {
       event.target.value = '';
@@ -26,24 +30,27 @@ export const AvatarOnboarding = () => {
   };
 
   useEffect(() => {
-    if (alreadyUploadedAvatar) {
-      generateAvatars(alreadyUploadedAvatar.url ?? '');
+    if (alreadyUploadedReferencePhoto) {
+      generateReferencePhotos(alreadyUploadedReferencePhoto.url ?? '');
     }
-  }, [alreadyUploadedAvatar]);
+  }, [alreadyUploadedReferencePhoto]);
 
-  const generateAvatars = async (imageUrl: string) => {
+  const generateReferencePhotos = async (imageUrl: string) => {
     setIsGenerating(true);
     // Simulate API call
     setTimeout(() => {
-      // Mock avatars - replace with actual API call
-      const mockAvatars: Avatar[] = Array.from({ length: 8 }, (_, i) => ({
-        id: `avatar-${i + 1}`,
-        url: imageUrl, // In real implementation, this would be the generated avatar URL
-      }));
-      setAvatars(mockAvatars);
-      // Auto-select first avatar
-      if (mockAvatars.length > 0) {
-        setSelectedAvatarId(mockAvatars[0].id);
+      // Mock reference photos - replace with actual API call
+      const mockReferencePhotos: ReferencePhoto[] = Array.from(
+        { length: 8 },
+        (_, i) => ({
+          id: `reference-photo-${i + 1}`,
+          url: imageUrl, // In real implementation, this would be the generated reference photo URL
+        })
+      );
+      setReferencePhotos(mockReferencePhotos);
+      // Auto-select first reference photo
+      if (mockReferencePhotos.length > 0) {
+        setSelectedReferencePhotoId(mockReferencePhotos[0].id);
       }
       setIsGenerating(false);
     }, 2000);
@@ -53,30 +60,32 @@ export const AvatarOnboarding = () => {
     fileInputRef.current?.click();
   };
 
-  const handleSelectAvatar = (avatarId: string) => {
-    setSelectedAvatarId(avatarId);
+  const handleSelectReferencePhoto = (referencePhotoId: string) => {
+    setSelectedReferencePhotoId(referencePhotoId);
   };
 
-  // Get the selected avatar URL or default to first avatar
-  const getDisplayAvatarUrl = () => {
-    if (selectedAvatarId) {
-      const selected = avatars.find((a) => a.id === selectedAvatarId);
+  // Get the selected reference photo URL or default to first reference photo
+  const getDisplayReferencePhotoUrl = () => {
+    if (selectedReferencePhotoId) {
+      const selected = referencePhotos.find(
+        (a) => a.id === selectedReferencePhotoId
+      );
       return selected?.url;
     }
-    return alreadyUploadedAvatar?.url;
+    return alreadyUploadedReferencePhoto?.url;
   };
 
-  const handleUseAvatar = () => {
-    if (selectedAvatarId) {
-      // TODO: Call backend API to save selected avatar
+  const handleUseReferencePhoto = () => {
+    if (selectedReferencePhotoId) {
+      // TODO: Call backend API to save selected reference photo
     }
   };
 
-  const handleDeleteAvatar = () => {
-    deleteAvatar(undefined, {
+  const handleDeleteReferencePhoto = () => {
+    deleteReferencePhoto(undefined, {
       onSuccess: () => {
-        setAvatars([]);
-        setSelectedAvatarId(null);
+        setReferencePhotos([]);
+        setSelectedReferencePhotoId(null);
       },
     });
   };
@@ -99,7 +108,7 @@ export const AvatarOnboarding = () => {
           Upload your photo to generate lookalike avatars
         </p>
 
-        {isLoadingAvatar ? (
+        {isLoadingReferencePhoto ? (
           <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-stone-200 rounded-xl bg-white shadow-sm">
             <div className="mb-5">
               <div className="w-16 h-16 border-2 border-stone-300 border-t-stone-600 rounded-full animate-spin mx-auto" />
@@ -108,7 +117,7 @@ export const AvatarOnboarding = () => {
               Loading avatar...
             </p>
           </div>
-        ) : !alreadyUploadedAvatar ? (
+        ) : !alreadyUploadedReferencePhoto ? (
           <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-stone-200 rounded-xl bg-white shadow-sm">
             <div className="mb-5">
               <svg
@@ -137,18 +146,18 @@ export const AvatarOnboarding = () => {
           </div>
         ) : (
           <div className="flex gap-8 flex-1 min-h-0">
-            {/* Left Side - Main Avatar Display */}
+            {/* Left Side - Main Reference Photo Display */}
             <div className="flex-[0.4] flex items-center justify-center min-w-0 min-h-0">
               <div className="w-full h-full flex items-center justify-center p-6">
                 <img
-                  src={getDisplayAvatarUrl() || ''}
-                  alt="Selected Avatar"
+                  src={getDisplayReferencePhotoUrl() || ''}
+                  alt="Selected Reference Photo"
                   className="w-full h-full object-contain"
                 />
               </div>
             </div>
 
-            {/* Right Side - Scrollable Avatars and Buttons */}
+            {/* Right Side - Scrollable Reference Photos and Buttons */}
             <div className="flex-[0.6] flex flex-col min-w-0 min-h-0">
               {isGenerating ? (
                 <div className="flex-1 flex items-center justify-center">
@@ -159,15 +168,17 @@ export const AvatarOnboarding = () => {
                     </p>
                   </div>
                 </div>
-              ) : avatars.length > 0 ? (
+              ) : referencePhotos.length > 0 ? (
                 <>
-                  {/* Avatar Selector */}
+                  {/* Reference Photo Selector */}
                   <div className="flex-1"></div>
                   <div className="shrink-0 mb-2" style={{ maxHeight: '60%' }}>
-                    <AvatarSelector
-                      avatars={avatars}
-                      selectedAvatarId={selectedAvatarId || undefined}
-                      onSelectAvatar={handleSelectAvatar}
+                    <ReferencePhotoSelector
+                      referencePhotos={referencePhotos}
+                      selectedReferencePhotoId={
+                        selectedReferencePhotoId || undefined
+                      }
+                      onSelectReferencePhoto={handleSelectReferencePhoto}
                       isLoading={isGenerating}
                     />
                   </div>
@@ -180,15 +191,15 @@ export const AvatarOnboarding = () => {
                       Upload Different Photo
                     </button>
                     <button
-                      onClick={handleDeleteAvatar}
-                      disabled={isDeletingAvatar}
+                      onClick={handleDeleteReferencePhoto}
+                      disabled={isDeletingReferencePhoto}
                       className="px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 border border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] uppercase whitespace-nowrap"
                     >
-                      {isDeletingAvatar ? 'Deleting...' : 'Delete'}
+                      {isDeletingReferencePhoto ? 'Deleting...' : 'Delete'}
                     </button>
-                    {selectedAvatarId && (
+                    {selectedReferencePhotoId && (
                       <button
-                        onClick={handleUseAvatar}
+                        onClick={handleUseReferencePhoto}
                         className="flex-1 bg-black text-white px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] hover:bg-stone-800 transition-all shadow-xl hover:-translate-y-1 duration-300 uppercase flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 group whitespace-nowrap"
                       >
                         Use This Avatar
@@ -201,7 +212,7 @@ export const AvatarOnboarding = () => {
                   <div className="flex-1"></div>
                 </>
               ) : (
-                /* Show upload button when there's an avatar but no generated avatars */
+                /* Show upload button when there's a reference photo but no generated reference photos */
                 <div className="flex-1 flex items-center justify-center">
                   <div className="w-full">
                     <div className="flex-1"></div>
@@ -213,11 +224,11 @@ export const AvatarOnboarding = () => {
                         Upload Different Photo
                       </button>
                       <button
-                        onClick={handleDeleteAvatar}
-                        disabled={isDeletingAvatar}
+                        onClick={handleDeleteReferencePhoto}
+                        disabled={isDeletingReferencePhoto}
                         className="px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 border border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] uppercase whitespace-nowrap"
                       >
-                        {isDeletingAvatar ? 'Deleting...' : 'Delete'}
+                        {isDeletingReferencePhoto ? 'Deleting...' : 'Delete'}
                       </button>
                     </div>
                     <div className="flex-1"></div>

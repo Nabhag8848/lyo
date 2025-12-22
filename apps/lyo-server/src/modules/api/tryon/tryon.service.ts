@@ -15,7 +15,7 @@ export class TryonService {
     { garmentImageUrl }: GenerateTryonDto
   ): Promise<GenerateTryonResponseDto> {
     const modelImageUrl = await this.s3ObjectService.get(
-      `users/${userId}/avatar/uploaded_avatar`,
+      `users/${userId}/reference-photo/uploaded_reference_photo`,
       {
         urlExpiresIn: 5 * 60, // 5 minutes
       }

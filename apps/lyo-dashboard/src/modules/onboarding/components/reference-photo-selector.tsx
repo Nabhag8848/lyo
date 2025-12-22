@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-export const AvatarSelector = ({
-  avatars,
-  selectedAvatarId,
-  onSelectAvatar,
+export const ReferencePhotoSelector = ({
+  referencePhotos,
+  selectedReferencePhotoId,
+  onSelectReferencePhoto,
   isLoading = false,
-}: AvatarSelectorProps) => {
+}: ReferencePhotoSelectorProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const avatarRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const referencePhotoRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [paddingWidth, setPaddingWidth] = useState(400);
@@ -18,17 +18,23 @@ export const AvatarSelector = ({
         scrollContainerRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-      // Update padding width to allow centering - adjust based on avatar size
-      // Avatar width: 96px (lg), 128px (md), 96px (sm), 96px (base)
+      // Update padding width to allow centering - adjust based on reference photo size
+      // Reference photo width: 96px (lg), 128px (md), 96px (sm), 96px (base)
       const isLarge = window.matchMedia('(min-width: 1024px)').matches;
       const isMedium = window.matchMedia('(min-width: 768px)').matches;
       const isSmall = window.matchMedia('(min-width: 640px)').matches;
-      const avatarWidth = isLarge ? 192 : isMedium ? 160 : isSmall ? 128 : 96;
-      setPaddingWidth(clientWidth / 2 - avatarWidth / 2);
+      const referencePhotoWidth = isLarge
+        ? 192
+        : isMedium
+        ? 160
+        : isSmall
+        ? 128
+        : 96;
+      setPaddingWidth(clientWidth / 2 - referencePhotoWidth / 2);
     }
   };
 
-  // Auto-select avatar when it comes into center view
+  // Auto-select reference photo when it comes into center view
   const handleScroll = useCallback(() => {
     checkScrollability();
 
@@ -38,33 +44,39 @@ export const AvatarSelector = ({
     const containerRect = container.getBoundingClientRect();
     const containerCenter = containerRect.left + containerRect.width / 2;
 
-    type ClosestAvatar = { id: string; distance: number };
-    let closestAvatar: ClosestAvatar | null = null;
+    type ClosestReferencePhoto = { id: string; distance: number };
+    let closestReferencePhoto: ClosestReferencePhoto | null = null;
 
-    for (const [avatarId, element] of avatarRefs.current.entries()) {
+    for (const [
+      referencePhotoId,
+      element,
+    ] of referencePhotoRefs.current.entries()) {
       if (!element) continue;
 
       const rect = element.getBoundingClientRect();
-      const avatarCenter = rect.left + rect.width / 2;
-      const distance = Math.abs(containerCenter - avatarCenter);
+      const referencePhotoCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(containerCenter - referencePhotoCenter);
 
-      // Check if avatar is in the visible area and closer to center
+      // Check if reference photo is in the visible area and closer to center
       if (rect.left < containerRect.right && rect.right > containerRect.left) {
-        if (!closestAvatar || distance < closestAvatar.distance) {
-          closestAvatar = { id: avatarId, distance };
+        if (
+          !closestReferencePhoto ||
+          distance < closestReferencePhoto.distance
+        ) {
+          closestReferencePhoto = { id: referencePhotoId, distance };
         }
       }
     }
 
-    // Only update if we found a close avatar (within reasonable distance)
+    // Only update if we found a close reference photo (within reasonable distance)
     if (
-      closestAvatar &&
-      closestAvatar.distance < 150 &&
-      closestAvatar.id !== selectedAvatarId
+      closestReferencePhoto &&
+      closestReferencePhoto.distance < 150 &&
+      closestReferencePhoto.id !== selectedReferencePhotoId
     ) {
-      onSelectAvatar(closestAvatar.id);
+      onSelectReferencePhoto(closestReferencePhoto.id);
     }
-  }, [selectedAvatarId, onSelectAvatar]);
+  }, [selectedReferencePhotoId, onSelectReferencePhoto]);
 
   useEffect(() => {
     checkScrollability();
@@ -75,19 +87,27 @@ export const AvatarSelector = ({
       // Initial check
       handleScroll();
 
-      // Scroll first avatar to center when avatars are first loaded
-      if (avatars.length > 0 && selectedAvatarId) {
-        const firstAvatar = avatarRefs.current.get(avatars[0].id);
-        if (firstAvatar && selectedAvatarId === avatars[0].id) {
+      // Scroll first reference photo to center when reference photos are first loaded
+      if (referencePhotos.length > 0 && selectedReferencePhotoId) {
+        const firstReferencePhoto = referencePhotoRefs.current.get(
+          referencePhotos[0].id
+        );
+        if (
+          firstReferencePhoto &&
+          selectedReferencePhotoId === referencePhotos[0].id
+        ) {
           requestAnimationFrame(() => {
             const containerRect = container.getBoundingClientRect();
-            const avatarRect = firstAvatar.getBoundingClientRect();
+            const referencePhotoRect =
+              firstReferencePhoto.getBoundingClientRect();
             const scrollLeft = container.scrollLeft;
-            const avatarLeft =
-              avatarRect.left - containerRect.left + scrollLeft;
+            const referencePhotoLeft =
+              referencePhotoRect.left - containerRect.left + scrollLeft;
             const containerCenter = containerRect.width / 2;
             const targetScroll =
-              avatarLeft - containerCenter + avatarRect.width / 2;
+              referencePhotoLeft -
+              containerCenter +
+              referencePhotoRect.width / 2;
 
             container.scrollTo({
               left: targetScroll,
@@ -103,36 +123,43 @@ export const AvatarSelector = ({
       };
     }
     return undefined;
-  }, [avatars, handleScroll, selectedAvatarId]);
+  }, [referencePhotos, handleScroll, selectedReferencePhotoId]);
 
   const scroll = (direction: 'left' | 'right') => {
-    if (!scrollContainerRef.current || !selectedAvatarId) return;
+    if (!scrollContainerRef.current || !selectedReferencePhotoId) return;
 
-    const selectedIndex = avatars.findIndex((a) => a.id === selectedAvatarId);
+    const selectedIndex = referencePhotos.findIndex(
+      (a) => a.id === selectedReferencePhotoId
+    );
     if (selectedIndex === -1) return;
 
-    // Find next/previous avatar
+    // Find next/previous reference photo
     const nextIndex =
       direction === 'left'
         ? Math.max(0, selectedIndex - 1)
-        : Math.min(avatars.length - 1, selectedIndex + 1);
+        : Math.min(referencePhotos.length - 1, selectedIndex + 1);
 
-    const nextAvatar = avatars[nextIndex];
-    if (!nextAvatar) return;
+    const nextReferencePhoto = referencePhotos[nextIndex];
+    if (!nextReferencePhoto) return;
 
-    // Select the next avatar
-    onSelectAvatar(nextAvatar.id);
+    // Select the next reference photo
+    onSelectReferencePhoto(nextReferencePhoto.id);
 
     // Scroll it to center
-    const nextAvatarElement = avatarRefs.current.get(nextAvatar.id);
-    if (nextAvatarElement && scrollContainerRef.current) {
+    const nextReferencePhotoElement = referencePhotoRefs.current.get(
+      nextReferencePhoto.id
+    );
+    if (nextReferencePhotoElement && scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const containerRect = container.getBoundingClientRect();
-      const avatarRect = nextAvatarElement.getBoundingClientRect();
+      const referencePhotoRect =
+        nextReferencePhotoElement.getBoundingClientRect();
       const scrollLeft = container.scrollLeft;
-      const avatarLeft = avatarRect.left - containerRect.left + scrollLeft;
+      const referencePhotoLeft =
+        referencePhotoRect.left - containerRect.left + scrollLeft;
       const containerCenter = containerRect.width / 2;
-      const targetScroll = avatarLeft - containerCenter + avatarRect.width / 2;
+      const targetScroll =
+        referencePhotoLeft - containerCenter + referencePhotoRect.width / 2;
 
       container.scrollTo({
         left: targetScroll,
@@ -145,13 +172,13 @@ export const AvatarSelector = ({
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
-          Generating avatars...
+          Generating reference photos...
         </div>
       </div>
     );
   }
 
-  if (avatars.length === 0) {
+  if (referencePhotos.length === 0) {
     return null;
   }
 
@@ -180,7 +207,7 @@ export const AvatarSelector = ({
         </button>
       )}
 
-      {/* Avatar container with horizontal scroll */}
+      {/* Reference photo container with horizontal scroll */}
       <div
         ref={scrollContainerRef}
         className="flex overflow-x-auto no-scrollbar scroll-smooth py-2 sm:py-3 lg:py-4"
@@ -190,42 +217,47 @@ export const AvatarSelector = ({
           WebkitOverflowScrolling: 'touch',
         }}
       >
-        {/* Left padding to allow first avatar to center */}
+        {/* Left padding to allow first reference photo to center */}
         <div
           className="shrink-0"
           style={{ width: `${Math.max(0, paddingWidth)}px` }}
         />
 
-        {avatars.map((avatar, index) => {
+        {referencePhotos.map((referencePhoto, index) => {
           // Simple opacity and scale for selection feedback
-          const isSelected = avatar.id === selectedAvatarId;
+          const isSelected = referencePhoto.id === selectedReferencePhotoId;
           const scale = isSelected ? 1.05 : 1;
           const opacity = isSelected ? 1 : 0.6;
 
           return (
             <button
-              key={avatar.id}
+              key={referencePhoto.id}
               ref={(el) => {
                 if (el) {
-                  avatarRefs.current.set(avatar.id, el);
+                  referencePhotoRefs.current.set(referencePhoto.id, el);
                 } else {
-                  avatarRefs.current.delete(avatar.id);
+                  referencePhotoRefs.current.delete(referencePhoto.id);
                 }
               }}
               onClick={() => {
-                onSelectAvatar(avatar.id);
-                // Scroll avatar to center
-                const avatarElement = avatarRefs.current.get(avatar.id);
-                if (scrollContainerRef.current && avatarElement) {
+                onSelectReferencePhoto(referencePhoto.id);
+                // Scroll reference photo to center
+                const referencePhotoElement = referencePhotoRefs.current.get(
+                  referencePhoto.id
+                );
+                if (scrollContainerRef.current && referencePhotoElement) {
                   const container = scrollContainerRef.current;
                   const containerRect = container.getBoundingClientRect();
-                  const avatarRect = avatarElement.getBoundingClientRect();
+                  const referencePhotoRect =
+                    referencePhotoElement.getBoundingClientRect();
                   const scrollLeft = container.scrollLeft;
-                  const avatarLeft =
-                    avatarRect.left - containerRect.left + scrollLeft;
+                  const referencePhotoLeft =
+                    referencePhotoRect.left - containerRect.left + scrollLeft;
                   const containerCenter = containerRect.width / 2;
                   const targetScroll =
-                    avatarLeft - containerCenter + avatarRect.width / 2;
+                    referencePhotoLeft -
+                    containerCenter +
+                    referencePhotoRect.width / 2;
 
                   container.scrollTo({
                     left: targetScroll,
@@ -243,15 +275,15 @@ export const AvatarSelector = ({
               }}
             >
               <img
-                src={avatar.url}
-                alt={`Avatar ${avatar.id}`}
+                src={referencePhoto.url}
+                alt={`Reference Photo ${referencePhoto.id}`}
                 className="max-w-full max-h-full object-contain"
               />
             </button>
           );
         })}
 
-        {/* Right padding to allow last avatar to center */}
+        {/* Right padding to allow last reference photo to center */}
         <div
           className="shrink-0"
           style={{ width: `${Math.max(0, paddingWidth)}px` }}

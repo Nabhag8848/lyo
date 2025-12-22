@@ -1,3 +1,3 @@
-export * from './upload-avatar';
-export * from './fetch-avatar';
-export * from './delete-avatar';
+export * from './upload-reference-photo';
+export * from './fetch-reference-photo';
+export * from './delete-reference-photo';
