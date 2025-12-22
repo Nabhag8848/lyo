@@ -1,6 +1,5 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { FashnaiWebhookRequestDto } from './dtos';
 import { FashnaiWebhookService } from './fashnai-wh.service';
 import { FashnaiWebhookSecretGuard } from './guards';
 import { CurrentUserId } from './decorators';
@@ -46,9 +45,22 @@ export class FashnaiWebhookController {
     description: 'Unauthorized - Invalid webhook secret',
   })
   async handleFashnaiWebhook(
-    @Body() body: FashnaiWebhookRequestDto,
+    @Body() body: any,
     @CurrentUserId() userId: string
   ) {
     return this.fashnaiWebhookService.handleFashnaiWebhook(body, userId);
+  }
+
+  @Get('gen')
+  handleFashnaiWebhookGet(@CurrentUserId() userId: string, @Body() body: any) {
+    console.log('get request');
+    console.log('userId', userId);
+    console.log(body.output);
+    console.log(body.id);
+    console.log(body.status);
+    console.log(body.error);
+    return {
+      success: true,
+    };
   }
 }

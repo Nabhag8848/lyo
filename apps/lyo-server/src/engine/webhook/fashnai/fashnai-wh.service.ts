@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { FashnaiWebhookRequestDto } from './dtos';
 import { FashnaiWebhookStatus } from './enum';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
 
@@ -7,10 +6,12 @@ import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service
 export class FashnaiWebhookService {
   constructor(private readonly s3ObjectService: S3ObjectService) {}
 
-  async handleFashnaiWebhook(
-    { status, id, output }: FashnaiWebhookRequestDto,
-    userId: string
-  ) {
+  async handleFashnaiWebhook({ status, id, output }: any, userId: string) {
+    console.log('output', output);
+    console.log('id', id);
+    console.log('userId', userId);
+    console.log('status', status);
+
     switch (status) {
       case FashnaiWebhookStatus.FAILED:
         return {
@@ -19,11 +20,11 @@ export class FashnaiWebhookService {
       case FashnaiWebhookStatus.COMPLETED: {
         // output contains the base64 encoded images with prefix we must remove that before saving to s3
         const images =
-          output?.map((image) => {
+          output?.map((image: any) => {
             return image.replace('data:image/jpeg;base64,', '');
           }) || [];
 
-        const imageBuffers = images.map((image) => {
+        const imageBuffers = images.map((image: any) => {
           return Buffer.from(image, 'base64');
         });
 
