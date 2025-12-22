@@ -1,2 +1,2 @@
-export * from './avatar-onboarding';
-export * from './avatar-selector';
+export * from './reference-photo-onboarding';
+export * from './reference-photo-selector';

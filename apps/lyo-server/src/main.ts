@@ -45,7 +45,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('auth', 'Authentication endpoints')
     .addTag('user', 'User management endpoints')
-    .addTag('avatar', 'Avatar management endpoints')
+    .addTag('reference-photo', 'Reference photo management endpoints')
     .addTag('tryon', 'Virtual try-on endpoints')
     .addTag('webhook', 'Webhook endpoints')
     .addTag('health', 'Health check endpoints')

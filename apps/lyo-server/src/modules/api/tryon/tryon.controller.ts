@@ -16,7 +16,7 @@ export class TryonController {
   @ApiOperation({
     summary: 'Generate virtual try-on',
     description:
-      "Generates a virtual try-on image by combining a garment image with the user's avatar",
+      "Generates a virtual try-on image by combining a garment image with the user's reference photo",
   })
   @ApiResponse({
     status: 200,

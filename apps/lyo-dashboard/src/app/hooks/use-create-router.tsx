@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import { DefaultLayout } from '@/app/layout/components';
 import { AppRouterProviders } from '@/app/components';
-import { AvatarOnboarding } from '@/modules/onboarding/components';
+import { ReferencePhotoOnboarding } from '@/modules/onboarding/components';
 import { Settings } from '@/modules/settings/components';
 import { AppPath } from '@/app/utils/title';
 import { DashboardSkeleton } from '@/modules/onboarding/skeleton';
@@ -24,7 +24,7 @@ export const useCreateRouter = (): ReturnType<typeof createBrowserRouter> => {
             path={AppPath.ONBOARDING}
             element={
               <Suspense fallback={<DashboardSkeleton />}>
-                <AvatarOnboarding />
+                <ReferencePhotoOnboarding />
               </Suspense>
             }
           />
