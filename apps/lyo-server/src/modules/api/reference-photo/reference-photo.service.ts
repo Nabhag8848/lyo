@@ -19,11 +19,11 @@ export class ReferencePhotoService {
   };
 
   constructor(
-    private s3ObjectService: S3ObjectService,
-    private redisService: RedisService,
-    private s3BucketService: S3BucketService,
+    private readonly s3ObjectService: S3ObjectService,
+    private readonly redisService: RedisService,
+    private readonly s3BucketService: S3BucketService,
     @InjectRepository(ReferencePhotoEntity)
-    private referencePhotoRepository: Repository<ReferencePhotoEntity>,
+    private readonly referencePhotoRepository: Repository<ReferencePhotoEntity>,
     private readonly dataSource: DataSource,
     private readonly avatarService: AvatarService
   ) {}

@@ -13,9 +13,9 @@ export interface TokenPayload {
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
-    private configService: ConfigService,
-    private userService: UserService
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly userService: UserService
   ) {}
 
   async validateGoogleUser(

@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 export class AvatarService {
   constructor(
     @InjectRepository(AvatarEntity)
-    private avatarRepository: Repository<AvatarEntity>
+    private readonly avatarRepository: Repository<AvatarEntity>
   ) {}
 
   async createAvatar(

@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '@/modules/api/auth/guards';
 @Controller('user')
 @UseGuards(JwtAuthGuard)
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get('me')
   @Serialize(UserProfileDto)

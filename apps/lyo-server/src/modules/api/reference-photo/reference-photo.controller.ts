@@ -29,7 +29,7 @@ import { ImageFilePipe } from './validator';
 @Controller('reference-photo')
 @UseGuards(JwtAuthGuard)
 export class ReferencePhotoController {
-  constructor(private referencePhotoService: ReferencePhotoService) {}
+  constructor(private readonly referencePhotoService: ReferencePhotoService) {}
 
   @Post('upload')
   @HttpCode(HttpStatus.CREATED)

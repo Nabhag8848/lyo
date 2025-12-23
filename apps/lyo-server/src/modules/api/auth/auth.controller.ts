@@ -19,9 +19,9 @@ import { AuthUserDto } from '@/modules/api/user/dtos';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
-    private userService: UserService
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+    private readonly userService: UserService
   ) {}
 
   @Get('google')

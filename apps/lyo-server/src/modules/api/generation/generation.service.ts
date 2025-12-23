@@ -7,7 +7,7 @@ import { S3BucketService } from '@/modules/storage/s3/services/s3-bucket.service
 export class GenerationService {
   constructor(
     @InjectRepository(GenerationEntity)
-    private generationRepository: Repository<GenerationEntity>,
+    private readonly generationRepository: Repository<GenerationEntity>,
     private readonly s3BucketService: S3BucketService
   ) {}
 

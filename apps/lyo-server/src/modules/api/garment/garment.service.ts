@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 export class GarmentService {
   constructor(
     @InjectRepository(GarmentEntity)
-    private garmentRepository: Repository<GarmentEntity>
+    private readonly garmentRepository: Repository<GarmentEntity>
   ) {}
 
   async createGarment(

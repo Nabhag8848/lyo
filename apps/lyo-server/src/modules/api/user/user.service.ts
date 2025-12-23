@@ -9,7 +9,7 @@ import { AuthProvider } from '../../../database/@types';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>
   ) {}
 
   async findByIdOrFail(id: string): Promise<UserEntity> {
