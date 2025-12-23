@@ -9,6 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 import { S3BucketService } from '@/modules/storage/s3/services/s3-bucket.service';
 import { CachedReferencePhotoSchema } from './schema';
 import { parseJson, stringifyJson } from './utils';
+import { AvatarService } from '@/modules/api/avatar/avatar.service';
 
 @Injectable()
 export class ReferencePhotoService {
@@ -23,7 +24,8 @@ export class ReferencePhotoService {
     private s3BucketService: S3BucketService,
     @InjectRepository(ReferencePhotoEntity)
     private referencePhotoRepository: Repository<ReferencePhotoEntity>,
-    private readonly dataSource: DataSource
+    private readonly dataSource: DataSource,
+    private readonly avatarService: AvatarService
   ) {}
 
   async uploadReferencePhoto(
@@ -61,6 +63,14 @@ export class ReferencePhotoService {
 
       referencePhotoId = referencePhoto.identifiers[0]?.id;
     });
+
+    await this.avatarService.createAvatar(
+      userId,
+      referencePhotoId,
+      contentType,
+      key,
+      bucketName
+    );
 
     await this.invalidateCache(userId);
 
@@ -163,6 +173,8 @@ export class ReferencePhotoService {
 
       await this.invalidateCache(userId);
     }
+
+    await this.avatarService.deSelectCurrentAvatar(userId);
   }
 
   private async invalidateCache(userId: string): Promise<void> {

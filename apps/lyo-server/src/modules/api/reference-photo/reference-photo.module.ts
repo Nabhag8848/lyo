@@ -6,6 +6,7 @@ import { UserModule } from '@/modules/api/user/user.module';
 import { RedisModule } from '@/database/redis/redis.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ReferencePhotoEntity } from '@/database/entities';
+import { AvatarModule } from '@/modules/api/avatar/avatar.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ReferencePhotoEntity } from '@/database/entities';
     S3Module,
     UserModule,
     RedisModule,
+    AvatarModule,
   ],
   controllers: [ReferencePhotoController],
   providers: [ReferencePhotoService],
