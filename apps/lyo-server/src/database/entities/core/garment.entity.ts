@@ -34,6 +34,9 @@ export class GarmentEntity extends AbstractBaseEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   brandName: string | null;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  garmentBrandName: string | null;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   garmentName: string | null;
 

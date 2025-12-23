@@ -24,8 +24,17 @@ export class GenerateTryonDto {
   @IsOptional()
   @IsString()
   @ApiProperty({
-    description: 'Brand name of the garment',
+    description: 'Brand name of ecommerce shop',
     example: 'Myntra',
+    required: false,
+  })
+  brandName?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'Brand name of the garment',
+    example: 'StyleCast',
     required: false,
   })
   garmentBrandName?: string;

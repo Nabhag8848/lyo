@@ -11,12 +11,20 @@ export class GarmentService {
   async createGarment(
     userId: string,
     garmentUrl: string,
-    sourceUrl: string
+    sourceUrl: string,
+    garmentBrandName?: string,
+    garmentName?: string,
+    garmentDescription?: string,
+    brandName?: string
   ): Promise<GarmentEntity> {
     const garment = await this.garmentRepository.insert({
       user: { id: userId },
       garmentUrl,
       sourceUrl,
+      brandName,
+      garmentName,
+      garmentDescription,
+      garmentBrandName,
     });
 
     return garment.raw[0];

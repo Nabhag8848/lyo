@@ -18,7 +18,7 @@ export class TryonService {
 
   async generateTryon(
     userId: string,
-    { garmentImageUrl, garmentSourceUrl }: GenerateTryonDto
+    { garmentImageUrl, garmentSourceUrl, garmentBrandName, garmentName, garmentDescription, brandName }: GenerateTryonDto
   ): Promise<GenerateTryonResponseDto> {
     // temporary later we will get selected avatar image url
     const { url } = await this.referencePhotoService.getActiveReferencePhoto(
@@ -35,7 +35,11 @@ export class TryonService {
     const garment = await this.garmentService.createGarment(
       userId,
       garmentImageUrl,
-      garmentSourceUrl
+      garmentSourceUrl,
+      garmentBrandName,
+      garmentName,
+      garmentDescription,
+      brandName
     );
     await this.generationService.createGeneration(
       userId,
