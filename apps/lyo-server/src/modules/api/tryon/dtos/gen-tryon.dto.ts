@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GenerateTryonDto {
@@ -20,4 +20,32 @@ export class GenerateTryonDto {
     example: 'https://ecommerceshop.com/product/123',
   })
   garmentSourceUrl: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'Brand name of the garment',
+    example: 'Myntra',
+    required: false,
+  })
+  garmentBrandName?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'Name of the garment',
+    example: 'Red Floral Print Maxi Dress',
+    required: false,
+  })
+  garmentName?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    description: 'Description of the garment',
+    example:
+      'This is a red floral print maxi dress with a v-neckline and a flowy skirt.',
+    required: false,
+  })
+  garmentDescription?: string;
 }
