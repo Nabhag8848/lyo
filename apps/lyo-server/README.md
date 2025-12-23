@@ -6,24 +6,24 @@
 erDiagram
   garment {
     uuid id PK
-    timestamp without time zone createdAt
-    timestamp without time zone updatedAt
-    character varying garmentUrl
-    character varying sourceUrl
-    character varying brandName
-    character varying garmentBrandName
-    character varying garmentName
+    timestamp createdAt
+    timestamp updatedAt
+    varchar garmentUrl
+    varchar sourceUrl
+    varchar brandName
+    varchar garmentBrandName
+    varchar garmentName
     text garmentDescription
     uuid userId FK
   }
   generation {
     uuid id PK
-    timestamp without time zone createdAt
-    timestamp without time zone updatedAt
+    timestamp createdAt
+    timestamp updatedAt
     uuid jobId "External provider reference"
-    character varying key
-    character varying bucketName
-    character varying contentType
+    varchar key
+    varchar bucketName
+    varchar contentType
     enum status
     uuid garmentId FK
     uuid avatarId FK
@@ -31,38 +31,38 @@ erDiagram
   }
   avatar {
     uuid id PK
-    timestamp without time zone createdAt
-    timestamp without time zone updatedAt
-    character varying key
-    character varying bucketName
-    character varying contentType
-    boolean isSelected
+    timestamp createdAt
+    timestamp updatedAt
+    varchar key
+    varchar bucketName
+    varchar contentType
+    bool isSelected
     uuid referencePhotoId FK
     uuid userId FK
   }
   referencePhoto {
     uuid id PK
-    timestamp without time zone createdAt
-    timestamp without time zone updatedAt
-    character varying key "S3 Object Key"
-    character varying bucketName
-    character varying contentType
-    boolean isActive
+    timestamp createdAt
+    timestamp updatedAt
+    varchar key "S3 Object Key"
+    varchar bucketName
+    varchar contentType
+    bool isActive
     uuid userId FK
   }
   user {
     uuid id PK
-    timestamp without time zone createdAt
-    timestamp without time zone updatedAt
-    character varying email
-    character varying firstName
-    character varying lastName
-    character varying picture
+    timestamp createdAt
+    timestamp updatedAt
+    varchar email
+    varchar firstName
+    varchar lastName
+    varchar picture
     enum provider
-    character varying providerId
-    boolean isActive
-    timestamp without time zone lastLoginAt
-    character varying googleAccessToken
+    varchar providerId
+    bool isActive
+    timestamp lastLoginAt
+    varchar googleAccessToken
   }
   garment }|--|| user: user
   generation }|--|| garment: garment
