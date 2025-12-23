@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { FashnaiWebhookStatus } from './enum';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
 import { FashnaiWebhookRequestDto } from './dtos';
-
+import { GenerationService } from '@/modules/api/generation/generation.service';
+import { JobStatus } from '@/database/@types';
 @Injectable()
 export class FashnaiWebhookService {
-  constructor(private readonly s3ObjectService: S3ObjectService) {}
+  constructor(
+    private readonly s3ObjectService: S3ObjectService,
+    private readonly generationService: GenerationService
+  ) {}
 
   async handleFashnaiWebhook(
     { status, id, output }: FashnaiWebhookRequestDto,
@@ -27,12 +31,17 @@ export class FashnaiWebhookService {
           return Buffer.from(image, 'base64');
         });
 
-        const generationId = id;
-        const key = `users/${userId}/generations/${generationId}`;
+        const jobId = id;
+        const key = `users/${userId}/generations/${jobId}`;
         for (const imageBuffer of imageBuffers) {
           await this.s3ObjectService.put(key, imageBuffer, {
             ContentType: 'image/jpeg',
           });
+          await this.generationService.updateGeneration(
+            jobId,
+            JobStatus.COMPLETED,
+            key
+          );
         }
 
         return {

@@ -34,4 +34,15 @@ export class AvatarService {
       { isSelected: false }
     );
   }
+
+  async getCurrentAvatarId(userId: string): Promise<string> {
+    const avatar = await this.avatarRepository.findOneOrFail({
+      where: {
+        user: { id: userId },
+        isSelected: true,
+      },
+    });
+
+    return avatar.id;
+  }
 }
