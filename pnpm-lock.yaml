@@ -333,6 +333,9 @@ importers:
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.17))(@types/node@20.19.9)(typescript@5.9.3)
+      typeorm-erd:
+        specifier: ^0.0.4
+        version: 0.0.4(reflect-metadata@0.1.14)(typeorm@0.3.28(babel-plugin-macros@3.1.0)(ioredis@5.8.2)(pg@8.16.3)(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.17))(@types/node@20.19.9)(typescript@5.9.3)))
       typescript:
         specifier: ~5.9.2
         version: 5.9.3
@@ -9594,6 +9597,12 @@ packages:
 
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
+
+  typeorm-erd@0.0.4:
+    resolution: {integrity: sha512-wtgKwkDk9eFwwgcooP1m08QJ1Bmsn1KZLSzn7/WzwreRxEFIU+AXo/QFtu7ivswYpFKxZAiFrGBFS707lox8zg==}
+    peerDependencies:
+      reflect-metadata: ^0.1.13
+      typeorm: ^0.3.6
 
   typeorm@0.3.28:
     resolution: {integrity: sha512-6GH7wXhtfq2D33ZuRXYwIsl/qM5685WZcODZb7noOOcRMteM9KF2x2ap3H0EBjnSV0VO4gNAfJT5Ukp0PkOlvg==}
@@ -21357,6 +21366,11 @@ snapshots:
   typed-assert@1.0.9: {}
 
   typedarray@0.0.6: {}
+
+  typeorm-erd@0.0.4(reflect-metadata@0.1.14)(typeorm@0.3.28(babel-plugin-macros@3.1.0)(ioredis@5.8.2)(pg@8.16.3)(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.17))(@types/node@20.19.9)(typescript@5.9.3))):
+    dependencies:
+      reflect-metadata: 0.1.14
+      typeorm: 0.3.28(babel-plugin-macros@3.1.0)(ioredis@5.8.2)(pg@8.16.3)(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.17))(@types/node@20.19.9)(typescript@5.9.3))
 
   typeorm@0.3.28(babel-plugin-macros@3.1.0)(ioredis@5.8.2)(pg@8.16.3)(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.17))(@types/node@20.19.9)(typescript@5.9.3)):
     dependencies:

@@ -75,7 +75,11 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "development",
       "options": {
-        "command": "typeorm-ts-node-commonjs migration:run -d src/database/datasource/app.datasource.ts",
+        "commands": [
+          "typeorm-ts-node-commonjs migration:run -d src/database/datasource/app.datasource.ts",
+          "ts-node --project tsconfig.json src/database/scripts/generate-erd.ts"
+        ],
+        "parallel": false,
         "cwd": "apps/lyo-server"
       },
       "configurations": {
