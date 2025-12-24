@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { S3BucketService } from '@/modules/storage/s3/services/s3-bucket.service';
 import { CachedReferencePhotoSchema } from './schema';
-import { parseJson, stringifyJson } from './utils';
+import { parseJson, stringifyJson } from '@/utils';
 import { AvatarService } from '@/modules/api/avatar/avatar.service';
 
 @Injectable()

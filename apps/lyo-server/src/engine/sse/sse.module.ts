@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '@/modules/auth/auth.module';
-import { SseController } from './sse.controller';
+import { GenerationModule } from './generation/generation.module';
 
 @Module({
-  imports: [AuthModule],
-  controllers: [SseController],
+  imports: [AuthModule, GenerationModule],
 })
 export class SseModule {}

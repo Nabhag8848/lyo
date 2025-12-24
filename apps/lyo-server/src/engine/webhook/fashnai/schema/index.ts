@@ -1,0 +1,1 @@
+export * from './fashnai-generation-complete-schema.schema';

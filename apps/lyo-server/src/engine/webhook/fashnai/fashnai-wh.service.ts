@@ -4,11 +4,18 @@ import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service
 import { FashnaiWebhookRequestDto } from './dtos';
 import { GenerationService } from '@/modules/api/generation/generation.service';
 import { JobStatus } from '@/database/@types';
+import { PubSubService } from '@/engine/pubsub/pubsub.service';
+import { stringifyJson } from '@/utils';
+import { FashnaiGenerationCompleteSchema } from './schema';
 @Injectable()
 export class FashnaiWebhookService {
   constructor(
     private readonly s3ObjectService: S3ObjectService,
-    private readonly generationService: GenerationService
+    private readonly generationService: GenerationService,
+    private readonly pubSubService: PubSubService<
+      typeof FashnaiGenerationCompleteSchema,
+      FashnaiGenerationCompletedMessage
+    >
   ) {}
 
   async handleFashnaiWebhook(
@@ -32,6 +39,7 @@ export class FashnaiWebhookService {
         });
 
         const jobId = id;
+        const channel = `user:${userId}:generation`;
         const key = `users/${userId}/generations/${jobId}`;
         for (const imageBuffer of imageBuffers) {
           await this.s3ObjectService.put(key, imageBuffer, {
@@ -41,6 +49,14 @@ export class FashnaiWebhookService {
             jobId,
             JobStatus.COMPLETED,
             key
+          );
+
+          this.pubSubService.publish(
+            channel,
+            stringifyJson(FashnaiGenerationCompleteSchema, {
+              id: jobId,
+              imageUrl: key,
+            })
           );
         }
 
