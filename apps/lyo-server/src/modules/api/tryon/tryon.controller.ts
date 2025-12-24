@@ -1,9 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/modules/api/auth/guards';
+import { JwtAuthGuard } from '@/modules/auth/guards';
 import { GenerateTryonDto, GenerateTryonResponseDto } from './dtos';
 import { TryonService } from './tryon.service';
-import { CurrentUser } from '@/modules/api/user/decorators';
+import { CurrentUser } from '@/modules/auth/decorators';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 
 @ApiTags('tryon')

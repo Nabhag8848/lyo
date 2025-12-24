@@ -2,9 +2,9 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { AuthUserDto, UserProfileDto } from './dtos';
-import { CurrentUser } from './decorators';
+import { CurrentUser } from '@/modules/auth/decorators';
 import { Serialize } from '@/app/decorators/serialize.decorator';
-import { JwtAuthGuard } from '@/modules/api/auth/guards';
+import { JwtAuthGuard } from '@/modules/auth/guards';
 
 @ApiTags('user')
 @Controller('user')

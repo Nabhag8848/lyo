@@ -18,8 +18,8 @@ import {
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ReferencePhotoService } from './reference-photo.service';
-import { JwtAuthGuard } from '@/modules/api/auth/guards';
-import { CurrentUser } from '@/modules/api/user/decorators';
+import { JwtAuthGuard } from '@/modules/auth/guards';
+import { CurrentUser } from '@/modules/auth/decorators';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 import { ReferencePhotoDto } from './dtos/reference-photo.dto';
 import { Serialize } from '@/app/decorators/serialize.decorator';

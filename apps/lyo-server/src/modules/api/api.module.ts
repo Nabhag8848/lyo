@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { ReferencePhotoModule } from './reference-photo/reference-photo.module';
 import { TryonModule } from './tryon/tryon.module';
 import { AvatarModule } from './avatar/avatar.module';
