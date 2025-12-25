@@ -1,0 +1,1 @@
+export * from './get-generation-img-response.dto';

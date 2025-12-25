@@ -32,7 +32,7 @@ export class TryonService {
       userId
     );
 
-    const { id } = await this.fashnaiService.startTryon({
+    const { id: jobId } = await this.fashnaiService.startTryon({
       modelImageUrl: url as string,
       garmentImageUrl,
       userId,
@@ -52,9 +52,13 @@ export class TryonService {
       userId,
       garment.id,
       avatarId,
-      id
+      jobId
     );
 
-    return { id };
+    const generationId = await this.generationService.getGenerationIdByJobId(
+      jobId
+    );
+
+    return { id: generationId };
   }
 }

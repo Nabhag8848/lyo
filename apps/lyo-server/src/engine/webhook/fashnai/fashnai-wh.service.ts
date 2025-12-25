@@ -50,13 +50,14 @@ export class FashnaiWebhookService {
             JobStatus.COMPLETED,
             key
           );
+          const generation = await this.generationService.getGenerationImageUrl(
+            jobId,
+            key
+          );
 
           this.pubSubService.publish(
             channel,
-            stringifyJson(FashnaiGenerationCompleteSchema, {
-              id: jobId,
-              imageUrl: key,
-            })
+            stringifyJson(FashnaiGenerationCompleteSchema, generation)
           );
         }
 
