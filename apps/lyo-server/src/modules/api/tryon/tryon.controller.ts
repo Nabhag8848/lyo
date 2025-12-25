@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/modules/auth/guards';
 import { GenerateTryonDto, GenerateTryonResponseDto } from './dtos';
 import { TryonService } from './tryon.service';
@@ -17,6 +17,10 @@ export class TryonController {
     summary: 'Generate virtual try-on',
     description:
       "Generates a virtual try-on image by combining a garment image with the user's reference photo",
+  })
+  @ApiBody({
+    type: GenerateTryonDto,
+    description: 'Try-on generation request payload',
   })
   @ApiResponse({
     status: 200,

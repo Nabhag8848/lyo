@@ -47,9 +47,7 @@ export class PubSubService<
       const subscription = this.activeSubscriptions.get(channel);
       if (subscription) {
         const data = parseJson<Type>(this.schema, message);
-        if (data) {
-          subscription.next({ data });
-        }
+        subscription.next({ data, type: 'generation' });
       }
     });
   }
@@ -69,6 +67,20 @@ export class PubSubService<
 
   publish(channel: string, data: string): void {
     this.publisher.publish(channel, data);
+  }
+
+  unsubscribe(channel: string): void {
+    const subscription = this.activeSubscriptions.get(channel);
+    if (subscription) {
+      // Complete the subscription (closes SSE connection)
+      if (!subscription.closed) {
+        subscription.complete();
+      }
+      // Remove from active subscriptions
+      this.activeSubscriptions.delete(channel);
+      // Unsubscribe from Redis channel
+      this.subscriber.unsubscribe(channel);
+    }
   }
 
   private getSubscription(channel: string): Subject<MessageEventData<Type>> {

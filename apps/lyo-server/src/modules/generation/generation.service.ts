@@ -1,9 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { JobStatus } from '@/database/@types';
 import { GenerationEntity } from '@/database/entities';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { S3BucketService } from '@/modules/storage/s3/services/s3-bucket.service';
 
+@Injectable()
 export class GenerationService {
   constructor(
     @InjectRepository(GenerationEntity)
@@ -39,5 +41,19 @@ export class GenerationService {
         contentType: 'image/jpeg',
       }
     );
+  }
+
+  async hasPendingGenerations(userId: string): Promise<boolean> {
+    const count = await this.generationRepository.count({
+      where: {
+        user: { id: userId },
+        status: In([
+          JobStatus.STARTING,
+          JobStatus.IN_QUEUE,
+          JobStatus.PROCESSING,
+        ]),
+      },
+    });
+    return count > 0;
   }
 }

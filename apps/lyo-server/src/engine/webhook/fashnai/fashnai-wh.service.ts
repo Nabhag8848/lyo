@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { FashnaiWebhookStatus } from './enum';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
 import { FashnaiWebhookRequestDto } from './dtos';
-import { GenerationService } from '@/modules/api/generation/generation.service';
+import { GenerationService } from '@/modules/generation/generation.service';
 import { JobStatus } from '@/database/@types';
 import { PubSubService } from '@/engine/pubsub/pubsub.service';
 import { stringifyJson } from '@/utils';

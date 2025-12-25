@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '@/modules/auth/auth.module';
-import { GenerationController } from './generation.controller';
 import {
   PUBSUB_SCHEMA_TOKEN,
   PubSubService,
 } from '@/engine/pubsub/pubsub.service';
 import { FashnaiGenerationCompleteSchema } from '@/engine/webhook/fashnai/schema';
+import { GenerationModule } from '@/modules/generation/generation.module';
+import { SseGenerationController } from './sse-generation.controller';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, GenerationModule],
   providers: [
     {
       provide: PUBSUB_SCHEMA_TOKEN,
@@ -16,6 +17,6 @@ import { FashnaiGenerationCompleteSchema } from '@/engine/webhook/fashnai/schema
     },
     PubSubService,
   ],
-  controllers: [GenerationController],
+  controllers: [SseGenerationController],
 })
-export class GenerationModule {}
+export class SseGenerationModule {}

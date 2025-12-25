@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from '@/modules/auth/auth.module';
-import { GenerationModule } from './generation/generation.module';
+import { SseGenerationModule } from './generation/sse-generation.module';
 
 @Module({
-  imports: [AuthModule, GenerationModule],
+  imports: [AuthModule, SseGenerationModule],
 })
 export class SseModule {}

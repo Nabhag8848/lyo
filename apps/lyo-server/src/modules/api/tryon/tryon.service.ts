@@ -4,7 +4,7 @@ import { FashnaiService } from '@/modules/fashnai/fashnai.service';
 import { ReferencePhotoService } from '@/modules/api/reference-photo/reference-photo.service';
 import { AvatarService } from '@/modules/api/avatar/avatar.service';
 import { GarmentService } from '@/modules/api/garment/garment.service';
-import { GenerationService } from '@/modules/api/generation/generation.service';
+import { GenerationService } from '@/modules/generation/generation.service';
 
 @Injectable()
 export class TryonService {
@@ -18,7 +18,14 @@ export class TryonService {
 
   async generateTryon(
     userId: string,
-    { garmentImageUrl, garmentSourceUrl, garmentBrandName, garmentName, garmentDescription, brandName }: GenerateTryonDto
+    {
+      garmentImageUrl,
+      garmentSourceUrl,
+      garmentBrandName,
+      garmentName,
+      garmentDescription,
+      brandName,
+    }: GenerateTryonDto
   ): Promise<GenerateTryonResponseDto> {
     // temporary later we will get selected avatar image url
     const { url } = await this.referencePhotoService.getActiveReferencePhoto(

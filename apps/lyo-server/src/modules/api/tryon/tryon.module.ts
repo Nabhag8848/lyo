@@ -6,7 +6,7 @@ import { S3Module } from '@/modules/storage/s3/s3.module';
 import { ReferencePhotoModule } from '@/modules/api/reference-photo/reference-photo.module';
 import { AvatarModule } from '@/modules/api/avatar/avatar.module';
 import { GarmentModule } from '@/modules/api/garment/garment.module';
-import { GenerationModule } from '@/modules/api/generation/generation.module';
+import { GenerationModule } from '@/modules/generation/generation.module';
 
 @Module({
   imports: [

@@ -48,6 +48,7 @@ async function bootstrap() {
     .addTag('user', 'User management endpoints')
     .addTag('reference-photo', 'Reference photo management endpoints')
     .addTag('tryon', 'Virtual try-on endpoints')
+    .addTag('sse', 'Server-Sent Events endpoints for real-time updates')
     .addTag('webhook', 'Webhook endpoints')
     .addTag('health', 'Health check endpoints')
     .addCookieAuth('access_token', {

@@ -4,7 +4,7 @@ import { FashnaiWebhookController } from './fashnai-wh.controller';
 import { FashnaiWebhookService } from './fashnai-wh.service';
 import { FashnaiWebhookSecretGuard } from './guards';
 import { S3Module } from '@/modules/storage/s3/s3.module';
-import { GenerationModule } from '@/modules/api/generation/generation.module';
+import { GenerationModule } from '@/modules/generation/generation.module';
 import {
   PUBSUB_SCHEMA_TOKEN,
   PubSubService,

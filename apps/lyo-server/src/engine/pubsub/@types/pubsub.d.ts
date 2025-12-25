@@ -1,7 +1,8 @@
 import { MessageEvent } from '@nestjs/common';
 
 declare global {
-  interface MessageEventData<T> extends Omit<MessageEvent, 'data'> {
-    data: T;
+  interface MessageEventData<T> extends MessageEvent {
+    data: T | null;
+    type: 'generation' | 'close_connection';
   }
 }
