@@ -1,3 +1,5 @@
+import { ClosingCTA } from './ClosingCTA';
+
 export const HowItWorks = () => {
   return (
     <section
@@ -215,7 +217,7 @@ export const HowItWorks = () => {
               <div className="space-y-6 max-w-xl">
                 <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
                   In a few seconds, you can see the clothes on you in your{' '}
-                  <strong className="text-black font-medium">wardrobe{' '}</strong>
+                  <strong className="text-black font-medium">wardrobe </strong>
                   while you browse through all your favorites before you buy.
                 </p>
                 <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
@@ -251,45 +253,7 @@ export const HowItWorks = () => {
         </div>
 
         {/* NEW CTA SECTION (CLEAN & DARK) */}
-        <div className="mt-32 relative group">
-          {/* Main Card */}
-          <div className="bg-stone-900 rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden border border-stone-800 shadow-2xl">
-            <div className="relative z-10 flex flex-col items-center">
-              {/* Headline (Sentence Case) */}
-              <h3 className="font-display text-5xl md:text-7xl text-white leading-tight mb-6">
-                Never return an <br />
-                <span className="italic text-stone-400">outfit again.</span>
-              </h3>
-              {/* Subtext */}
-              <p className="text-stone-400 text-lg font-light max-w-xl mb-10 leading-relaxed">
-                See exactly how that Myntra dress fits <em>your</em> body. No
-                more guessing games, just confidence.
-              </p>
-              {/* CTA Block */}
-              <div className="flex flex-col items-center gap-4 w-full sm:w-auto">
-                <button className="w-full sm:w-auto bg-white text-black px-12 py-5 rounded-sm text-xs font-bold tracking-[0.2em] hover:bg-brand-pink hover:text-white transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,63,108,0.6)] uppercase flex items-center justify-center gap-3">
-                  Start free trial
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </button>
-                <p className="text-[10px] text-stone-500 font-medium tracking-wider uppercase">
-                  14-Day Free Trial • Cancel Anytime
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ClosingCTA />
       </div>
     </section>
   );
