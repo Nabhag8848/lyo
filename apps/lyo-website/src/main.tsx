@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
+import { Analytics } from '@vercel/analytics/react';
 import App from './app/app';
 import './styles.css';
 import * as Sentry from '@sentry/react';
@@ -39,6 +40,7 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <App />
+      <Analytics />
     </BrowserRouter>
   </StrictMode>
 );
