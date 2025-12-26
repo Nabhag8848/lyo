@@ -292,15 +292,20 @@ export const InteractiveBrowser = () => {
 
             <div className="p-2 md:p-3 lg:p-3 xl:p-4 2xl:p-4 border-t border-stone-100 bg-white shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
               {/* Add to Bag Button */}
-              <button className="w-full bg-brand-pink text-white px-2.5 sm:px-3 md:px-3.5 lg:px-4 xl:px-4.5 2xl:px-5 py-2 sm:py-2.25 md:py-2.5 lg:py-2.75 xl:py-3 2xl:py-3.5 rounded-[2px] text-[0.5rem] sm:text-[0.5625rem] md:text-[0.625rem] lg:text-[0.6875rem] xl:text-[0.75rem] 2xl:text-[0.875rem] font-bold uppercase tracking-[0.15em] hover:bg-rose-600 transition-colors flex items-center justify-center gap-1.25 sm:gap-1.5 md:gap-1.75 lg:gap-2 xl:gap-2.5 2xl:gap-3">
-                <svg
-                  className="w-3.25 h-3.25 sm:w-3.75 sm:h-3.75 md:w-4 md:h-4 lg:w-4.25 lg:h-4.25 xl:w-4.5 xl:h-4.5 2xl:w-5 2xl:h-5 shrink-0"
-                  fill="white"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M16 6v2h2l2 12H0L2 8h2V6a6 6 0 1112 0zm-2 0a4 4 0 10-8 0v2h8V6z" />
-                </svg>
-                <span className="whitespace-nowrap">Add to Bag</span>
+              <button className="w-full bg-brand-pink text-white px-2.5 sm:px-3 md:px-3.5 lg:px-4 xl:px-4.5 2xl:px-5 py-2 sm:py-2.25 md:py-2.5 lg:py-2.75 xl:py-3 2xl:py-3.5 rounded-[2px] text-[0.5rem] sm:text-[0.5625rem] md:text-[0.625rem] lg:text-[0.6875rem] xl:text-[0.75rem] 2xl:text-[0.875rem] font-bold uppercase tracking-[0.15em] hover:bg-rose-600 transition-colors flex items-center justify-between">
+                <span className="flex items-center gap-1.25 sm:gap-1.5 md:gap-1.75 lg:gap-2 xl:gap-2.5 2xl:gap-3">
+                  <svg
+                    className="w-3.25 h-3.25 sm:w-3.75 sm:h-3.75 md:w-4 md:h-4 lg:w-4.25 lg:h-4.25 xl:w-4.5 xl:h-4.5 2xl:w-5 2xl:h-5 shrink-0"
+                    fill="white"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M16 6v2h2l2 12H0L2 8h2V6a6 6 0 1112 0zm-2 0a4 4 0 10-8 0v2h8V6z" />
+                  </svg>
+                  <span className="whitespace-nowrap">Add to Bag</span>
+                </span>
+                <span className="text-[0.5rem] sm:text-[0.5625rem] md:text-[0.625rem] lg:text-[0.6875rem] xl:text-[0.75rem] 2xl:text-[0.875rem]">
+                  ₹1,799
+                </span>
               </button>
             </div>
           </div>
