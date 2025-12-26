@@ -46,6 +46,7 @@ declare global {
     discountPercent: string;
     description: string;
     imageUrl: string;
+    sourceUrl: string;
     buttonType: 'add_to_bag' | 'go_to_bag';
     sizes: SizeOption[];
     selectedSize?: string | null;

@@ -1,11 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useProduct } from './hooks/use-product';
+import { useAccessToken } from './hooks/use-access-token';
+import { useGenerateTryon } from './hooks/use-generate-tryon';
+import { useSSEGeneration } from './hooks/use-sse-generation';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedGeneration, setSelectedGeneration] = useState(0);
 
   const product = useProduct();
   const selectedSize = product?.selectedSize ?? null;
+  const accessToken = useAccessToken();
+  const {
+    generate,
+    isLoading: isGenerating,
+    error: generateError,
+  } = useGenerateTryon(accessToken);
+  const {
+    generations,
+    isConnected,
+    error: sseError,
+    connect,
+  } = useSSEGeneration();
 
   // Simulate loading animation
   useEffect(() => {
@@ -14,14 +30,6 @@ function App() {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
-  const getImageSrc = () => {
-    // Use product image if available, otherwise fallback
-    return (
-      product?.imageUrl ||
-      'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png'
-    );
-  };
 
   const displayPrice = product?.price || '₹1,499';
   const displayMrp = product?.mrp || '';
@@ -45,6 +53,41 @@ function App() {
     });
   };
 
+  const handleTryOn = async () => {
+    if (!product?.imageUrl || !product?.sourceUrl) {
+      console.error('Missing product data');
+      return;
+    }
+
+    // Connect to SSE first
+    connect();
+
+    // Generate tryon
+    await generate({
+      garmentImageUrl: product.imageUrl,
+      garmentSourceUrl: product.sourceUrl,
+      brandName: product.brand,
+      garmentBrandName: product.brand,
+      garmentName: product.name,
+      garmentDescription: product.name,
+    });
+  };
+
+  const getDisplayImageSrc = () => {
+    // Show generated image if selected, otherwise product image or fallback
+    if (generations.length > 0 && selectedGeneration < generations.length) {
+      return (
+        generations[selectedGeneration].imageUrl ||
+        product?.imageUrl ||
+        'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png'
+      );
+    }
+    return (
+      product?.imageUrl ||
+      'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png'
+    );
+  };
+
   return (
     <div className="flex flex-col h-screen bg-white">
       {/* Header
@@ -60,77 +103,63 @@ function App() {
       </div> */}
 
       {/* Content */}
-      <style>{`
-        .content-scroll::-webkit-scrollbar {
-          width: 3px;
-        }
-        .content-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .content-scroll::-webkit-scrollbar-thumb {
-          background: rgba(214, 211, 209, 0.4);
-          border-radius: 2px;
-          min-height: 20px;
-        }
-        .content-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(214, 211, 209, 0.7);
-        }
-        .content-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(214, 211, 209, 0.4) transparent;
-        }
-      `}</style>
-      <div
-        className="flex-1 flex flex-col p-8 pb-0 bg-white overflow-y-auto min-h-0 content-scroll"
-        style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(214, 211, 209, 0.4) transparent',
-        }}
-      >
+      <div className="flex-1 flex flex-col min-h-0 p-4 bg-white">
         {/* Image Container */}
-        <div className="relative rounded overflow-hidden mb-6 group h-3/5 w-full shrink-0">
-          {/* Loading Animation */}
+        <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 max-h-[60%] w-full flex items-center justify-center">
+          {/* Loading Animation - Initial Load */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">
               <div className="w-10 h-10 border-2 border-stone-200 border-t-brand-pink rounded-full animate-spin"></div>
             </div>
           )}
+          {/* Loading Animation - Generating or Waiting for SSE */}
+          {!isLoading &&
+            (isGenerating || (isConnected && generations.length === 0)) && (
+              <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-10 h-10 border-2 border-stone-200 border-t-brand-pink rounded-full animate-spin"></div>
+                  <p className="text-stone-600 text-xs font-medium">
+                    {isGenerating ? 'Generating...' : 'Waiting for results...'}
+                  </p>
+                </div>
+              </div>
+            )}
           {/* Image */}
-          {!isLoading && (
-            <div className="absolute inset-0 z-10">
+          {!isLoading &&
+            !isGenerating &&
+            !(isConnected && generations.length === 0) && (
               <img
-                src={getImageSrc()}
-                className="w-full h-full object-cover"
+                src={getDisplayImageSrc()}
+                className="w-auto h-full max-w-full max-h-full object-contain"
                 alt={displayName}
               />
-            </div>
-          )}
+            )}
         </div>
 
         {/* Product Info & Controls */}
-        <div className="shrink-0 space-y-6">
+        <div className="shrink-0 space-y-2 overflow-y-auto min-h-0">
           {/* Product Name, Description & Price */}
-          <div className="space-y-3">
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <h4 className="font-display text-stone-900 text-2xl tracking-wide uppercase">
+          <div className="space-y-1.5">
+            <div className="flex justify-between items-start gap-2">
+              <div className="flex-1 min-w-0">
+                <h4 className="font-display text-stone-900 text-base tracking-wide uppercase">
                   {displayBrand}
                 </h4>
-                <p className="text-stone-500 text-[10px] font-bold uppercase tracking-[0.2em] mt-1 line-clamp-2">
+                <p className="text-stone-500 text-[0.5rem] font-bold uppercase tracking-[0.2em] mt-0.5 line-clamp-2">
                   {displayName}
                 </p>
               </div>
-              <div className="text-right ml-4">
-                <span className="font-display text-2xl text-stone-900 block">
+              <div className="text-right shrink-0">
+                <span className="font-display text-base text-stone-900 block">
                   {displayPrice}
                 </span>
                 {displayMrp && (
-                  <span className="text-stone-400 text-xs line-through">
+                  <span className="text-stone-400 text-[0.625rem] line-through">
                     {displayMrp}
                   </span>
                 )}
                 {displayDiscount && (
-                  <span className="text-green-600 text-xs font-bold ml-2">
+                  <span className="text-green-600 text-[0.625rem] font-bold ml-1">
                     {displayDiscount}
                   </span>
                 )}
@@ -141,8 +170,8 @@ function App() {
           {/* Size Selector */}
           {sizes.length > 0 && (
             <div>
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-[9px] font-bold text-stone-400 uppercase tracking-[0.2em]">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[0.5rem] font-bold text-stone-400 uppercase tracking-[0.2em]">
                   Select Size
                 </span>
               </div>
@@ -156,7 +185,7 @@ function App() {
                 }
               `}</style>
               <div
-                className="flex gap-2 overflow-x-auto pb-2 -mx-2 px-2 size-scroll"
+                className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 size-scroll"
                 style={{
                   scrollbarWidth: 'none',
                 }}
@@ -174,7 +203,7 @@ function App() {
                         }
                       }}
                       disabled={!sizeOption.available}
-                      className={`w-12 h-12 rounded-full border text-xs font-bold transition-colors shrink-0 ${
+                      className={`w-9 h-9 rounded-full border text-[0.625rem] font-bold transition-colors shrink-0 ${
                         selectedSize === sizeOption.size
                           ? 'border-brand-pink text-black bg-white'
                           : sizeOption.available
@@ -188,16 +217,129 @@ function App() {
                 })}
               </div>
               {sizes.some((s) => !s.available) && (
-                <p className="text-[9px] text-stone-400 mt-2">
+                <p className="text-[0.5rem] text-stone-400 mt-1">
                   * Some sizes may not be available
                 </p>
               )}
             </div>
           )}
+
+          {/* Wardrobe Section - Show when there are generated images */}
+          {generations.length > 0 && (
+            <div className="mt-2">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[0.5rem] font-bold text-stone-400 uppercase tracking-[0.2em]">
+                  Wardrobe
+                </span>
+                {!isConnected && (
+                  <span className="text-[0.5rem] text-green-600 font-bold">
+                    ✓ Complete
+                  </span>
+                )}
+              </div>
+              <style>{`
+                .wardrobe-scroll::-webkit-scrollbar {
+                  display: none;
+                }
+                .wardrobe-scroll {
+                  -ms-overflow-style: none;
+                  scrollbar-width: none;
+                }
+              `}</style>
+              <div
+                className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 wardrobe-scroll"
+                style={{
+                  scrollbarWidth: 'none',
+                }}
+              >
+                {generations.map((gen, index) => (
+                  <button
+                    key={gen.id || index}
+                    onClick={() => setSelectedGeneration(index)}
+                    className={`shrink-0 w-14 h-14 rounded overflow-hidden border-2 transition-all ${
+                      selectedGeneration === index
+                        ? 'border-brand-pink opacity-100 scale-105'
+                        : 'border-stone-200 opacity-60 hover:opacity-80 hover:border-brand-pink'
+                    }`}
+                  >
+                    <img
+                      src={gen.imageUrl}
+                      alt={`Try-on ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Error Messages */}
+          {(generateError || sseError) && (
+            <div className="mt-2 bg-red-50 border border-red-200 rounded-lg p-2">
+              <p className="text-red-800 text-[0.625rem]">
+                {generateError || sseError}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="p-6 border-t border-stone-100 bg-white shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+      <div className="p-3 border-t border-stone-100 bg-white shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] space-y-2">
+        {/* Try On Button */}
+        <button
+          onClick={handleTryOn}
+          disabled={
+            !accessToken ||
+            !product?.imageUrl ||
+            isGenerating ||
+            (isConnected && generations.length === 0)
+          }
+          className={`w-full py-2.5 text-[0.625rem] font-bold tracking-[0.25em] uppercase transition-all flex justify-center items-center gap-1.5 rounded ${
+            !accessToken ||
+            !product?.imageUrl ||
+            isGenerating ||
+            (isConnected && generations.length === 0)
+              ? 'bg-stone-300 text-stone-500 cursor-not-allowed shadow-none'
+              : 'bg-brand-pink text-white hover:bg-rose-600 shadow-lg hover:shadow-rose-200'
+          }`}
+        >
+          <svg
+            className="w-3 h-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            />
+          </svg>
+          {!accessToken
+            ? 'Login Required'
+            : isGenerating || (isConnected && generations.length === 0)
+            ? 'Generating...'
+            : 'Try On'}
+        </button>
+
+        {/* Debug Info - Remove in production */}
+        {(!accessToken || !product?.imageUrl) && (
+          <div className="text-[0.5rem] text-stone-400 text-center">
+            {!accessToken && (
+              <div>⚠️ No access token (login to gpt-ui.dev)</div>
+            )}
+            {!product?.imageUrl && <div>⚠️ No product image</div>}
+          </div>
+        )}
+
+        {/* Add to Bag Button */}
         <button
           onClick={async () => {
             if (!isButtonDisabled) {
@@ -208,16 +350,16 @@ function App() {
             }
           }}
           disabled={isButtonDisabled}
-          className={`w-full py-4 text-xs font-bold tracking-[0.25em] uppercase transition-all flex justify-between px-8 rounded ${
+          className={`w-full py-2.5 text-[0.625rem] font-bold tracking-[0.25em] uppercase transition-all flex justify-between px-4 rounded ${
             isButtonDisabled
               ? 'bg-stone-300 text-stone-500 cursor-not-allowed shadow-none'
               : 'bg-brand-pink text-white hover:bg-rose-600 shadow-lg hover:shadow-rose-200'
           }`}
         >
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-1.5">
             {buttonType === 'add_to_bag' && (
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -233,11 +375,11 @@ function App() {
             {buttonText}
           </span>
           {buttonType === 'add_to_bag' && !isButtonDisabled && (
-            <span>{displayPrice}</span>
+            <span className="text-[0.625rem]">{displayPrice}</span>
           )}
           {buttonType === 'go_to_bag' && (
             <svg
-              className="w-4 h-4"
+              className="w-3 h-3"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

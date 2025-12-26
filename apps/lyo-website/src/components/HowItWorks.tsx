@@ -1,3 +1,5 @@
+import { ClosingCTA } from './ClosingCTA';
+
 export const HowItWorks = () => {
   return (
     <section
@@ -9,15 +11,14 @@ export const HowItWorks = () => {
         <div className="text-center space-y-8 max-w-3xl mx-auto mb-24">
           <div className="inline-block border border-stone-200 rounded-full px-4 py-2">
             <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-stone-500">
-              The Magic of LYO
+              3 SIMPLE STEPS
             </span>
           </div>
           <h2 className="font-display text-6xl md:text-7xl text-black tracking-wide uppercase">
-            Fitting Room, Right In your browser.
+            YOUR PERFECT FIT AWAITS
           </h2>
-          <p className="text-stone-600 text-lg font-light leading-relaxed">
-            See how clothes actually fit you before you buy, and shop with
-            confidence.
+          <p className="text-stone-600 text-base md:text-lg font-light leading-relaxed">
+            Get started by uploading your photo once and start wearing.
           </p>
         </div>
 
@@ -31,47 +32,24 @@ export const HowItWorks = () => {
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-px w-8 bg-stone-300"></div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
-                  The Genesis
+                  STEP 01
                 </span>
               </div>
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
-                Create Your
-                <br />
-                Digital Twin
+                Create Your Avatar
               </h3>
-              <div className="space-y-6">
-                <p className="text-lg text-stone-600 font-light leading-relaxed">
-                  Forget the measuring tape. Upload a single{' '}
+              <div className="space-y-6 max-w-xl">
+                <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
+                  Upload a{' '}
                   <strong className="text-black font-medium">
                     full-body photo
                   </strong>{' '}
-                  to your private vault.
+                  and we'll generate multiple avatars.
                 </p>
-                <p className="text-sm text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
-                  Our AI instantly maps your unique geometry to build a
-                  hyper-realistic 3D model that moves and fits exactly like you
-                  do.
+                <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
+                  Each avatar is a virtual version of you in different poses.
+                  Choose the one that matches your likeness.
                 </p>
-                <div className="pt-2">
-                  <button className="group flex items-center gap-3 bg-stone-100 hover:bg-stone-900 hover:text-white text-stone-600 px-4 py-2.5 rounded-full transition-all duration-300">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
-                      One-Click Scan
-                    </span>
-                    <svg
-                      className="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -146,7 +124,7 @@ export const HowItWorks = () => {
                   <div className="absolute inset-0 flex items-center justify-center text-stone-400">
                     <img
                       src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
-                      className="w-full h-full object-contain opacity-90"
+                      className="w-full h-full object-cover opacity-90"
                       alt="Store Item"
                     />
                   </div>
@@ -198,25 +176,22 @@ export const HowItWorks = () => {
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-px w-8 bg-stone-300"></div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
-                  Shop Flow
+                  STEP 02
                 </span>
               </div>
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
-                Shop Your
-                <br />
-                Favorites
+                Try On Clothes
               </h3>
-              <div className="space-y-6">
-                <p className="text-lg text-stone-600 font-light leading-relaxed">
+              <div className="space-y-6 max-w-xl">
+                <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
                   Browse{' '}
-                  <strong className="text-black font-medium">Myntra</strong>{' '}
-                  like it's your personal closet. Spot a crush-worthy top?
+                  <strong className="text-black font-medium">Myntra</strong> and
+                  when you find clothes you like, use try on to see how they
+                  look on you.
                 </p>
-                <p className="text-sm text-stone-500 leading-relaxed">
-                  Look for the{' '}
-                  <strong className="text-brand-pink">TRY ON</strong> button
-                  right next to "Add to Bag". Tap it to see how it looks on you
-                  before buying.
+                <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
+                  The clothes appear on your selected avatar, so you can see
+                  exactly how they look on you before you buy.
                 </p>
               </div>
             </div>
@@ -233,48 +208,21 @@ export const HowItWorks = () => {
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-px w-8 bg-stone-300"></div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
-                  The Reveal
+                  STEP 03
                 </span>
               </div>
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
-                See It
-                <br />
-                On You
+                Your Virtual Wardrobe
               </h3>
-              <div className="space-y-6">
-                <p className="text-lg text-stone-600 font-light leading-relaxed">
-                  No more imagination games. The sidebar slides open to reveal{' '}
-                  <strong className="text-black font-medium">
-                    you wearing the outfit
-                  </strong>{' '}
-                  instantly.
+              <div className="space-y-6 max-w-xl">
+                <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
+                  In a few seconds, you can see the clothes on you in your{' '}
+                  <strong className="text-black font-medium">wardrobe </strong>
+                  while you browse through all your favorites before you buy.
                 </p>
-                <p className="text-sm text-stone-500 leading-relaxed">
-                  Check the length, the tightness, and the vibe. Make confident
-                  decisions before you ever spend a rupee.
+                <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
+                  Your style journey starts here.
                 </p>
-                {/* Micro Interaction */}
-                <div className="pt-2 flex items-center gap-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded text-green-700">
-                    <svg
-                      className="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                    <span className="text-[10px] font-bold tracking-wider uppercase">
-                      Perfect Fit
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest border-b border-stone-300 cursor-pointer hover:text-black transition-colors">
-                    View Analysis
-                  </span>
-                </div>
               </div>
             </div>
           </div>
@@ -305,45 +253,7 @@ export const HowItWorks = () => {
         </div>
 
         {/* NEW CTA SECTION (CLEAN & DARK) */}
-        <div className="mt-32 relative group">
-          {/* Main Card */}
-          <div className="bg-stone-900 rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden border border-stone-800 shadow-2xl">
-            <div className="relative z-10 flex flex-col items-center">
-              {/* Headline (Sentence Case) */}
-              <h3 className="font-display text-5xl md:text-7xl text-white leading-tight mb-6">
-                Never return an <br />
-                <span className="italic text-stone-400">outfit again.</span>
-              </h3>
-              {/* Subtext */}
-              <p className="text-stone-400 text-lg font-light max-w-xl mb-10 leading-relaxed">
-                See exactly how that Myntra dress fits <em>your</em> body. No
-                more guessing games, just confidence.
-              </p>
-              {/* CTA Block */}
-              <div className="flex flex-col items-center gap-4 w-full sm:w-auto">
-                <button className="w-full sm:w-auto bg-white text-black px-12 py-5 rounded-sm text-xs font-bold tracking-[0.2em] hover:bg-brand-pink hover:text-white transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,63,108,0.6)] uppercase flex items-center justify-center gap-3">
-                  Start free trial
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </button>
-                <p className="text-[10px] text-stone-500 font-medium tracking-wider uppercase">
-                  14-Day Free Trial • Cancel Anytime
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ClosingCTA />
       </div>
     </section>
   );
