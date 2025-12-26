@@ -80,6 +80,7 @@ export function extractProductData(): Product | null {
     if (!brand || !name || !price) {
       return null;
     }
+    const sourceUrl = window.location.href;
 
     const product: Product = {
       brand,
@@ -90,6 +91,7 @@ export function extractProductData(): Product | null {
       discountPercent,
       description,
       imageUrl,
+      sourceUrl,
       buttonType,
       sizes,
       selectedSize,

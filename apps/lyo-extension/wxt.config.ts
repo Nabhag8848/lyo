@@ -19,7 +19,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
   }),
   manifest: {
-    permissions: ['sidePanel', 'storage'],
+    permissions: ['sidePanel', 'storage', 'cookies'],
+    host_permissions: ['https://gpt-ui.dev/*', 'https://api.gpt-ui.dev/*'],
   },
   webExt: {
     disabled: true,
