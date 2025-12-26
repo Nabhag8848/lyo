@@ -60,11 +60,11 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="md:col-span-1 md:pl-12 flex flex-col items-center">
-          <h4 className="font-bold text-[11px] uppercase tracking-[0.2em] mb-8 text-black mr-2">
+        <div className="hidden md:flex md:col-span-1 md:pl-12 flex-col items-start lg:items-center">
+          <h4 className="font-bold text-[11px] uppercase tracking-[0.2em] mb-8 text-black lg:text-center">
             Product
           </h4>
-          <ul className="space-y-5 text-xs text-stone-600 font-medium uppercase tracking-wider">
+          <ul className="space-y-5 text-xs text-stone-600 font-medium uppercase tracking-wider lg:text-center">
             <li>
               <a href="#hero" className="hover:text-black transition-colors">
                 Home
