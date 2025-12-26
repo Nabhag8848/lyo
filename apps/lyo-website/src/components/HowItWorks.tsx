@@ -174,25 +174,22 @@ export const HowItWorks = () => {
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-px w-8 bg-stone-300"></div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
-                  Shop Flow
+                  STEP 02
                 </span>
               </div>
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
-                Shop Your
-                <br />
-                Favorites
+                Try On Clothes
               </h3>
-              <div className="space-y-6">
-                <p className="text-lg text-stone-600 font-light leading-relaxed">
+              <div className="space-y-6 max-w-2xl">
+                <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
                   Browse{' '}
-                  <strong className="text-black font-medium">Myntra</strong>{' '}
-                  like it's your personal closet. Spot a crush-worthy top?
+                  <strong className="text-black font-medium">Myntra</strong> and
+                  when you find clothes you like, use the try on feature to see
+                  how they look on you.
                 </p>
-                <p className="text-sm text-stone-500 leading-relaxed">
-                  Look for the{' '}
-                  <strong className="text-brand-pink">TRY ON</strong> button
-                  right next to "Add to Bag". Tap it to see how it looks on you
-                  before buying.
+                <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
+                  The clothes appear on your selected avatar, so you can see
+                  exactly how they look on you before you buy.
                 </p>
               </div>
             </div>
