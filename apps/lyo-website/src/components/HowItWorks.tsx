@@ -36,7 +36,7 @@ export const HowItWorks = () => {
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
                 Create Your Avatar
               </h3>
-              <div className="space-y-6 max-w-2xl">
+              <div className="space-y-6 max-w-xl">
                 <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
                   Upload a{' '}
                   <strong className="text-black font-medium">
@@ -180,12 +180,12 @@ export const HowItWorks = () => {
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
                 Try On Clothes
               </h3>
-              <div className="space-y-6 max-w-2xl">
+              <div className="space-y-6 max-w-xl">
                 <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
                   Browse{' '}
                   <strong className="text-black font-medium">Myntra</strong> and
-                  when you find clothes you like, use the try on feature to see
-                  how they look on you.
+                  when you find clothes you like, use try on to see how they
+                  look on you.
                 </p>
                 <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
                   The clothes appear on your selected avatar, so you can see
@@ -206,48 +206,21 @@ export const HowItWorks = () => {
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-px w-8 bg-stone-300"></div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400">
-                  The Reveal
+                  STEP 03
                 </span>
               </div>
               <h3 className="text-4xl md:text-5xl font-display mb-8 text-black uppercase tracking-wide leading-tight">
-                See It
-                <br />
-                On You
+                Your Virtual Wardrobe
               </h3>
-              <div className="space-y-6">
-                <p className="text-lg text-stone-600 font-light leading-relaxed">
-                  No more imagination games. The sidebar slides open to reveal{' '}
-                  <strong className="text-black font-medium">
-                    you wearing the outfit
-                  </strong>{' '}
-                  instantly.
+              <div className="space-y-6 max-w-xl">
+                <p className="text-lg md:text-xl text-stone-600 font-light leading-relaxed">
+                  In a few seconds, you can see the clothes on you in your{' '}
+                  <strong className="text-black font-medium">wardrobe{' '}</strong>
+                  while you browse through all your favorites before you buy.
                 </p>
-                <p className="text-sm text-stone-500 leading-relaxed">
-                  Check the length, the tightness, and the vibe. Make confident
-                  decisions before you ever spend a rupee.
+                <p className="text-base md:text-lg text-stone-500 leading-relaxed border-l-2 border-brand-pink/30 pl-4">
+                  Your style journey starts here.
                 </p>
-                {/* Micro Interaction */}
-                <div className="pt-2 flex items-center gap-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded text-green-700">
-                    <svg
-                      className="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                    <span className="text-[10px] font-bold tracking-wider uppercase">
-                      Perfect Fit
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest border-b border-stone-300 cursor-pointer hover:text-black transition-colors">
-                    View Analysis
-                  </span>
-                </div>
               </div>
             </div>
           </div>
