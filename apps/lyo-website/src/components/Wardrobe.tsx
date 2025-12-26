@@ -120,7 +120,7 @@ export const Wardrobe = ({
                 }
               }}
               onClick={() => scrollToAvatar(index)}
-              className={`shrink-0 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-14 lg:h-14 xl:w-20 xl:h-20 2xl:w-28 2xl:h-28 rounded overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
+              className={`shrink-0 w-12 h-16 sm:w-14 sm:h-18 md:w-16 md:h-20 lg:w-14 lg:h-18 xl:w-20 xl:h-24 2xl:w-28 2xl:h-32 rounded overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
                 index === 0
                   ? ''
                   : '-ml-6 sm:-ml-7 md:-ml-8 lg:-ml-7 xl:-ml-10 2xl:-ml-14'

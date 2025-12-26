@@ -74,7 +74,7 @@ export const Pricing = () => {
               </span>
             </div>
             <h3 className="font-display text-6xl mb-2">
-              $4.99
+              $20
               <span className="text-xl font-light text-stone-500 ml-1">
                 /mo
               </span>
@@ -87,7 +87,7 @@ export const Pricing = () => {
                 <div className="w-5 h-5 rounded-full bg-brand-pink flex items-center justify-center shrink-0 text-white text-[10px]">
                   ✓
                 </div>
-                50 Try-ons per day
+                50 credits
               </li>
               <li className="flex items-center gap-4 text-sm text-stone-300 font-medium">
                 <div className="w-5 h-5 rounded-full bg-stone-800 flex items-center justify-center shrink-0 text-stone-500 text-[10px]">
@@ -121,7 +121,7 @@ export const Pricing = () => {
               </span>
             </div>
             <h3 className="font-display text-6xl mb-2">
-              $9.99
+              $35
               <span className="text-xl font-light text-stone-400 ml-1">
                 /mo
               </span>
@@ -134,7 +134,7 @@ export const Pricing = () => {
                 <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center shrink-0 text-green-600 text-[10px]">
                   ✓
                 </div>
-                Unlimited Try-ons
+                100 credits
               </li>
               <li className="flex items-center gap-4 text-sm text-stone-600 font-medium">
                 <div className="w-5 h-5 rounded-full bg-stone-100 flex items-center justify-center shrink-0 text-stone-400 text-[10px]">

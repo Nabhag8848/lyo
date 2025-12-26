@@ -146,7 +146,7 @@ export const HowItWorks = () => {
                   <div className="absolute inset-0 flex items-center justify-center text-stone-400">
                     <img
                       src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
-                      className="w-full h-full object-contain opacity-90"
+                      className="w-full h-full object-cover opacity-90"
                       alt="Store Item"
                     />
                   </div>
