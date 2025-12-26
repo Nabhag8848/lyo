@@ -9,15 +9,14 @@ export const HowItWorks = () => {
         <div className="text-center space-y-8 max-w-3xl mx-auto mb-24">
           <div className="inline-block border border-stone-200 rounded-full px-4 py-2">
             <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-stone-500">
-              The Magic of LYO
+              3 SIMPLE STEPS
             </span>
           </div>
           <h2 className="font-display text-6xl md:text-7xl text-black tracking-wide uppercase">
-            Fitting Room, Right In your browser.
+            YOUR PERFECT FIT AWAITS
           </h2>
           <p className="text-stone-600 text-lg font-light leading-relaxed">
-            See how clothes actually fit you before you buy, and shop with
-            confidence.
+            Get started by uploading your photo once and start wearing.
           </p>
         </div>
 

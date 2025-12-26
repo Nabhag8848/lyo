@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import useSWR from 'swr';
 import { fetchUser, userKey, loginWithGoogle } from '@/lib/auth';
 
@@ -11,18 +10,24 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-stone-100">
       <div className="mx-auto px-4 sm:px-5 md:px-6 lg:px-8 xl:px-12  h-14 md:h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-1 cursor-pointer group">
+        <a
+          href="#hero"
+          className="flex items-center gap-1 cursor-pointer group"
+        >
           <span className="font-display text-2xl sm:text-2xl md:text-3xl tracking-wide font-normal group-hover:text-stone-600 transition-colors">
             LYO.
           </span>
-        </Link>
+        </a>
 
         <div className="hidden md:flex items-center gap-10 text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+          <a href="#hero" className="hover:text-black transition-colors">
+            Home
+          </a>
           <a
             href="#how-it-works"
             className="hover:text-black transition-colors"
           >
-            Experience
+            How It Works
           </a>
           <a href="#pricing" className="hover:text-black transition-colors">
             Pricing
@@ -59,7 +64,8 @@ export const NavbarSkeleton = () => (
     <div className="mx-auto px-4 sm:px-5 md:px-6 lg:px-8 xl:px-12 h-14 md:h-16 flex items-center justify-between">
       <span className="font-display text-3xl tracking-wide">LYO.</span>
       <div className="hidden md:flex items-center gap-10 text-[1.1rem] font-bold tracking-[0.2em] text-stone-500 uppercase">
-        <span>Experience</span>
+        <span>Home</span>
+        <span>How It Works</span>
         <span>Pricing</span>
       </div>
       <div className="w-24 h-10 bg-stone-100 animate-pulse rounded" />

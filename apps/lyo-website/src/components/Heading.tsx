@@ -39,7 +39,7 @@ export const Heading = () => {
           </svg>
         </span>{' '}
         shopping — instantly see how that outfit looks on you. Upload your photo
-        once, try on everything.
+        once & start wearing.
       </p>
 
       <button className="bg-black text-white px-6 md:px-8 lg:px-8 xl:px-12 py-3 md:py-3.5 lg:py-3.5 xl:py-5 text-[0.55rem] md:text-[0.625rem] lg:text-[0.625rem] xl:text-xs font-bold tracking-[0.2em] hover:bg-stone-800 transition-all shadow-xl hover:-translate-y-1 duration-300 flex items-center gap-2 md:gap-2.5 group uppercase">
