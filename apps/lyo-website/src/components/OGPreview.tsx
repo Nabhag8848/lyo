@@ -38,13 +38,6 @@ export const OGPreview = () => {
           />
         ))}
       </div>
-
-      {/* LYO Logo in bottom right */}
-      <div className="absolute bottom-4 right-4 z-10">
-        <span className="font-display text-4xl tracking-wide font-normal text-black">
-          LYO.
-        </span>
-      </div>
     </div>
   );
 };
