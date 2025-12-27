@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
 import { Analytics } from '@vercel/analytics/react';
 import App from './app/app';
 import './styles.css';
@@ -38,9 +39,11 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-      <Analytics />
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <App />
+        <Analytics />
+      </BrowserRouter>
+    </HelmetProvider>
   </StrictMode>
 );

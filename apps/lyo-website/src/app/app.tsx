@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { SEO } from '@/components/SEO';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { HowItWorks } from '@/components/HowItWorks';
@@ -7,6 +8,7 @@ import { Footer } from '@/components/Footer';
 
 const Home = () => (
   <>
+    <SEO />
     <Navbar />
     <Hero />
     <HowItWorks />
