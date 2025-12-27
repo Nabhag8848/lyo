@@ -119,7 +119,7 @@ export const Footer = () => {
         </div>
         <div className="flex gap-8 text-[10px] text-stone-500 uppercase tracking-wider font-bold">
           <a
-            href="mailto:motivaras.nabhag@gmail.com"
+            href="mailto:nabhag@lyo.fashion"
             className="hover:text-black transition-colors"
           >
             Contact
