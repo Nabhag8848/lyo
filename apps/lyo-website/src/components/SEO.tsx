@@ -31,7 +31,7 @@ export const SEO = () => {
   const canonicalCurrentUrl = `${canonicalUrl}${location.pathname}`;
   const title = 'LYO';
   const description = 'Virtual Fitting Room';
-  const image = `${siteUrl}/user-model.png`;
+  const image = `${siteUrl}/opengraph.png`;
 
   return (
     <Helmet>
