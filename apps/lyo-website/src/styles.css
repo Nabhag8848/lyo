@@ -335,3 +335,13 @@ body {
 ::selection {
   @apply bg-brand-pink text-white;
 }
+
+/* Hide Scrollbar for Main Page Scroll */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
