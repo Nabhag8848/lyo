@@ -29,7 +29,7 @@ export const Footer = () => {
             </button>
             <div className="flex gap-4 pt-2">
               <a
-                href="https://x.com/lyofashion"
+                href="https://x.com/lyo_fashion"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center text-stone-600 hover:bg-black hover:text-white transition-all duration-300"
