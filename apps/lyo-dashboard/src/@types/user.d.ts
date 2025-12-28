@@ -4,5 +4,6 @@ declare interface User {
   lastName?: string;
   picture?: string;
   createdAt: string;
+  isActive: boolean;
 }
 

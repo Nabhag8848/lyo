@@ -34,6 +34,7 @@ export class UserService {
         provider: AuthProvider.GOOGLE,
         lastLoginAt: new Date(),
         googleAccessToken: dto.accessToken,
+        isActive: false,
       },
       ['email']
     );
