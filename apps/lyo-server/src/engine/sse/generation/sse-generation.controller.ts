@@ -3,7 +3,7 @@ import { FashnaiGenerationCompletedResponseDto } from '@/engine/webhook/fashnai/
 import { FashnaiGenerationCompleteSchema } from '@/engine/webhook/fashnai/schema';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 import { CurrentUser } from '@/modules/auth/decorators';
-import { JwtAuthGuard } from '@/modules/auth/guards';
+import { ActiveUserGuard } from '@/modules/auth/guards';
 import { GenerationService } from '@/modules/generation/generation.service';
 import { Controller, Sse, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -21,7 +21,7 @@ import {
 
 @ApiTags('sse')
 @Controller('sse')
-@UseGuards(JwtAuthGuard)
+@UseGuards(ActiveUserGuard)
 export class SseGenerationController {
   constructor(
     private readonly pubSubService: PubSubService<
@@ -73,6 +73,10 @@ export class SseGenerationController {
   @ApiResponse({
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User account is inactive',
   })
   generationSse(
     @CurrentUser() authUser: AuthUserDto

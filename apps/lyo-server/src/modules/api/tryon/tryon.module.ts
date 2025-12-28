@@ -7,6 +7,7 @@ import { ReferencePhotoModule } from '@/modules/api/reference-photo/reference-ph
 import { AvatarModule } from '@/modules/api/avatar/avatar.module';
 import { GarmentModule } from '@/modules/api/garment/garment.module';
 import { GenerationModule } from '@/modules/generation/generation.module';
+import { UserModule } from '@/modules/api/user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GenerationModule } from '@/modules/generation/generation.module';
     AvatarModule,
     GarmentModule,
     GenerationModule,
+    UserModule,
   ],
   controllers: [TryonController],
   providers: [TryonService],

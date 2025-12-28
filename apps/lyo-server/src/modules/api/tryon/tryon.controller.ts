@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/modules/auth/guards';
+import { ActiveUserGuard } from '@/modules/auth/guards';
 import { GenerateTryonDto, GenerateTryonResponseDto } from './dtos';
 import { TryonService } from './tryon.service';
 import { CurrentUser } from '@/modules/auth/decorators';
@@ -8,7 +8,7 @@ import { AuthUserDto } from '@/modules/api/user/dtos';
 
 @ApiTags('tryon')
 @Controller('tryon')
-@UseGuards(JwtAuthGuard)
+@UseGuards(ActiveUserGuard)
 export class TryonController {
   constructor(private readonly tryonService: TryonService) {}
 
@@ -34,6 +34,10 @@ export class TryonController {
   @ApiResponse({
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User account is inactive',
   })
   async generateTryon(
     @Body() body: GenerateTryonDto,

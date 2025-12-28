@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ActiveUserGuard } from './guards/active-user.guard';
 import { parseExpiration } from './utils';
 
 @Module({
@@ -28,7 +29,13 @@ import { parseExpiration } from './utils';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, JwtStrategy, JwtAuthGuard],
-  exports: [JwtAuthGuard],
+  providers: [
+    AuthService,
+    GoogleStrategy,
+    JwtStrategy,
+    JwtAuthGuard,
+    ActiveUserGuard,
+  ],
+  exports: [JwtAuthGuard, ActiveUserGuard, UserModule],
 })
 export class AuthModule {}

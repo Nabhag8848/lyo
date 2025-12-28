@@ -41,4 +41,12 @@ export class UserService {
 
     return this.userRepository.findOneOrFail({ where: { email: dto.email } });
   }
+
+  async isUserActive(userId: string): Promise<boolean> {
+    const { isActive } = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      select: { isActive: true },
+    });
+    return isActive;
+  }
 }
