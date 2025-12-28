@@ -34,10 +34,19 @@ export class UserService {
         provider: AuthProvider.GOOGLE,
         lastLoginAt: new Date(),
         googleAccessToken: dto.accessToken,
+        isActive: false,
       },
       ['email']
     );
 
     return this.userRepository.findOneOrFail({ where: { email: dto.email } });
+  }
+
+  async isUserActive(userId: string): Promise<boolean> {
+    const { isActive } = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      select: { isActive: true },
+    });
+    return isActive;
   }
 }

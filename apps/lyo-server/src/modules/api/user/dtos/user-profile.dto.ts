@@ -1,5 +1,11 @@
 import { Expose } from 'class-transformer';
-import { IsDate, IsEmail, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UserProfileDto {
@@ -48,4 +54,12 @@ export class UserProfileDto {
     example: '2024-01-01T00:00:00.000Z',
   })
   createdAt: Date;
+
+  @Expose()
+  @IsBoolean()
+  @ApiProperty({
+    description: 'Whether the user account is active',
+    example: true,
+  })
+  isActive: boolean;
 }

@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ReferencePhotoService } from './reference-photo.service';
-import { JwtAuthGuard } from '@/modules/auth/guards';
+import { ActiveUserGuard } from '@/modules/auth/guards';
 import { CurrentUser } from '@/modules/auth/decorators';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 import { ReferencePhotoDto } from './dtos/reference-photo.dto';
@@ -27,7 +27,7 @@ import { ImageFilePipe } from './validator';
 
 @ApiTags('reference-photo')
 @Controller('reference-photo')
-@UseGuards(JwtAuthGuard)
+@UseGuards(ActiveUserGuard)
 export class ReferencePhotoController {
   constructor(private readonly referencePhotoService: ReferencePhotoService) {}
 
@@ -68,6 +68,10 @@ export class ReferencePhotoController {
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User account is inactive',
+  })
   async uploadReferencePhoto(
     @UploadedFile(ImageFilePipe)
     file: MulterFile,
@@ -93,6 +97,10 @@ export class ReferencePhotoController {
     description: 'Unauthorized - Invalid or missing JWT token',
   })
   @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User account is inactive',
+  })
+  @ApiResponse({
     status: 404,
     description: 'No active reference photo found',
   })
@@ -115,6 +123,10 @@ export class ReferencePhotoController {
   @ApiResponse({
     status: 401,
     description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User account is inactive',
   })
   @ApiResponse({
     status: 404,

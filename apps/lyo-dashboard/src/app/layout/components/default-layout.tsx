@@ -15,6 +15,29 @@ export const DefaultLayout = () => {
     return null;
   }
 
+  // Check if user is active
+  if (!user.isActive) {
+    return (
+      <div className="h-screen bg-stone-50 flex items-center justify-center">
+        <div className="text-center px-6 max-w-md">
+          <h1 className="font-display text-4xl tracking-wide font-normal text-black mb-4">
+            Coming Soon
+          </h1>
+          <p className="text-stone-600 text-lg leading-relaxed">
+            We're working hard to bring you the best experience possible, for
+            early access reachout at{' '}
+            <a
+              href="mailto:support@lyo.com"
+              className="text-brand-pink hover:underline"
+            >
+              nabhag@lyo.fashion
+            </a>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen bg-stone-50 flex overflow-hidden">
       {/* Sidebar */}
