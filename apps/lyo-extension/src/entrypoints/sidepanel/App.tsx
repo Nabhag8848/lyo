@@ -333,7 +333,7 @@ function App() {
         {(!accessToken || !product?.imageUrl) && (
           <div className="text-[0.5rem] text-stone-400 text-center">
             {!accessToken && (
-              <div>⚠️ No access token (login to gpt-ui.dev)</div>
+              <div>⚠️ No access token (login to lyo.fashion)</div>
             )}
             {!product?.imageUrl && <div>⚠️ No product image</div>}
           </div>

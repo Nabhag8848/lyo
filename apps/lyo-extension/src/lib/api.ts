@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api.gpt-ui.dev/v1';
+const API_BASE_URL = 'https://api.lyo.fashion/v1';
 
 export const api = {
   baseUrl: API_BASE_URL,
@@ -12,7 +12,7 @@ export const api = {
 export async function getAccessToken(): Promise<string | null> {
   try {
     // Get cookies from the domain
-    const cookies = await browser.cookies.getAll({ domain: 'gpt-ui.dev' });
+    const cookies = await browser.cookies.getAll({ domain: 'lyo.fashion' });
     const accessTokenCookie = cookies.find(
       (cookie) => cookie.name === 'access_token'
     );

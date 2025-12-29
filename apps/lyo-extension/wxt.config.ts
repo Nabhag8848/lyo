@@ -20,7 +20,7 @@ export default defineConfig({
   }),
   manifest: {
     permissions: ['sidePanel', 'storage', 'cookies'],
-    host_permissions: ['https://gpt-ui.dev/*', 'https://api.gpt-ui.dev/*'],
+    host_permissions: ['https://lyo.fashion/*', 'https://api.lyo.fashion/*'],
   },
   webExt: {
     disabled: true,
