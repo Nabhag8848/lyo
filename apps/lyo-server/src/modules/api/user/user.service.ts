@@ -24,6 +24,11 @@ export class UserService {
   }
 
   async upsertGoogleUser(dto: GoogleOAuthUserDto): Promise<UserEntity> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: dto.email },
+      select: { isActive: true },
+    });
+
     await this.userRepository.upsert(
       {
         email: dto.email,
@@ -34,7 +39,7 @@ export class UserService {
         provider: AuthProvider.GOOGLE,
         lastLoginAt: new Date(),
         googleAccessToken: dto.accessToken,
-        isActive: false,
+        isActive: existingUser?.isActive ?? false,
       },
       ['email']
     );
