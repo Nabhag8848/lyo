@@ -2,21 +2,21 @@ import { useAccessToken } from './hooks/use-access-token';
 import { useUser } from './hooks/use-user';
 import { SignInScreen } from './components/SignInScreen';
 import { InactiveAccountScreen } from './components/InactiveAccountScreen';
-import { MainContent } from './components/MainContent';
+import { FittingRoom } from './components/FittingRoom';
 
 function App() {
   const accessToken = useAccessToken();
-  const user = useUser();
+  const { data: user, isLoading } = useUser();
 
   if (!accessToken) {
     return <SignInScreen />;
   }
 
-  if (user && !user.isActive) {
+  if (!isLoading && user && !user.isActive) {
     return <InactiveAccountScreen />;
   }
 
-  return <MainContent />;
+  return <FittingRoom />;
 }
 
 export default App;

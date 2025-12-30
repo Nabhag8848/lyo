@@ -24,10 +24,8 @@ const getUserKey = () => {
 };
 
 export const useUser = () => {
-  const { data: user } = useSWR(getUserKey, fetchUser, {
+  return useSWR(getUserKey, fetchUser, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
-
-  return user ?? null;
 };
