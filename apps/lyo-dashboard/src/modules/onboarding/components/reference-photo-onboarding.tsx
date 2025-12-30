@@ -146,7 +146,7 @@ export const ReferencePhotoOnboarding = () => {
         ) : (
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 flex-1 min-h-0 overflow-hidden">
             {/* Left Side - Main Reference Photo Display */}
-            <div className="flex-1 lg:flex-[0.4] flex items-center justify-center min-w-0 min-h-0 overflow-hidden max-h-[calc(100vh-300px)] sm:max-h-full lg:max-h-full">
+            <div className="flex-1 lg:flex-[0.4] flex items-center justify-center min-w-0 min-h-0 overflow-hidden max-h-[calc(100vh-320px)] sm:max-h-[calc(100vh-320px)] md:max-h-[calc(100vh-300px)] lg:max-h-[calc(90%)]">
               <div className="w-full h-full flex items-center justify-center p-2 sm:p-3 lg:p-6 max-h-full">
                 <img
                   src={getDisplayReferencePhotoUrl() || ''}

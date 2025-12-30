@@ -42,10 +42,10 @@ export const DefaultLayout = () => {
 
   return (
     <div className="h-full w-full bg-stone-50 flex overflow-hidden">
-      {/* Mobile Backdrop */}
+      {/* Mobile/Tablet Backdrop */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
@@ -66,10 +66,10 @@ export const DefaultLayout = () => {
             </span>
           </a>
 
-          {/* Burger Menu Button - Mobile Only */}
+          {/* Burger Menu Button - Mobile/Tablet Only */}
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+            className="lg:hidden p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
             aria-label="Open menu"
           >
             <svg

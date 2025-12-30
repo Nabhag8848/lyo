@@ -29,9 +29,9 @@ export const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
 
   return (
     <>
-      {/* Mobile Sidebar */}
+      {/* Mobile/Tablet Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 w-[16rem] bg-white text-stone-900 flex flex-col border-r border-stone-200 z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-y-0 left-0 w-[16rem] bg-white text-stone-900 flex flex-col border-r border-stone-200 z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -165,7 +165,7 @@ export const Sidebar = ({ isOpen = true, onClose }: SidebarProps) => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-[16rem] min-h-screen bg-white text-stone-900 flex-col border-r border-stone-200">
+      <div className="hidden lg:flex w-[16rem] min-h-screen bg-white text-stone-900 flex-col border-r border-stone-200">
         {/* User Profile Section */}
         <div className="p-6 border-b border-stone-200">
           <div className="flex items-center gap-3 mb-3">
