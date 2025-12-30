@@ -1,37 +1,31 @@
 import { useSyncExternalStore } from 'react';
-import { getAccessToken } from '@/lib/api';
+import { getAccessToken } from '@/api/get-access-token';
 
-let cachedToken: string | null = null;
+let cachedAccessToken: string | null = null;
 const listeners = new Set<() => void>();
 
 const notifyListeners = () => {
   listeners.forEach((listener) => listener());
 };
 
-// Fetch token on first subscription
-const fetchToken = async () => {
-  const token = await getAccessToken();
-  if (token !== cachedToken) {
-    cachedToken = token;
-    notifyListeners();
-  }
-};
-
 export const useAccessToken = () => {
   return useSyncExternalStore(
     (onChange) => {
       listeners.add(onChange);
-
-      // Fetch token when first listener subscribes
       if (listeners.size === 1) {
-        fetchToken();
-      }
+        (async () => {
+          const accessToken = await getAccessToken();
 
+          if (cachedAccessToken !== accessToken) {
+            cachedAccessToken = accessToken;
+            notifyListeners();
+          }
+        })();
+      }
       return () => {
         listeners.delete(onChange);
       };
     },
-    () => cachedToken
+    () => cachedAccessToken
   );
 };
-

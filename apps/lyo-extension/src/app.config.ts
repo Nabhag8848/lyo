@@ -3,23 +3,27 @@ import { defineAppConfig } from '#imports';
 // Define types for your config
 declare module 'wxt/utils/define-app-config' {
   export interface WxtAppConfig {
-    features?: {
-      enableChat?: boolean;
-      maxTokens?: number;
+    serverConfig: {
+      serverUrl: string;
+    };
+    clientConfig: {
+      clientDomain: string;
     };
   }
 }
 
 declare global {
   interface ImportMetaEnv {
-    readonly WXT_ENABLE_CHAT?: string;
-    readonly WXT_MAX_TOKENS?: string;
+    readonly VITE_SERVER_URL: string;
+    readonly VITE_CLIENT_DOMAIN: string;
   }
 }
 
 export default defineAppConfig({
-  features: {
-    enableChat: import.meta.env.WXT_ENABLE_CHAT === 'true' || true,
-    maxTokens: parseInt(import.meta.env.WXT_MAX_TOKENS || '1000'),
+  serverConfig: {
+    serverUrl: import.meta.env.VITE_SERVER_URL,
+  },
+  clientConfig: {
+    clientDomain: import.meta.env.VITE_CLIENT_DOMAIN,
   },
 });
