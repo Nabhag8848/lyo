@@ -35,7 +35,7 @@ ${cleanedErd}
 \`\`\`
 `;
 
-  writeFileSync(join(process.cwd(), 'README.md'), readmeContent);
+  writeFileSync(join(process.cwd(), 'DB_ERD.md'), readmeContent);
 
   if (AppDataSource.isInitialized) {
     await AppDataSource.destroy();

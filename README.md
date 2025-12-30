@@ -1,82 +1,55 @@
-# Lyo
+# LYO - Virtual Fitting Room
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+**Stop Guessing. Start Wearing.**
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+LYO is a Virtual Fitting Room for your Myntra shopping — instantly see how that outfit looks on you. Upload your photo once & start wearing.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## What is LYO?
 
-## Finish your remote caching setup
+LYO is a browser extension that transforms your online shopping experience. Instead of guessing how clothes will look on you, LYO lets you see exactly how they fit and look on your body before you buy.
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/jnvUJRHEXM)
+### How It Works
 
+**Step 1: Create Your Avatar**
+- Upload a full-body photo and we'll generate multiple avatars
+- Each avatar is a virtual version of you in different poses
+- Choose the one that matches your likeness
 
-## Run tasks
+**Step 2: Try On Clothes**
+- Browse Myntra and when you find clothes you like, use try on to see how they look on you
+- The clothes appear on your selected avatar, so you can see exactly how they look on you before you buy
 
-To run the dev server for your app, use:
+**Step 3: Your Virtual Wardrobe**
+- In a few seconds, you can see the clothes on you in your wardrobe
+- Browse through all your favorites before you buy
+- Your style journey starts here
 
-```sh
-npx nx serve lyo-website
-```
+## Features
 
-To create a production bundle:
+- ✅ Works seamlessly on Myntra
+- ✅ Instant virtual try-on
+- ✅ Multiple avatar poses to choose from
+- ✅ Save favorites to your wardrobe
+- ✅ Compare different styles
+- ✅ No credit card required to get started
 
-```sh
-npx nx build lyo-website
-```
+## Getting Started
 
-To see all available targets to run for a project, run:
+1. **Install the Extension**: Add LYO to your browser
+2. **Create Your Avatar**: Upload a full-body photo
+3. **Start Shopping**: Browse Myntra and try on clothes instantly
 
-```sh
-npx nx show project lyo-website
-```
+## Pricing
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+- **Free Plan**: 5 credits free to try
+- **$15 Plan**: 50 credits for occasional shoppers
+- **$24 Plan**: 100 credits for style enthusiasts (Best Value)
+- **Custom Plans**: Contact us for custom credit packages
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Learn More
 
-## Add new projects
+Visit [lyo.fashion](https://lyo.fashion) to learn more and get started.
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+---
 
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/react:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/react:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+*LYO - Your perfect fit awaits.*
