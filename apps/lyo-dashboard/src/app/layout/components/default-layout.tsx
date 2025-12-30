@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from '@/modules/sidebar/components/sidebar';
 import { getWebsiteUrl } from '@/app/utils';
@@ -5,6 +6,7 @@ import { useAuth } from '@/modules/auth/context';
 
 export const DefaultLayout = () => {
   const { user, isLoading, isAuthenticated } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (!isLoading && !isAuthenticated) {
     window.open(getWebsiteUrl(), '_self');
@@ -39,14 +41,22 @@ export const DefaultLayout = () => {
   }
 
   return (
-    <div className="h-screen bg-stone-50 flex overflow-hidden">
+    <div className="h-full w-full bg-stone-50 flex overflow-hidden">
+      {/* Mobile/Tablet Backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Panel */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Top Bar */}
-        <div className="h-20 bg-white/95 backdrop-blur-xl border-b border-stone-100 flex items-center justify-between px-6 shrink-0">
+        <div className="h-20 bg-white/95 backdrop-blur-xl border-b border-stone-100 flex items-center justify-between px-4 sm:px-6 shrink-0">
           <a
             href={getWebsiteUrl()}
             className="flex items-center gap-1 cursor-pointer group"
@@ -55,10 +65,31 @@ export const DefaultLayout = () => {
               LYO.
             </span>
           </a>
+
+          {/* Burger Menu Button - Mobile/Tablet Only */}
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="lg:hidden p-2 text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+            aria-label="Open menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 overflow-y-auto">
+        {/* Main Content - Scrollable area */}
+        <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain">
           <Outlet />
         </div>
       </div>

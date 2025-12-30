@@ -10,7 +10,7 @@ export const ReferencePhotoSelector = ({
   const referencePhotoRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [paddingWidth, setPaddingWidth] = useState(400);
+  const [paddingWidth, setPaddingWidth] = useState(0);
 
   const checkScrollability = () => {
     if (scrollContainerRef.current) {
@@ -19,17 +19,23 @@ export const ReferencePhotoSelector = ({
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
       // Update padding width to allow centering - adjust based on reference photo size
-      // Reference photo width: 96px (lg), 128px (md), 96px (sm), 96px (base)
+      // Reference photo width: 48px (lg), 32px (md), 24px (sm), 20px (base)
+      // Convert to pixels using root font size
+      const rootFontSize = parseFloat(
+        getComputedStyle(document.documentElement).fontSize
+      );
       const isLarge = window.matchMedia('(min-width: 1024px)').matches;
       const isMedium = window.matchMedia('(min-width: 768px)').matches;
       const isSmall = window.matchMedia('(min-width: 640px)').matches;
-      const referencePhotoWidth = isLarge
-        ? 192
+      // Widths in rem: 12rem (lg), 8rem (md), 6rem (sm), 5rem (base)
+      const referencePhotoWidthRem = isLarge
+        ? 12
         : isMedium
-        ? 160
+        ? 8
         : isSmall
-        ? 128
-        : 96;
+        ? 6
+        : 5;
+      const referencePhotoWidth = referencePhotoWidthRem * rootFontSize;
       setPaddingWidth(clientWidth / 2 - referencePhotoWidth / 2);
     }
   };
@@ -69,9 +75,14 @@ export const ReferencePhotoSelector = ({
     }
 
     // Only update if we found a close reference photo (within reasonable distance)
+    // Convert 9.375rem (150px at 16px base) to pixels using current root font size
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize
+    );
+    const maxDistance = 9.375 * rootFontSize;
     if (
       closestReferencePhoto &&
-      closestReferencePhoto.distance < 150 &&
+      closestReferencePhoto.distance < maxDistance &&
       closestReferencePhoto.id !== selectedReferencePhotoId
     ) {
       onSelectReferencePhoto(closestReferencePhoto.id);
@@ -171,7 +182,7 @@ export const ReferencePhotoSelector = ({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+        <div className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-stone-500 uppercase">
           Generating reference photos...
         </div>
       </div>
@@ -210,7 +221,7 @@ export const ReferencePhotoSelector = ({
       {/* Reference photo container with horizontal scroll */}
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto no-scrollbar scroll-smooth py-2 sm:py-3 lg:py-4"
+        className="flex overflow-x-auto no-scrollbar scroll-smooth py-1 sm:py-2 lg:py-4"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -265,8 +276,8 @@ export const ReferencePhotoSelector = ({
                   });
                 }
               }}
-              className={`shrink-0 w-24 h-32 sm:w-32 sm:h-40 md:w-40 md:h-52 lg:w-48 lg:h-60 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
-                index === 0 ? '' : '-ml-4 sm:-ml-6 lg:-ml-8'
+              className={`shrink-0 w-20 h-24 sm:w-24 sm:h-32 md:w-32 md:h-40 lg:w-48 lg:h-60 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
+                index === 0 ? '' : '-ml-3 sm:-ml-4 md:-ml-6 lg:-ml-8'
               }`}
               style={{
                 transform: `scale(${scale})`,
