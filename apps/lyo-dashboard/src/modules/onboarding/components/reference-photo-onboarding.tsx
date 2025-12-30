@@ -146,18 +146,18 @@ export const ReferencePhotoOnboarding = () => {
         ) : (
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 flex-1 min-h-0 overflow-hidden">
             {/* Left Side - Main Reference Photo Display */}
-            <div className="flex-1 lg:flex-[0.4] flex items-center justify-center min-w-0 min-h-0 overflow-hidden max-h-[calc(100vh-320px)] sm:max-h-[calc(100vh-320px)] md:max-h-[calc(100vh-300px)] lg:max-h-[calc(90%)]">
-              <div className="w-full h-full flex items-center justify-center p-2 sm:p-3 lg:p-6 max-h-full">
+            <div className="flex-1 lg:flex-[0.5] flex items-center justify-center min-w-0 min-h-0 overflow-hidden max-h-[calc(100vh-320px)] sm:max-h-[calc(100vh-320px)] md:max-h-[calc(100vh-300px)] lg:max-h-full">
+              <div className="w-full h-full flex items-center justify-center p-0 max-h-full border border-stone-200 lg:border-stone-300 rounded-lg lg:rounded-xl bg-transparent">
                 <img
                   src={getDisplayReferencePhotoUrl() || ''}
-                  alt="Selected Reference Photo"
-                  className="max-w-full max-h-full w-auto h-auto object-contain"
+                  alt=""
+                  className="max-w-full max-h-full w-auto h-auto object-cover 2xl:scale-130"
                 />
               </div>
             </div>
 
             {/* Right Side - Scrollable Reference Photos and Buttons */}
-            <div className="flex-none lg:flex-[0.6] flex flex-col min-w-0 lg:min-h-0 overflow-hidden lg:h-full mt-auto lg:mt-0">
+            <div className="flex-none lg:flex-[0.5] flex flex-col min-w-0 lg:min-h-0 overflow-hidden lg:h-full mt-auto lg:mt-0">
               {isGenerating ? (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
@@ -168,9 +168,9 @@ export const ReferencePhotoOnboarding = () => {
                   </div>
                 </div>
               ) : referencePhotos.length > 0 ? (
-                <div className="flex flex-col lg:h-full lg:min-h-0">
+                <div className="flex flex-col lg:h-full lg:min-h-0 lg:items-center lg:justify-center w-full">
                   {/* Reference Photo Selector */}
-                  <div className="flex items-center justify-center py-2 lg:py-8">
+                  <div className="flex items-center justify-center py-2 lg:py-8 w-full">
                     <div className="w-full min-h-[96px] sm:min-h-[120px] max-h-[30vh] sm:max-h-[35vh] lg:max-h-[60%] mb-3 lg:mb-6">
                       <ReferencePhotoSelector
                         referencePhotos={referencePhotos}
@@ -183,7 +183,7 @@ export const ReferencePhotoOnboarding = () => {
                     </div>
                   </div>
                   {/* Action Buttons - Right below selector */}
-                  <div className="flex flex-row gap-2 sm:gap-3 md:gap-4 pt-2 sm:pt-3 lg:pt-4 border-t border-stone-200 shrink-0">
+                  <div className="flex flex-row gap-2 sm:gap-3 md:gap-4 pt-2 sm:pt-3 lg:pt-4 border-t border-stone-200 shrink-0 w-full lg:justify-center">
                     <button
                       onClick={handleUploadClick}
                       className="flex-1 px-2.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 border border-stone-200 text-stone-700 hover:bg-stone-100 hover:border-stone-300 transition-colors text-[9px] sm:text-[10px] md:text-xs font-bold tracking-widest sm:tracking-[0.15em] md:tracking-[0.2em] uppercase whitespace-nowrap"
