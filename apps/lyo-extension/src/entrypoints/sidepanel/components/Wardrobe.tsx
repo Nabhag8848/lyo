@@ -134,6 +134,15 @@ export const Wardrobe = ({
                 src={avatar}
                 alt={`Avatar ${index + 1}`}
                 className="max-w-full max-h-full object-contain"
+                style={
+                  index === 0
+                    ? {
+                        filter: 'brightness(0)',
+                        mixBlendMode: 'normal',
+                        opacity: 0.8,
+                      }
+                    : undefined
+                }
               />
             </button>
           );

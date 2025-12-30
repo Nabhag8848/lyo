@@ -13,6 +13,7 @@ export function FittingRoom() {
   const selectedSize = product?.selectedSize ?? null;
 
   const avatarImages = [
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png', // blend
     'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png',
     'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-4-removebg-preview.png',
     'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-6-removebg-preview.png',
@@ -54,11 +55,10 @@ export function FittingRoom() {
   };
 
   const getDisplayImageSrc = () => {
-    return (
-      avatarImages[selectedAvatar] ||
-      product?.imageUrl ||
-      'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png'
-    );
+    return selectedAvatar === 0
+      ? (product?.imageUrl as string)
+      : avatarImages[selectedAvatar] ||
+          'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png';
   };
 
   return (
