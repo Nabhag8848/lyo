@@ -27,8 +27,6 @@ export class ActiveUserGuard extends JwtAuthGuard implements CanActivate {
       throw new ForbiddenException('User not found');
     }
 
-    console.log('user', user);
-
     const isUserActive = await this.userService.isUserActive(user.id);
 
     if (!isUserActive) {
