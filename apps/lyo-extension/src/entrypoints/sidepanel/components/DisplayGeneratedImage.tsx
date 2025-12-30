@@ -10,7 +10,7 @@ export function DisplayGeneratedImage({
   isLoading,
 }: DisplayGeneratedImageProps) {
   return (
-    <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 max-h-[60%] w-full flex items-center justify-center">
+    <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 max-h-[75%] w-full flex items-center justify-center">
       {/* Loading Animation - Initial Load */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-stone-50 z-20">

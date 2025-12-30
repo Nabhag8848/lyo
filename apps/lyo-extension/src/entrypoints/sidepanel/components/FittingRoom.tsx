@@ -4,11 +4,24 @@ import { SizeSelector } from './SizeSelector';
 import { ActionButtons } from './ActionButtons';
 import { CurrentProductDetails } from './CurrentProductDetails';
 import { DisplayGeneratedImage } from './DisplayGeneratedImage';
+import { Wardrobe } from './Wardrobe';
 
 export function FittingRoom() {
   const [isLoading] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(0);
   const product = useProduct();
   const selectedSize = product?.selectedSize ?? null;
+
+  const avatarImages = [
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-4-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-6-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-2-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-3-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-5-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-7-removebg-preview.png',
+    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-8-removebg-preview.png',
+  ];
 
   const displayPrice = product?.price || '₹1,499';
   const displayMrp = product?.mrp || '';
@@ -42,6 +55,7 @@ export function FittingRoom() {
 
   const getDisplayImageSrc = () => {
     return (
+      avatarImages[selectedAvatar] ||
       product?.imageUrl ||
       'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png'
     );
@@ -50,7 +64,7 @@ export function FittingRoom() {
   return (
     <div className="flex flex-col h-screen bg-white">
       {/* Content */}
-      <div className="flex-1 flex flex-col min-h-0 p-4 bg-white">
+      <div className="flex-1 flex flex-col min-h-0 p-4 pb-0 bg-white">
         {/* Image Container */}
         <DisplayGeneratedImage
           imageUrl={getDisplayImageSrc()}
@@ -59,7 +73,7 @@ export function FittingRoom() {
         />
 
         {/* Product Info & Controls */}
-        <div className="shrink-0 space-y-2 overflow-y-auto min-h-0">
+        <div className="shrink-0 space-y-2 overflow-y-auto overflow-x-hidden min-h-0">
           {/* Product Name, Description & Price */}
           <CurrentProductDetails
             brand={displayBrand}
@@ -74,6 +88,13 @@ export function FittingRoom() {
             sizes={sizes}
             selectedSize={selectedSize}
             onSizeClick={handleSizeClick}
+          />
+
+          {/* Wardrobe */}
+          <Wardrobe
+            selectedAvatar={selectedAvatar}
+            setSelectedAvatar={setSelectedAvatar}
+            avatarImages={avatarImages}
           />
         </div>
       </div>
