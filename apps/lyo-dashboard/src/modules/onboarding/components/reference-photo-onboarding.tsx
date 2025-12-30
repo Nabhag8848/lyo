@@ -113,7 +113,7 @@ export const ReferencePhotoOnboarding = () => {
             <div className="mb-5">
               <div className="w-16 h-16 border-2 border-stone-300 border-t-stone-600 rounded-full animate-spin mx-auto" />
             </div>
-            <p className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+            <p className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-stone-500 uppercase">
               Loading avatar...
             </p>
           </div>
@@ -140,19 +140,19 @@ export const ReferencePhotoOnboarding = () => {
             >
               Upload Photo
             </button>
-            <p className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+            <p className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-stone-500 uppercase">
               JPG, PNG or HEIC up to 10MB
             </p>
           </div>
         ) : (
           <div className="flex gap-8 flex-1 min-h-0">
             {/* Left Side - Main Reference Photo Display */}
-            <div className="flex-[0.4] flex items-center justify-center min-w-0 min-h-0">
-              <div className="w-full h-full flex items-center justify-center p-6">
+            <div className="flex-[0.4] flex items-center justify-center min-w-0 min-h-0 overflow-hidden">
+              <div className="w-full h-full flex items-center justify-center p-4 sm:p-6 xl:p-4 xl:max-h-[calc(100vh-8rem)]">
                 <img
                   src={getDisplayReferencePhotoUrl() || ''}
                   alt="Selected Reference Photo"
-                  className="w-full h-full object-contain"
+                  className="max-w-full max-h-full w-auto h-auto object-contain xl:max-h-[calc(100vh-10rem)]"
                 />
               </div>
             </div>
@@ -163,7 +163,7 @@ export const ReferencePhotoOnboarding = () => {
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
                     <div className="w-8 h-8 border-2 border-stone-300 border-t-stone-600 rounded-full animate-spin mx-auto mb-2" />
-                    <p className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+                    <p className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-stone-500 uppercase">
                       Generating avatars...
                     </p>
                   </div>

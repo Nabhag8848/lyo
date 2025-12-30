@@ -1,5 +1,20 @@
 @import 'tailwindcss';
 
+/* Responsive Root Font Size - Fluid Typography Strategy */
+/* Modern approach: Uses clamp() for smooth, continuous scaling */
+/* Scales from 62.5% (10px) on small screens to 81.25% (13px) on large screens */
+html {
+  font-size: clamp(62.5%, calc(62.5% + 0.5vw), 81.25%);
+  /* 
+    - Small screens: 62.5% (1rem = 10px) - minimum
+    - Scales smoothly with viewport width (0.5vw growth rate)
+    - Large screens: 81.25% (1rem = 13px) - maximum
+    - Provides fluid scaling without discrete breakpoint jumps
+    - More accessible and modern than fixed media queries
+    - Scales proportionally: starts at 62.5%, grows 0.5% per 100vw, caps at 81.25%
+  */
+}
+
 /* Tailwind v4 Theme Configuration */
 @theme {
   --font-sans: 'Manrope', sans-serif;
@@ -313,6 +328,12 @@
 }
 
 /* Global Styles */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   @apply font-sans text-stone-900 bg-white antialiased;
 }

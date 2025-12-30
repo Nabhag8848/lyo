@@ -10,7 +10,7 @@ export const ReferencePhotoSelector = ({
   const referencePhotoRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [paddingWidth, setPaddingWidth] = useState(400);
+  const [paddingWidth, setPaddingWidth] = useState(0);
 
   const checkScrollability = () => {
     if (scrollContainerRef.current) {
@@ -19,17 +19,22 @@ export const ReferencePhotoSelector = ({
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
       // Update padding width to allow centering - adjust based on reference photo size
-      // Reference photo width: 96px (lg), 128px (md), 96px (sm), 96px (base)
+      // Reference photo width in rem: 6rem (lg), 10rem (md), 8rem (sm), 6rem (base)
+      // Convert rem to pixels using root font size
+      const rootFontSize = parseFloat(
+        getComputedStyle(document.documentElement).fontSize
+      );
       const isLarge = window.matchMedia('(min-width: 1024px)').matches;
       const isMedium = window.matchMedia('(min-width: 768px)').matches;
       const isSmall = window.matchMedia('(min-width: 640px)').matches;
-      const referencePhotoWidth = isLarge
-        ? 192
+      const referencePhotoWidthRem = isLarge
+        ? 12
         : isMedium
-        ? 160
+        ? 10
         : isSmall
-        ? 128
-        : 96;
+        ? 8
+        : 6;
+      const referencePhotoWidth = referencePhotoWidthRem * rootFontSize;
       setPaddingWidth(clientWidth / 2 - referencePhotoWidth / 2);
     }
   };
@@ -69,9 +74,14 @@ export const ReferencePhotoSelector = ({
     }
 
     // Only update if we found a close reference photo (within reasonable distance)
+    // Convert 9.375rem (150px at 16px base) to pixels using current root font size
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize
+    );
+    const maxDistance = 9.375 * rootFontSize;
     if (
       closestReferencePhoto &&
-      closestReferencePhoto.distance < 150 &&
+      closestReferencePhoto.distance < maxDistance &&
       closestReferencePhoto.id !== selectedReferencePhotoId
     ) {
       onSelectReferencePhoto(closestReferencePhoto.id);
@@ -171,7 +181,7 @@ export const ReferencePhotoSelector = ({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-[11px] font-bold tracking-[0.2em] text-stone-500 uppercase">
+        <div className="text-[11px] sm:text-xs font-bold tracking-[0.2em] text-stone-500 uppercase">
           Generating reference photos...
         </div>
       </div>
