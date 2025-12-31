@@ -7,6 +7,7 @@ import { AuthModule } from '@/modules/auth/auth.module';
 import { ReferencePhotoModule } from './reference-photo/reference-photo.module';
 import { TryonModule } from './tryon/tryon.module';
 import { AvatarModule } from './avatar/avatar.module';
+import { WardrobeModule } from './wardrobe/wardrobe.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AvatarModule } from './avatar/avatar.module';
     ReferencePhotoModule,
     TryonModule,
     AvatarModule,
+    WardrobeModule,
   ],
   providers: [
     {

@@ -1,6 +1,7 @@
 export function SignInScreen() {
   const handleSignIn = () => {
     browser.tabs.create({ url: 'https://lyo.fashion' });
+    window.close();
   };
 
   return (
