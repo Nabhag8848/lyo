@@ -4,14 +4,17 @@ import type { Browser } from 'wxt/browser';
 type OpenOptions = Browser.sidePanel.OpenOptions;
 
 export default defineBackground(() => {
-  const closeSidePanel = async (tabId?: number, url?: string) => {
-    if (tabId) {
-      if (url && !url.includes('myntra.com')) {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-        await browser.runtime.sendMessage({ type: 'closeSidePanel' });
-      }
-    }
-  };
+  // onInstallation
+  browser.runtime.onInstalled.addListener(async () => {
+    await browser.sidePanel.setOptions({
+      path: 'sidepanel.html',
+      enabled: true,
+    });
+
+    await browser.sidePanel.setPanelBehavior({
+      openPanelOnActionClick: true,
+    });
+  });
 
   const forceCloseSidePanel = async (tabId?: number) => {
     if (tabId) {
@@ -32,75 +35,6 @@ export default defineBackground(() => {
       }
     }
   };
-
-  browser.tabs.onCreated.addListener(async (tab) => {
-    const { id: tabId, url } = tab;
-    if (tabId) {
-      if (url?.includes('myntra.com')) {
-        await browser.sidePanel.setOptions({
-          path: 'sidepanel.html',
-          tabId,
-          enabled: true,
-        });
-
-        await browser.sidePanel.setPanelBehavior({
-          openPanelOnActionClick: true,
-        });
-      } else {
-        await browser.sidePanel.setOptions({
-          tabId,
-          enabled: false,
-        });
-      }
-    }
-  });
-
-  browser.tabs.onActivated.addListener(async ({ tabId }) => {
-    if (tabId) {
-      const tab = await browser.tabs.get(tabId);
-      const { url } = tab;
-
-      if (url?.includes('myntra.com')) {
-        await browser.sidePanel.setOptions({
-          path: 'sidepanel.html',
-          tabId,
-          enabled: true,
-        });
-
-        await browser.sidePanel.setPanelBehavior({
-          openPanelOnActionClick: true,
-        });
-      } else {
-        await browser.sidePanel.setOptions({
-          tabId,
-          enabled: false,
-        });
-      }
-    }
-  });
-
-  browser.tabs.onUpdated.addListener(async (tabId, _changeInfo, tab) => {
-    const url = tab.url;
-    if (!url) return;
-
-    if (url.includes('myntra.com')) {
-      await browser.sidePanel.setOptions({
-        tabId,
-        path: 'sidepanel.html',
-        enabled: true,
-      });
-
-      await browser.sidePanel.setPanelBehavior({
-        openPanelOnActionClick: true,
-      });
-    } else {
-      await browser.sidePanel.setOptions({
-        tabId,
-        enabled: false,
-      });
-      await closeSidePanel(tab.id, url);
-    }
-  });
 
   browser.runtime.onMessage.addListener(async (message, sender) => {
     switch (message.type) {
