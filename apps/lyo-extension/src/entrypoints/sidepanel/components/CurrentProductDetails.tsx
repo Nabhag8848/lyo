@@ -14,14 +14,14 @@ export function CurrentProductDetails({
   discount,
 }: CurrentProductDetailsProps) {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1.5 min-h-14">
       <div className="flex justify-between items-start gap-2">
         <div className="flex-1 min-w-0">
-          <h4 className="font-display text-stone-900 text-base tracking-wide uppercase">
+          <h4 className="font-display text-stone-900 text-base tracking-wide uppercase line-clamp-1">
             {brand}
           </h4>
-          <p className="text-stone-500 text-[0.5rem] font-bold uppercase tracking-[0.2em] mt-0.5 line-clamp-2">
-            {name}
+          <p className="text-stone-500 text-[0.5rem] font-bold uppercase tracking-[0.2em] mt-0.5 line-clamp-2 min-h-[2.4em]">
+            {name || '\u00A0'}
           </p>
         </div>
         <div className="text-right shrink-0">

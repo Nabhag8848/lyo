@@ -1,16 +1,50 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { useWardrobe } from '../hooks/use-wardrobe';
+import { useReferencePhoto } from '../hooks/use-reference-photo';
+import { useProduct } from '../hooks/use-product';
+import { WardrobeItemShimmer } from './WardrobeShimmer';
+
+interface WardrobeProps {
+  selectedAvatar: number;
+  setSelectedAvatar: (index: number) => void;
+}
 
 export const Wardrobe = ({
   selectedAvatar,
   setSelectedAvatar,
-  avatarImages,
-}: {
-  selectedAvatar: number;
-  setSelectedAvatar: (index: number) => void;
-  avatarImages: string[];
-}) => {
+}: WardrobeProps) => {
   const historyScrollRef = useRef<HTMLDivElement>(null);
   const avatarRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+  const { wardrobeItems, isLoading, isLoadingMore, isReachingEnd, loadMore } =
+    useWardrobe();
+  const { data: referencePhoto } = useReferencePhoto();
+  const product = useProduct();
+
+  // Combine reference photo (index 0) with wardrobe items - only include reference photo if product exists
+  const allItems: Array<{
+    id: string;
+    imageUrl: string;
+    isReference: boolean;
+    garment?: WardrobeItem['garment'];
+  }> = [];
+
+  // Only add reference photo if product exists (when sidepanel opened with tryon button)
+  if (product && referencePhoto?.url) {
+    allItems.push({
+      id: 'reference',
+      imageUrl: referencePhoto.url,
+      isReference: true,
+    });
+  }
+
+  wardrobeItems.forEach((item) => {
+    allItems.push({
+      id: item.id,
+      imageUrl: item.signedUrl,
+      isReference: false,
+      garment: item.garment,
+    });
+  });
 
   const handleHistoryScroll = useCallback(() => {
     if (!historyScrollRef.current) return;
@@ -45,7 +79,23 @@ export const Wardrobe = ({
     ) {
       setSelectedAvatar(closestAvatar.index);
     }
-  }, [selectedAvatar, setSelectedAvatar]);
+
+    // Load more when scrolling near the end
+    if (
+      !isReachingEnd &&
+      !isLoadingMore &&
+      container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - 100
+    ) {
+      loadMore();
+    }
+  }, [
+    selectedAvatar,
+    setSelectedAvatar,
+    isReachingEnd,
+    isLoadingMore,
+    loadMore,
+  ]);
 
   const scrollToAvatar = (index: number) => {
     setSelectedAvatar(index);
@@ -95,6 +145,20 @@ export const Wardrobe = ({
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      @keyframes shimmer-opacity {
+        0% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 0.3;
+        }
+      }
+      .shimmer-opacity {
+        animation: shimmer-opacity 1.5s ease-in-out infinite;
+      }
     `}</style>
       <div
         ref={historyScrollRef}
@@ -107,13 +171,31 @@ export const Wardrobe = ({
         {/* Left padding to allow first avatar to center */}
         <div className="shrink-0 w-[calc(50%-1rem)]" />
 
-        {avatarImages.map((avatar, index) => {
+        {/* Show shimmer while initial loading */}
+        {isLoading && allItems.length === 0 && (
+          <>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <WardrobeItemShimmer
+                key={index}
+                referencePhotoUrl={
+                  product && referencePhoto?.url
+                    ? referencePhoto.url
+                    : undefined
+                }
+                isFirst={index === 0 && !!(product && referencePhoto?.url)}
+              />
+            ))}
+          </>
+        )}
+
+        {/* Render wardrobe items */}
+        {allItems.map((item, index) => {
           const isSelected = selectedAvatar === index;
           const opacity = isSelected ? 1 : 0.6;
 
           return (
             <button
-              key={index}
+              key={item.id}
               ref={(el) => {
                 if (el) {
                   avatarRefs.current.set(index, el);
@@ -123,7 +205,7 @@ export const Wardrobe = ({
               }}
               onClick={() => scrollToAvatar(index)}
               className={`shrink-0 w-16 h-28 rounded overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
-                index === 0 ? '' : '-ml-6'
+                index === 0 ? '' : '-ml-4'
               }`}
               style={{
                 opacity,
@@ -131,11 +213,15 @@ export const Wardrobe = ({
               }}
             >
               <img
-                src={avatar}
-                alt={`Avatar ${index + 1}`}
+                src={item.imageUrl}
+                alt={
+                  item.isReference
+                    ? 'Reference photo'
+                    : `Wardrobe item ${index}`
+                }
                 className="max-w-full max-h-full object-contain"
                 style={
-                  index === 0
+                  item.isReference
                     ? {
                         filter: 'brightness(0)',
                         mixBlendMode: 'normal',
@@ -147,6 +233,23 @@ export const Wardrobe = ({
             </button>
           );
         })}
+
+        {/* Show shimmer for loading more items */}
+        {isLoadingMore && !isLoading && (
+          <>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <WardrobeItemShimmer
+                key={`loading-more-${index}`}
+                referencePhotoUrl={
+                  product && referencePhoto?.url
+                    ? referencePhoto.url
+                    : undefined
+                }
+                isFirst={false}
+              />
+            ))}
+          </>
+        )}
 
         {/* Right padding to allow last avatar to center */}
         <div className="shrink-0 w-[calc(50%-1rem)]" />

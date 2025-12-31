@@ -1,5 +1,5 @@
 interface ActionButtonsProps {
-  buttonType: 'add_to_bag' | 'go_to_bag';
+  buttonType: 'add_to_bag' | 'go_to_bag' | 'go_to_page';
   isDisabled: boolean;
   price: string;
   onAddToBag: () => void;
@@ -11,7 +11,12 @@ export function ActionButtons({
   price,
   onAddToBag,
 }: ActionButtonsProps) {
-  const buttonText = buttonType === 'go_to_bag' ? 'Go to Bag' : 'Add to Bag';
+  const buttonText =
+    buttonType === 'go_to_bag'
+      ? 'Go to Bag'
+      : buttonType === 'go_to_page'
+      ? 'Go to Page'
+      : 'Add to Bag';
 
   return (
     <div className="p-3 border-t border-stone-100 bg-white shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] space-y-2">
@@ -45,7 +50,7 @@ export function ActionButtons({
         {buttonType === 'add_to_bag' && !isDisabled && (
           <span className="text-[0.625rem]">{price}</span>
         )}
-        {buttonType === 'go_to_bag' && (
+        {(buttonType === 'go_to_bag' || buttonType === 'go_to_page') && (
           <svg
             className="w-3 h-3"
             fill="none"

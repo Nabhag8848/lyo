@@ -51,6 +51,34 @@ declare global {
     sizes: SizeOption[];
     selectedSize?: string | null;
   };
+
+  type ReferencePhoto = {
+    id: string;
+    url: string;
+  };
+
+  type WardrobeItem = {
+    id: string;
+    signedUrl: string;
+    garment: {
+      id: string;
+      garmentUrl: string;
+      sourceUrl: string;
+      brandName?: string | null;
+      garmentBrandName?: string | null;
+      garmentName?: string | null;
+      garmentDescription?: string | null;
+    };
+  };
+
+  type WardrobeResponse = {
+    wardrobe: WardrobeItem[];
+    nextCursor: string | null;
+  };
+
+  type User = {
+    isActive: boolean;
+  };
 }
 
 export {};

@@ -1,10 +1,6 @@
 import useSWR from 'swr';
 import { api } from '@/api/util';
 
-interface User {
-  isActive: boolean;
-}
-
 const fetchUser = async (): Promise<User | null> => {
   const baseUrl = api.serverUrl;
   const res = await fetch(`${baseUrl}/user/me`, {
