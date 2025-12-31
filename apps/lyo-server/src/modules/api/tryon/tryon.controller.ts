@@ -5,6 +5,7 @@ import { GenerateTryonDto, GenerateTryonResponseDto } from './dtos';
 import { TryonService } from './tryon.service';
 import { CurrentUser } from '@/modules/auth/decorators';
 import { AuthUserDto } from '@/modules/api/user/dtos';
+import { Serialize } from '@/app/decorators/serialize.decorator';
 
 @ApiTags('tryon')
 @Controller('tryon')
@@ -13,6 +14,7 @@ export class TryonController {
   constructor(private readonly tryonService: TryonService) {}
 
   @Post('gen')
+  @Serialize(GenerateTryonResponseDto)
   @ApiOperation({
     summary: 'Generate virtual try-on',
     description:
