@@ -3,7 +3,7 @@ import { GenerateTryonDto, GenerateTryonResponseDto } from './dtos';
 import { FashnaiService } from '@/modules/fashnai/fashnai.service';
 import { ReferencePhotoService } from '@/modules/api/reference-photo/reference-photo.service';
 import { AvatarService } from '@/modules/api/avatar/avatar.service';
-import { GarmentService } from '@/modules/api/garment/garment.service';
+import { GarmentService } from '@/modules/garment/garment.service';
 import { GenerationService } from '@/modules/generation/generation.service';
 
 @Injectable()

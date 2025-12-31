@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { IsUrl, IsUUID } from 'class-validator';
 
 export class GetGenerationImageUrlResponseDto {
+  @Expose()
   @IsUUID()
   @ApiProperty({
     description: 'Unique identifier for the try-on generation job',
@@ -9,6 +11,7 @@ export class GetGenerationImageUrlResponseDto {
   })
   id: string;
 
+  @Expose()
   @IsUrl()
   @ApiProperty({
     description: 'URL of the generated try-on image',
