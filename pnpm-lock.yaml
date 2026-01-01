@@ -368,6 +368,8 @@ importers:
 
   apps/lyo-extension: {}
 
+  apps/lyo-extension-mvp: {}
+
   apps/lyo-server: {}
 
   apps/lyo-website: {}
