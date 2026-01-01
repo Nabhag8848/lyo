@@ -134,19 +134,6 @@ class SSEService {
     );
   }
 
-  // Check if we need to reconnect on startup (e.g., after browser restart)
-  async checkAndReconnect(): Promise<void> {
-    const generations = (await pendingGenerationsStorage.getValue()) ?? [];
-    const hasPending = generations.some((g) => g.status === 'pending');
-
-    if (hasPending && !this.isConnected()) {
-      console.log(
-        '[SSE] Found pending generations on startup, reconnecting...'
-      );
-      await this.connect();
-    }
-  }
-
   // Clear all generations - called when sidepanel closes
   async clearGenerations(): Promise<void> {
     await pendingGenerationsStorage.setValue([]);

@@ -18,9 +18,6 @@ export default defineBackground(() => {
     });
   });
 
-  // On startup - check if we need to reconnect SSE for pending generations
-  sseService.checkAndReconnect();
-
   const forceCloseSidePanel = async (tabId?: number) => {
     if (tabId) {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -167,7 +164,7 @@ export default defineBackground(() => {
       case 'clearCurrentProduct': {
         // Clear current product view when sidepanel closes
         await currentProductView.setValue(null);
-        
+
         // Also clear completed generations from storage
         // Keep pending ones in case SSE is still processing
         // The SSE service will handle cleanup when all generations complete
