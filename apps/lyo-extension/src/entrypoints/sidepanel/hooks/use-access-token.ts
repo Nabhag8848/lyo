@@ -1,31 +1,42 @@
 import { useSyncExternalStore } from 'react';
-import { getAccessToken } from '@/api/get-access-token';
-
-let cachedAccessToken: string | null = null;
-const listeners = new Set<() => void>();
-
-const notifyListeners = () => {
-  listeners.forEach((listener) => listener());
-};
+import { api } from '@/api/util';
+import { SignInStore } from '@/entrypoints/sidepanel/stores';
 
 export const useAccessToken = () => {
   return useSyncExternalStore(
-    (onChange) => {
-      listeners.add(onChange);
-      if (listeners.size === 1) {
-        (async () => {
-          const accessToken = await getAccessToken();
+    (onStoreChange) => {
+      const { clientDomain } = api;
 
-          if (cachedAccessToken !== accessToken) {
-            cachedAccessToken = accessToken;
-            notifyListeners();
+      // Trigger hydration on first subscription
+      SignInStore.getState().hydrate();
+
+      const onChangeCallback = (
+        changeInfo: Browser.cookies.CookieChangeInfo
+      ) => {
+        const { cookie, removed } = changeInfo;
+
+        const isAccessTokenClientDomain =
+          cookie?.domain === clientDomain && cookie?.name === 'access_token';
+
+        if (isAccessTokenClientDomain) {
+          if (removed) {
+            SignInStore.getState().setAccessToken(null);
+          } else {
+            SignInStore.getState().setAccessToken(cookie.value);
           }
-        })();
-      }
+        }
+      };
+
+      browser.cookies.onChanged.addListener(onChangeCallback);
+
+      // Subscribe to Zustand store to notify React of changes
+      const unsubscribeStore = SignInStore.subscribe(onStoreChange);
+
       return () => {
-        listeners.delete(onChange);
+        browser.cookies.onChanged.removeListener(onChangeCallback);
+        unsubscribeStore();
       };
     },
-    () => cachedAccessToken
+    () => SignInStore.getState().accessToken
   );
 };

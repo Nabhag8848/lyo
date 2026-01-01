@@ -17,6 +17,7 @@ export default defineConfig({
   },
   vite: () => ({
     plugins: [tailwindcss()],
+    envDir: path.resolve(__dirname, '.env'),
   }),
   manifest: {
     permissions: ['sidePanel', 'storage', 'cookies'],
