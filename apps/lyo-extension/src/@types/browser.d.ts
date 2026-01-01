@@ -51,6 +51,65 @@ declare global {
     sizes: SizeOption[];
     selectedSize?: string | null;
   };
+
+  type ReferencePhoto = {
+    id: string;
+    url: string;
+  };
+
+  type WardrobeItem = {
+    id: string;
+    signedUrl: string;
+    garment: {
+      id: string;
+      garmentUrl: string;
+      sourceUrl: string;
+      brandName?: string | null;
+      garmentBrandName?: string | null;
+      garmentName?: string | null;
+      garmentDescription?: string | null;
+    };
+  };
+
+  type WardrobeResponse = {
+    wardrobe: WardrobeItem[];
+    nextCursor: string | null;
+  };
+
+  type User = {
+    isActive: boolean;
+  };
+
+  // Generation types for try-on workflow
+  type ProductInfo = {
+    brand: string;
+    name: string;
+    sourceUrl: string;
+    imageUrl: string;
+    garmentBrandName?: string;
+    garmentName?: string;
+    garmentDescription?: string;
+  };
+
+  type PendingGeneration = {
+    id: string;
+    status: 'pending' | 'completed';
+    productImageUrl: string;
+    productInfo: ProductInfo;
+    generatedImageUrl?: string;
+    createdAt: number;
+  };
+
+  type SSEConnectionState = {
+    isConnected: boolean;
+    lastEventId?: string;
+  };
+
+  // Discriminated union for wardrobe display items
+  type WardrobeDisplayItem =
+    | { type: 'pending'; generation: PendingGeneration }
+    | { type: 'completed'; item: WardrobeItem }
+    | { type: 'reference'; imageUrl: string };
 }
 
 export {};
