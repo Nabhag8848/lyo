@@ -17,7 +17,7 @@ function App() {
     );
   }
 
-  if (!accessToken) {
+  if (!accessToken || !user) {
     return <SignInScreen />;
   }
 
