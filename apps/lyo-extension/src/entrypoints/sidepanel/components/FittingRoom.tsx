@@ -1,131 +1,132 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useProduct } from '../hooks/use-product';
-import { useWardrobe } from '../hooks/use-wardrobe';
-import { useReferencePhoto } from '../hooks/use-reference-photo';
-import { useCurrentTabUrl } from '../hooks/use-current-tab-url';
+import { useWardrobeWithGenerations } from '../hooks/use-wardrobe-with-generations';
+import {
+  useIsCurrentProduct,
+  getItemSourceUrl,
+  getItemDisplayInfo,
+} from '../hooks/use-is-current-product';
+import { useGenerationStore } from '../stores/generation-store';
 import { SizeSelector } from './SizeSelector';
 import { ActionButtons } from './ActionButtons';
 import { CurrentProductDetails } from './CurrentProductDetails';
 import { DisplayGeneratedImage } from './DisplayGeneratedImage';
 import { Wardrobe } from './Wardrobe';
 
+/**
+ * Checks if item is currently generating (still pending)
+ */
+function isItemGenerating(item: WardrobeDisplayItem | null): boolean {
+  if (!item) return false;
+  return item.type === 'pending' && item.generation.status === 'pending';
+}
+
+/**
+ * Gets the display image URL for the main view
+ */
+function getDisplayImageUrl(
+  item: WardrobeDisplayItem | null,
+  product: Product | null
+): string {
+  if (!item) return '';
+
+  // For pending generation that's still loading, we'll show product image in loading overlay
+  // For completed pending generation, show generated image
+  if (item.type === 'pending') {
+    if (
+      item.generation.status === 'completed' &&
+      item.generation.generatedImageUrl
+    ) {
+      return item.generation.generatedImageUrl;
+    }
+    // Return empty - DisplayGeneratedImage will handle loading state
+    return '';
+  }
+
+  // For completed wardrobe items
+  if (item.type === 'completed') {
+    return item.item.signedUrl;
+  }
+
+  // For reference type (shouldn't happen with new logic, but just in case)
+  if (item.type === 'reference') {
+    return product?.imageUrl || item.imageUrl;
+  }
+
+  return '';
+}
+
 export function FittingRoom() {
-  const [isLoading] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(0);
   const product = useProduct();
   const selectedSize = product?.selectedSize ?? null;
-  const { wardrobeItems } = useWardrobe();
-  const { data: referencePhoto } = useReferencePhoto();
-  const currentTabUrl = useCurrentTabUrl();
+  const { allItems } = useWardrobeWithGenerations();
 
-  // Combine reference photo (index 0) with wardrobe items, only include reference photo if product exists
-  const allItems = useMemo(() => {
-    const items: Array<{
-      id: string;
-      imageUrl: string;
-      isReference: boolean;
-      garment?: WardrobeItem['garment'];
-    }> = [];
+  // Hydrate generation store on mount
+  const hydrate = useGenerationStore((s) => s.hydrate);
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
 
-    // Only add reference photo if product exists (when sidepanel opened with tryon button)
-    if (product && referencePhoto?.url) {
-      items.push({
-        id: 'reference',
-        imageUrl: referencePhoto.url,
-        isReference: true,
-      });
+  // Get the selected item
+  const selectedItem = allItems[selectedAvatar] ?? null;
+
+  // Check if selected item matches current tab URL
+  const isCurrentProduct = useIsCurrentProduct(selectedItem);
+
+  // Check if selected item is currently generating
+  const isGenerating = isItemGenerating(selectedItem);
+
+  // Get the product image URL for loading state
+  const loadingImageUrl = useMemo(() => {
+    if (selectedItem?.type === 'pending') {
+      return selectedItem.generation.productImageUrl;
     }
-
-    wardrobeItems.forEach((item) => {
-      items.push({
-        id: item.id,
-        imageUrl: item.signedUrl,
-        isReference: false,
-        garment: item.garment,
-      });
-    });
-
-    return items;
-  }, [product, referencePhoto, wardrobeItems]);
-
-  // Get the selected item to access garment sourceUrl when needed
-  const selectedItem = allItems[selectedAvatar];
-
-  // Check if the selected item matches the current product
-  // Match when:
-  // 1. Selected item is the reference photo (index 0) and product exists, OR
-  // 2. Selected item's garment.sourceUrl matches the current tab URL
-  const isCurrentProduct = useMemo(() => {
-    if (!product) return false;
-
-    // If selected item is reference photo (index 0), it's the current product
-    if (selectedAvatar === 0 && selectedItem?.isReference) {
-      return true;
+    if (product?.imageUrl) {
+      return product.imageUrl;
     }
+    return '';
+  }, [selectedItem, product]);
 
-    // Otherwise, check if garment sourceUrl matches current tab URL
-    if (
-      selectedItem &&
-      !selectedItem.isReference &&
-      selectedItem.garment?.sourceUrl &&
-      currentTabUrl
-    ) {
-      // Normalize URLs for comparison (remove trailing slashes, query params, etc.)
-      const normalizeUrl = (url: string) => {
-        try {
-          const urlObj = new URL(url);
-          return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`.replace(
-            /\/$/,
-            ''
-          );
-        } catch {
-          return url.replace(/\/$/, '');
-        }
-      };
-
-      const normalizedGarmentUrl = normalizeUrl(selectedItem.garment.sourceUrl);
-      const normalizedTabUrl = normalizeUrl(currentTabUrl);
-      return normalizedGarmentUrl === normalizedTabUrl;
-    }
-
-    return false;
-  }, [product, selectedAvatar, selectedItem, currentTabUrl]);
-
-  // Get display info based on selected avatar - use garment info if available
+  // Get display info based on selected item
   const displayInfo = useMemo(() => {
-    // If we have a wardrobe item (not reference photo) with garment info, use it
-    if (selectedItem && !selectedItem.isReference && selectedItem.garment) {
+    // For pending generation (whether still loading or completed)
+    if (selectedItem?.type === 'pending') {
+      const gen = selectedItem.generation;
       return {
-        brand: selectedItem.garment.garmentBrandName || product?.brand || '',
-        name: selectedItem.garment.garmentName || product?.name || '',
-        // Only show price/MRP/discount if this is the current product
+        brand: gen.productInfo.garmentBrandName || gen.productInfo.brand || '',
+        name: gen.productInfo.garmentName || gen.productInfo.name || '',
         price: isCurrentProduct ? product?.price || '' : '',
         mrp: isCurrentProduct ? product?.mrp || '' : '',
         discount: isCurrentProduct ? product?.discount || '' : '',
       };
     }
 
-    // Otherwise use product info (only if product exists)
+    // Get base display info from item
+    const itemInfo = getItemDisplayInfo(selectedItem);
+
     return {
-      brand: product?.brand || '',
-      name: product?.name || '',
+      brand: itemInfo.brand || product?.brand || '',
+      name: itemInfo.name || product?.name || '',
       // Only show price/MRP/discount if this is the current product
       price: isCurrentProduct ? product?.price || '' : '',
       mrp: isCurrentProduct ? product?.mrp || '' : '',
       discount: isCurrentProduct ? product?.discount || '' : '',
     };
-  }, [selectedAvatar, selectedItem, product, isCurrentProduct]);
+  }, [selectedItem, product, isCurrentProduct]);
 
   const displayPrice = displayInfo.price;
   const displayMrp = displayInfo.mrp;
   const displayDiscount = displayInfo.discount;
   const displayBrand = displayInfo.brand;
   const displayName = displayInfo.name;
+
+  // Determine button type based on product context
   // If no product exists, or product exists but selected item doesn't match, show "go_to_page" button
   // Otherwise use product's buttonType
-  const buttonType =
+  const buttonType: 'add_to_bag' | 'go_to_bag' | 'go_to_page' =
     !product || !isCurrentProduct ? 'go_to_page' : product.buttonType;
-  const sizes = product?.sizes || [];
+  const sizes = isCurrentProduct ? product?.sizes || [] : [];
 
   // Determine if button should be disabled
   // - "Add to Bag" is only enabled if size is selected (or if no sizes exist)
@@ -145,10 +146,7 @@ export function FittingRoom() {
 
     // If button type is "go_to_page", redirect to the garment sourceUrl
     if (buttonType === 'go_to_page') {
-      const sourceUrl =
-        selectedItem && !selectedItem.isReference && selectedItem.garment
-          ? selectedItem.garment.sourceUrl
-          : null;
+      const sourceUrl = getItemSourceUrl(selectedItem);
 
       if (sourceUrl) {
         // Redirect within the same tab
@@ -174,18 +172,8 @@ export function FittingRoom() {
     });
   };
 
-  const getDisplayImageSrc = () => {
-    // If product exists, selectedAvatar is 0, and there's a reference photo, show product image
-    if (product && selectedAvatar === 0 && referencePhoto?.url) {
-      return (product?.imageUrl as string) || '';
-    }
-
-    // Otherwise, show the selected item from allItems
-    // When no product exists, allItems[0] will be the first wardrobe item
-    // When product exists, allItems[0] will be reference photo, allItems[1+] will be wardrobe items
-    const selectedItem = allItems[selectedAvatar];
-    return selectedItem?.imageUrl || '';
-  };
+  // Get the image to display in the main view
+  const displayImageUrl = getDisplayImageUrl(selectedItem, product);
 
   return (
     <div className="flex flex-col h-screen bg-white">
@@ -193,9 +181,10 @@ export function FittingRoom() {
       <div className="flex-1 flex flex-col min-h-0 p-4 pb-0 bg-white">
         {/* Image Container */}
         <DisplayGeneratedImage
-          imageUrl={getDisplayImageSrc()}
+          imageUrl={displayImageUrl}
           alt={displayName}
-          isLoading={isLoading}
+          isLoading={isGenerating}
+          loadingImageUrl={loadingImageUrl}
         />
 
         {/* Product Info & Controls */}
@@ -210,7 +199,7 @@ export function FittingRoom() {
           />
 
           {/* Size Selector - only show when selected item matches current product */}
-          {isCurrentProduct && (
+          {isCurrentProduct && sizes.length > 0 && (
             <SizeSelector
               sizes={sizes}
               selectedSize={selectedSize}

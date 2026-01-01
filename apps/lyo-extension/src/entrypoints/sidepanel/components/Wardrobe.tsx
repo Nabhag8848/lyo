@@ -1,12 +1,52 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useWardrobe } from '../hooks/use-wardrobe';
-import { useReferencePhoto } from '../hooks/use-reference-photo';
-import { useProduct } from '../hooks/use-product';
+import { useWardrobeWithGenerations } from '../hooks/use-wardrobe-with-generations';
 import { WardrobeItemShimmer } from './WardrobeShimmer';
 
 interface WardrobeProps {
   selectedAvatar: number;
   setSelectedAvatar: (index: number) => void;
+}
+
+/**
+ * Gets a unique key for a wardrobe display item
+ */
+function getItemKey(item: WardrobeDisplayItem): string {
+  if (item.type === 'reference') {
+    return 'reference';
+  }
+  if (item.type === 'pending') {
+    return `pending-${item.generation.id}`;
+  }
+  return `completed-${item.item.id}`;
+}
+
+/**
+ * Gets the image URL to display for a wardrobe item in the carousel
+ */
+function getCarouselImageUrl(item: WardrobeDisplayItem): string {
+  if (item.type === 'reference') {
+    return item.imageUrl;
+  }
+  if (item.type === 'pending') {
+    // If generation is complete, show generated image
+    // Otherwise this shouldn't be called (we use shimmer for pending)
+    return item.generation.generatedImageUrl || '';
+  }
+  return item.item.signedUrl;
+}
+
+/**
+ * Checks if item is currently generating (still pending, not completed)
+ */
+function isGenerating(item: WardrobeDisplayItem): boolean {
+  return item.type === 'pending' && item.generation.status === 'pending';
+}
+
+/**
+ * Checks if item is a completed generation from current session
+ */
+function isCompletedGeneration(item: WardrobeDisplayItem): boolean {
+  return item.type === 'pending' && item.generation.status === 'completed';
 }
 
 export const Wardrobe = ({
@@ -15,36 +55,14 @@ export const Wardrobe = ({
 }: WardrobeProps) => {
   const historyScrollRef = useRef<HTMLDivElement>(null);
   const avatarRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
-  const { wardrobeItems, isLoading, isLoadingMore, isReachingEnd, loadMore } =
-    useWardrobe();
-  const { data: referencePhoto } = useReferencePhoto();
-  const product = useProduct();
-
-  // Combine reference photo (index 0) with wardrobe items - only include reference photo if product exists
-  const allItems: Array<{
-    id: string;
-    imageUrl: string;
-    isReference: boolean;
-    garment?: WardrobeItem['garment'];
-  }> = [];
-
-  // Only add reference photo if product exists (when sidepanel opened with tryon button)
-  if (product && referencePhoto?.url) {
-    allItems.push({
-      id: 'reference',
-      imageUrl: referencePhoto.url,
-      isReference: true,
-    });
-  }
-
-  wardrobeItems.forEach((item) => {
-    allItems.push({
-      id: item.id,
-      imageUrl: item.signedUrl,
-      isReference: false,
-      garment: item.garment,
-    });
-  });
+  const {
+    allItems,
+    isLoading,
+    isLoadingMore,
+    isReachingEnd,
+    loadMore,
+    referencePhotoUrl,
+  } = useWardrobeWithGenerations();
 
   const handleHistoryScroll = useCallback(() => {
     if (!historyScrollRef.current) return;
@@ -177,12 +195,8 @@ export const Wardrobe = ({
             {Array.from({ length: 8 }).map((_, index) => (
               <WardrobeItemShimmer
                 key={index}
-                referencePhotoUrl={
-                  product && referencePhoto?.url
-                    ? referencePhoto.url
-                    : undefined
-                }
-                isFirst={index === 0 && !!(product && referencePhoto?.url)}
+                referencePhotoUrl={referencePhotoUrl}
+                isFirst={index === 0}
               />
             ))}
           </>
@@ -192,10 +206,82 @@ export const Wardrobe = ({
         {allItems.map((item, index) => {
           const isSelected = selectedAvatar === index;
           const opacity = isSelected ? 1 : 0.6;
+          const itemIsGenerating = isGenerating(item);
+          const itemIsCompletedGeneration = isCompletedGeneration(item);
 
+          // For generating items (pending), show shimmer with reference photo
+          if (itemIsGenerating) {
+            return (
+              <button
+                key={getItemKey(item)}
+                ref={(el) => {
+                  if (el) {
+                    avatarRefs.current.set(index, el);
+                  } else {
+                    avatarRefs.current.delete(index);
+                  }
+                }}
+                onClick={() => scrollToAvatar(index)}
+                className={`shrink-0 w-16 h-28 rounded overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
+                  index === 0 ? '' : '-ml-4'
+                }`}
+                style={{
+                  opacity,
+                  zIndex: isSelected ? 10 : 1,
+                }}
+              >
+                {/* Use reference photo for shimmer effect */}
+                <img
+                  src={referencePhotoUrl || ''}
+                  alt="Generating..."
+                  className="max-w-full max-h-full object-contain shimmer-opacity"
+                  style={{
+                    filter: 'brightness(0)',
+                    mixBlendMode: 'normal',
+                  }}
+                />
+              </button>
+            );
+          }
+
+          // For completed generation from current session, show generated image
+          if (itemIsCompletedGeneration) {
+            const pendingItem = item as {
+              type: 'pending';
+              generation: PendingGeneration;
+            };
+            return (
+              <button
+                key={getItemKey(item)}
+                ref={(el) => {
+                  if (el) {
+                    avatarRefs.current.set(index, el);
+                  } else {
+                    avatarRefs.current.delete(index);
+                  }
+                }}
+                onClick={() => scrollToAvatar(index)}
+                className={`shrink-0 w-16 h-28 rounded overflow-hidden transition-all duration-300 ease-out flex items-center justify-center ${
+                  index === 0 ? '' : '-ml-4'
+                }`}
+                style={{
+                  opacity,
+                  zIndex: isSelected ? 10 : 1,
+                }}
+              >
+                <img
+                  src={pendingItem.generation.generatedImageUrl || ''}
+                  alt="Generated try-on"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </button>
+            );
+          }
+
+          // For completed wardrobe items from API
           return (
             <button
-              key={item.id}
+              key={getItemKey(item)}
               ref={(el) => {
                 if (el) {
                   avatarRefs.current.set(index, el);
@@ -213,22 +299,9 @@ export const Wardrobe = ({
               }}
             >
               <img
-                src={item.imageUrl}
-                alt={
-                  item.isReference
-                    ? 'Reference photo'
-                    : `Wardrobe item ${index}`
-                }
+                src={getCarouselImageUrl(item)}
+                alt={`Wardrobe item ${index}`}
                 className="max-w-full max-h-full object-contain"
-                style={
-                  item.isReference
-                    ? {
-                        filter: 'brightness(0)',
-                        mixBlendMode: 'normal',
-                        opacity: 0.8,
-                      }
-                    : undefined
-                }
               />
             </button>
           );
@@ -240,11 +313,7 @@ export const Wardrobe = ({
             {Array.from({ length: 8 }).map((_, index) => (
               <WardrobeItemShimmer
                 key={`loading-more-${index}`}
-                referencePhotoUrl={
-                  product && referencePhoto?.url
-                    ? referencePhoto.url
-                    : undefined
-                }
+                referencePhotoUrl={referencePhotoUrl}
                 isFirst={false}
               />
             ))}

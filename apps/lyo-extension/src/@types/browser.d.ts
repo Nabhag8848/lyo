@@ -79,6 +79,37 @@ declare global {
   type User = {
     isActive: boolean;
   };
+
+  // Generation types for try-on workflow
+  type ProductInfo = {
+    brand: string;
+    name: string;
+    sourceUrl: string;
+    imageUrl: string;
+    garmentBrandName?: string;
+    garmentName?: string;
+    garmentDescription?: string;
+  };
+
+  type PendingGeneration = {
+    id: string;
+    status: 'pending' | 'completed';
+    productImageUrl: string;
+    productInfo: ProductInfo;
+    generatedImageUrl?: string;
+    createdAt: number;
+  };
+
+  type SSEConnectionState = {
+    isConnected: boolean;
+    lastEventId?: string;
+  };
+
+  // Discriminated union for wardrobe display items
+  type WardrobeDisplayItem =
+    | { type: 'pending'; generation: PendingGeneration }
+    | { type: 'completed'; item: WardrobeItem }
+    | { type: 'reference'; imageUrl: string };
 }
 
 export {};
