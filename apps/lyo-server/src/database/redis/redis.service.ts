@@ -1,23 +1,21 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 import { createRedisConfig } from './redis.config';
 
 @Injectable()
-export class RedisService implements OnModuleInit, OnModuleDestroy {
+export class RedisService implements OnModuleDestroy {
   private redis: Redis;
 
-  constructor(private readonly configService: ConfigService) {}
-
-  async onModuleInit() {
-    await this.createConnection();
+  constructor(private readonly configService: ConfigService) {
+    this.createConnection();
   }
 
   async onModuleDestroy() {
     await this.redis.quit();
   }
 
-  private async createConnection(): Promise<void> {
+  private createConnection() {
     const redisConfig = createRedisConfig(this.configService);
     this.redis = new Redis(redisConfig);
   }
