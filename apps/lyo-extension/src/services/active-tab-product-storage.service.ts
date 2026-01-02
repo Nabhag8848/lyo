@@ -1,3 +1,4 @@
+import { ActiveTabProductButton } from '@/constants/active-tab-product';
 import { activeTabProduct } from '@/storage';
 
 export class ActiveTabProductStorageService {
@@ -11,5 +12,14 @@ export class ActiveTabProductStorageService {
 
   async clearActiveTabProduct(): Promise<void> {
     await activeTabProduct.setValue(null);
+  }
+
+  async updateActiveTabProductButtonType(
+    buttonType: ActiveTabProductButton
+  ): Promise<void> {
+    const product = await this.getActiveTabProduct();
+    if (product) {
+      await this.setActiveTabProduct({ ...product, buttonType });
+    }
   }
 }

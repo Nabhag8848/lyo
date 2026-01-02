@@ -1,5 +1,5 @@
 import { MATCHES } from '@/entrypoints/sidepanel/utils/matches';
-import { myntraExtractActiveProductMeta } from './myntra-extract-active-product-meta';
+import { myntraExtractActiveProductMeta } from '@/extraction';
 
 export default defineContentScript({
   matches: [MATCHES.MYNTRA_BASE],
