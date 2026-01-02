@@ -2,20 +2,7 @@ import { activeTabProduct } from '@/storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist, StateStorage } from 'zustand/middleware';
 
-const initialState: ActiveTabProductState = {
-  brand: null,
-  name: null,
-  price: null,
-  mrp: null,
-  discount: null,
-  discountPercent: null,
-  description: null,
-  imageUrl: null,
-  sourceUrl: null,
-  buttonType: null,
-  sizeOptions: null,
-  selectedSize: null,
-};
+let activeTabProductInitialState!: ActiveTabProductState | null;
 
 const activeTabProductStateStorage: StateStorage<void> = {
   getItem: async () => {
@@ -30,8 +17,8 @@ const activeTabProductStateStorage: StateStorage<void> = {
   },
 };
 
-export const useActiveTabProductStore = create<ActiveTabProductState>()(
-  persist(() => initialState, {
+export const useActiveTabProductStore = create<ActiveTabProductState | null>()(
+  persist(() => activeTabProductInitialState, {
     name: 'active_tab_product',
     storage: createJSONStorage(() => activeTabProductStateStorage),
   })
@@ -47,8 +34,6 @@ activeTabProduct.watch((newValue) => {
   const currentState = useActiveTabProductStore.getState();
 
   if (JSON.stringify(currentState) != JSON.stringify(newValue)) {
-    if (newValue) {
-      useActiveTabProductStore.setState(newValue);
-    }
+    useActiveTabProductStore.setState(newValue);
   }
 });

@@ -1,16 +1,22 @@
-export function extractProductData(): Product | null {
+import { ActiveTabProductButton } from '@/constants/active-tab-product';
+
+export function myntraExtractActiveProductMeta(): ActiveTabProductState {
+  // garment brand name
   const brandElement = document.querySelector('h1.pdp-title');
   const brand = brandElement?.textContent?.trim() || '';
 
   const nameElement = document.querySelector('h1.pdp-name');
   const name = nameElement?.textContent?.trim() || '';
 
+  // garment price
   const priceElement = document.querySelector('.pdp-price strong');
   const price = priceElement?.textContent?.trim() || '';
 
+  // garment mrp
   const mrpElement = document.querySelector('.pdp-mrp s');
   const mrp = mrpElement?.textContent?.trim() || '';
 
+  // garment discount
   const discountElement = document.querySelector('.pdp-discount');
   const discountText = discountElement?.textContent?.trim() || '';
   const discountMatch = discountText.match(/(\d+)%/);
@@ -34,15 +40,15 @@ export function extractProductData(): Product | null {
   // Check which button exists: "GO TO BAG" or "ADD TO BAG"
   const goToBagButton = document.querySelector('a.pdp-goToCart.pdp-add-to-bag');
 
-  const buttonType: 'add_to_bag' | 'go_to_bag' = goToBagButton
-    ? 'go_to_bag'
-    : 'add_to_bag';
+  const buttonType: ActiveTabProductButton = goToBagButton
+    ? ActiveTabProductButton.GO_TO_BAG
+    : ActiveTabProductButton.ADD_TO_BAG;
 
   // Extract available sizes and detect currently selected size
   const sizeButtons = document.querySelectorAll(
     'button.size-buttons-size-button'
   );
-  const sizes: SizeOption[] = [];
+  const sizeOptions: SizeOption[] = [];
   let selectedSize: string | null = null;
 
   sizeButtons.forEach((button) => {
@@ -66,7 +72,7 @@ export function extractProductData(): Product | null {
         button.getAttribute('data-selected') === 'true';
 
       if (size) {
-        sizes.push({ size, available });
+        sizeOptions.push({ size, available });
         if (isSelected && !selectedSize) {
           selectedSize = size;
         }
@@ -74,12 +80,10 @@ export function extractProductData(): Product | null {
     }
   });
 
-  if (!brand || !name || !price) {
-    return null;
-  }
+  // garmentSourceUrl
   const sourceUrl = window.location.href;
 
-  const product: Product = {
+  const product: ActiveTabProductState = {
     brand,
     name,
     price,
@@ -90,7 +94,7 @@ export function extractProductData(): Product | null {
     imageUrl,
     sourceUrl,
     buttonType,
-    sizes,
+    sizeOptions,
     selectedSize,
   };
 

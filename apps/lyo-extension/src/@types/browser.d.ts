@@ -31,15 +31,12 @@ declare module 'wxt/browser' {
   }
 }
 
+import { ActiveTabProductButton } from '@/constants/active-tab-product';
+
 declare global {
   type User = {
     isActive: boolean;
   };
-
-  enum ActiveTabProductButton {
-    ADD_TO_BAG = 'add_to_bag',
-    GO_TO_BAG = 'go_to_bag',
-  }
 
   type SizeOption = {
     size: string;
