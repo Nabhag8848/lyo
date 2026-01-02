@@ -5,6 +5,7 @@ import {
   PostActiveTabProductMetaHandler,
   UpdateActiveTabProductButtonTypeHandler,
 } from './handlers/active-tab-product-meta';
+import { OpenSidepanelHandler } from './handlers/sidepanel/open';
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
@@ -31,6 +32,8 @@ export default defineBackground(() => {
   messageRegistry.register(
     new UpdateActiveTabProductButtonTypeHandler(activeTabProductStorageService)
   );
+
+  messageRegistry.register(new OpenSidepanelHandler());
 
   // Single listener delegates to registry
   browser.runtime.onMessage.addListener(
