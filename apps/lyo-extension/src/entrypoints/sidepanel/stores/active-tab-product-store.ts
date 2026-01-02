@@ -1,43 +1,54 @@
+import { activeTabProduct } from '@/storage';
 import { create } from 'zustand';
+import { createJSONStorage, persist, StateStorage } from 'zustand/middleware';
 
-enum ActiveTabProductButton {
-  ADD_TO_BAG = 'add_to_bag',
-  GO_TO_BAG = 'go_to_bag',
-}
-
-type SizeOption = {
-  size: string;
-  available: boolean;
+const initialState: ActiveTabProductState = {
+  brand: null,
+  name: null,
+  price: null,
+  mrp: null,
+  discount: null,
+  discountPercent: null,
+  description: null,
+  imageUrl: null,
+  sourceUrl: null,
+  buttonType: null,
+  sizeOptions: null,
+  selectedSize: null,
 };
 
-type ActiveTabProductState = {
-  brand: string | null;
-  name: string | null;
-  price: string | null;
-  mrp: string | null;
-  discount: string | null;
-  discountPercent: string | null;
-  description: string | null;
-  imageUrl: string | null;
-  sourceUrl: string | null;
-  buttonType: ActiveTabProductButton | null;
-  sizeOptions: SizeOption[] | null;
-  selectedSize?: string | null;
+const activeTabProductStateStorage: StateStorage<void> = {
+  getItem: async () => {
+    const activeTabProductValue = await activeTabProduct.getValue();
+    return JSON.stringify({ activeTabProductValue });
+  },
+  setItem: async (_: string, value: string) => {
+    return activeTabProduct.setValue(JSON.parse(value)?.state);
+  },
+  removeItem: async () => {
+    return activeTabProduct.setValue(null);
+  },
 };
 
-export const createActiveTabProductStore = create<ActiveTabProductState>()(
-  () => ({
-    brand: null,
-    name: null,
-    price: null,
-    mrp: null,
-    discount: null,
-    discountPercent: null,
-    description: null,
-    imageUrl: null,
-    sourceUrl: null,
-    buttonType: null,
-    sizeOptions: null,
-    selectedSize: null,
+export const useActiveTabProductStore = create<ActiveTabProductState>()(
+  persist(() => initialState, {
+    name: 'active_tab_product',
+    storage: createJSONStorage(() => activeTabProductStateStorage),
   })
 );
+
+activeTabProduct.getValue().then((newValue) => {
+  if (newValue) {
+    useActiveTabProductStore.setState(newValue);
+  }
+});
+
+activeTabProduct.watch((newValue) => {
+  const currentState = useActiveTabProductStore.getState();
+
+  if (JSON.stringify(currentState) != JSON.stringify(newValue)) {
+    if (newValue) {
+      useActiveTabProductStore.setState(newValue);
+    }
+  }
+});

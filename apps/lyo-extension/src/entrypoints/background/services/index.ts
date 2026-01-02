@@ -1,0 +1,1 @@
+export { TabEventManager } from './tab-event-manager';
