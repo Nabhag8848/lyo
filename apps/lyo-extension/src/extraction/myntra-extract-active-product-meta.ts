@@ -1,4 +1,4 @@
-import { ActiveTabProductButton } from '@/constants/active-tab-product';
+import { ActiveTabProductButton } from '@/constants';
 
 export function myntraExtractActiveProductMeta(): ActiveTabProductState {
   // garment brand name

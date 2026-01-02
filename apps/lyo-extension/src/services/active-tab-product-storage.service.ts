@@ -1,4 +1,4 @@
-import { ActiveTabProductButton } from '@/constants/active-tab-product';
+import { ActiveTabProductButton } from '@/constants';
 import { activeTabProduct } from '@/storage';
 
 export class ActiveTabProductStorageService {

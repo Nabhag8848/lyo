@@ -31,7 +31,7 @@ declare module 'wxt/browser' {
   }
 }
 
-import { ActiveTabProductButton } from '@/constants/active-tab-product';
+import { ActiveTabProductButton, WardrobeItemStatus } from '@/constants';
 
 declare global {
   type User = {
@@ -56,6 +56,34 @@ declare global {
     buttonType: ActiveTabProductButton | null;
     sizeOptions: SizeOption[] | null;
     selectedSize?: string | null;
+  };
+
+  type SignInState = {
+    accessToken: string | null;
+    isHydrated: boolean;
+    setAccessToken: (accessToken: string | null) => void;
+    hydrate: () => Promise<void>;
+  };
+
+  type Garment = {
+    id: string;
+    garmentUrl: string;
+    sourceUrl: string;
+    brandName: string | null;
+    garmentBrandName: string | null;
+    garmentName: string | null;
+    garmentDescription: string | null;
+  };
+
+  type WardrobeItem = {
+    id: string;
+    imageUrl: string;
+    status: WardrobeItemStatus;
+    garment: Garment;
+  };
+
+  type WardrobeState = {
+    wardrobe: Array<WardrobeItem>;
   };
 }
 

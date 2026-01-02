@@ -1,4 +1,4 @@
-import { ActiveTabProductButton } from '@/constants/active-tab-product';
+import { ActiveTabProductButton } from '@/constants';
 import { ActiveTabProductStorageService } from '@/services/active-tab-product-storage.service';
 import { MessageHandler } from '@/entrypoints/background/handlers/message';
 

@@ -1,4 +1,4 @@
-import { ActiveTabProductButton } from '@/constants/active-tab-product';
+import { ActiveTabProductButton } from '@/constants';
 import { MATCHES } from '@/entrypoints/sidepanel/utils/matches';
 import { myntraExtractActiveProductMeta } from '@/extraction';
 
