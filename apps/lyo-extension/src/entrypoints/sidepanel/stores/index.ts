@@ -1,2 +1,2 @@
 export { useGenerationStore } from './generation-store';
-export { SignInStore } from './signin-store';
+export { useSignInStore } from './signin-store';

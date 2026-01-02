@@ -1,14 +1,13 @@
 import { useSyncExternalStore } from 'react';
 import { api } from '@/api/util';
-import { SignInStore } from '@/entrypoints/sidepanel/stores';
+import { useSignInStore } from '@/entrypoints/sidepanel/stores';
 
 export const useAccessToken = () => {
   return useSyncExternalStore(
     (onStoreChange) => {
       const { clientDomain } = api;
-
-      // Trigger hydration on first subscription
-      SignInStore.getState().hydrate();
+      const { hydrate, setAccessToken } = useSignInStore.getState();
+      hydrate();
 
       const onChangeCallback = (
         changeInfo: Browser.cookies.CookieChangeInfo
@@ -20,9 +19,9 @@ export const useAccessToken = () => {
 
         if (isAccessTokenClientDomain) {
           if (removed) {
-            SignInStore.getState().setAccessToken(null);
+            setAccessToken(null);
           } else {
-            SignInStore.getState().setAccessToken(cookie.value);
+            setAccessToken(cookie.value);
           }
         }
       };
@@ -30,13 +29,16 @@ export const useAccessToken = () => {
       browser.cookies.onChanged.addListener(onChangeCallback);
 
       // Subscribe to Zustand store to notify React of changes
-      const unsubscribeStore = SignInStore.subscribe(onStoreChange);
+      const unsubscribeStoreChanges = useSignInStore.subscribe(onStoreChange);
 
       return () => {
         browser.cookies.onChanged.removeListener(onChangeCallback);
-        unsubscribeStore();
+        unsubscribeStoreChanges();
       };
     },
-    () => SignInStore.getState().accessToken
+    () => {
+      const { accessToken } = useSignInStore.getState();
+      return accessToken;
+    }
   );
 };

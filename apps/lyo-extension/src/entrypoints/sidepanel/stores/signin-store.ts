@@ -8,7 +8,7 @@ type SignInState = {
   hydrate: () => Promise<void>;
 };
 
-export const SignInStore = create<SignInState>()((set, get) => ({
+export const useSignInStore = create<SignInState>()((set, get) => ({
   accessToken: null,
   isHydrated: false,
   setAccessToken: (accessToken: string | null) => set({ accessToken }),
