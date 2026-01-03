@@ -5,11 +5,11 @@ import { usePendingWardrobeItemStore } from '../stores/pending-wardrobe-items';
 import { WardrobeItemStatus } from '@/constants';
 
 export class GenerationService {
-  async startGeneration() {
+  async startGeneration(): Promise<boolean> {
     const activeTabProductMetadata = await activeTabProduct.getValue();
 
     if (!activeTabProductMetadata) {
-      return;
+      return false;
     }
 
     const pendingWardrobeItemStore = usePendingWardrobeItemStore.getState();
@@ -59,9 +59,11 @@ export class GenerationService {
       pendingWardrobeItemStore.updateItemByOptimisticId(optimisticId, {
         id: data.id,
       });
+      return true;
     } catch (error) {
-      pendingWardrobeItemStore.removeItem(optimisticId);
+      pendingWardrobeItemStore.removeItemByOptimisticId(optimisticId);
       console.error(error);
+      return false;
     }
   }
 }

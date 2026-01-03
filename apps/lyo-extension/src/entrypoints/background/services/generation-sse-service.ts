@@ -1,13 +1,12 @@
 import { api } from '@/api/util';
-import { pendingWardrobeItems } from '@/storage';
+import { usePendingWardrobeItemStore } from '../stores';
+import { WardrobeItemStatus } from '@/constants';
 
 export class GenerationSSEService {
   private eventSource: EventSource | null = null;
 
-  constructor() {}
-
   async connect() {
-    if (this.eventSource) {
+    if (this.isConnectionOpen()) {
       return;
     }
 
@@ -30,14 +29,31 @@ export class GenerationSSEService {
     this.eventSource.addEventListener('open', this.handleOpen);
   }
 
-  private handleGenerationComplete(event: MessageEvent) {}
+  private handleGenerationComplete(event: MessageEvent<WardrobeItemResponse>) {
+    const wardrobeItem = event.data;
+    const pendingWardrobeItemsStore = usePendingWardrobeItemStore.getState();
+    const { updateItem } = pendingWardrobeItemsStore;
+    updateItem(wardrobeItem.id, {
+      ...wardrobeItem,
+      status: WardrobeItemStatus.COMPLETED,
+    });
+  }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private handleCloseConnection(_event: MessageEvent) {
     this.eventSource?.close();
     this.eventSource = null;
   }
 
-  private handleError(event: Event) {}
+  private handleError(event: Event) {
+    console.error('[Generation SSE] Error:', event);
+  }
 
-  private handleOpen(event: Event) {}
+  private handleOpen(event: Event) {
+    console.log('[Generation SSE] Connection opened', event);
+  }
+
+  private isConnectionOpen() {
+    return this.eventSource && this.eventSource.readyState === EventSource.OPEN;
+  }
 }

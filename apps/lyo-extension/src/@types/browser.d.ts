@@ -98,7 +98,8 @@ declare global {
       updates: Partial<PendingWardrobeItem>
     ) => void;
     updateItem(id: string, updates: Partial<PendingWardrobeItem>);
-    removeItem: (optimisticId: string) => void;
+    removeItemByOptimisticId: (optimisticId: string) => void;
+    removeItem: (id: string) => void;
   };
 
   type Garment = {

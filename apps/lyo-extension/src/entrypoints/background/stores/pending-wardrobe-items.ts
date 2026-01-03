@@ -38,10 +38,16 @@ export const usePendingWardrobeItemStore = create<PendingWardrobeItemState>()(
             item.id === id ? { ...item, ...updates } : item
           ),
         })),
-      removeItem: (optimisticId) =>
+      removeItemByOptimisticId: (optimisticId) =>
         set((state) => ({
           pendingWardrobeItems: state.pendingWardrobeItems.filter(
             (item) => item.optimisticId !== optimisticId
+          ),
+        })),
+      removeItem: (id) =>
+        set((state) => ({
+          pendingWardrobeItems: state.pendingWardrobeItems.filter(
+            (item) => item.id !== id
           ),
         })),
     }),

@@ -1,10 +1,16 @@
 import { MessageHandler } from '@/entrypoints/background/handlers/message';
-import { GenerationService } from '../../services';
+import {
+  GenerationService,
+  GenerationSSEService,
+} from '@/entrypoints/background/services';
 
 export class OpenSidepanelHandler implements MessageHandler<undefined, void> {
   readonly messageType = 'open_sidepanel';
 
-  constructor(private readonly generationService: GenerationService) {}
+  constructor(
+    private readonly generationService: GenerationService,
+    private readonly generationSSEService: GenerationSSEService
+  ) {}
 
   async handle(
     _data: undefined,
@@ -15,6 +21,10 @@ export class OpenSidepanelHandler implements MessageHandler<undefined, void> {
     };
 
     await browser.sidePanel.open(options);
-    await this.generationService.startGeneration();
+    const success = await this.generationService.startGeneration();
+
+    if (success) {
+      await this.generationSSEService.connect();
+    }
   }
 }
