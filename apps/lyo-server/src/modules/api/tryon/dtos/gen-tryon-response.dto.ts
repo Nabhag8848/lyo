@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GenerateTryonResponseDto {
@@ -11,4 +11,14 @@ export class GenerateTryonResponseDto {
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
   id: string;
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Optimistic identifier for the try-on generation',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  optimisticId?: string
 }

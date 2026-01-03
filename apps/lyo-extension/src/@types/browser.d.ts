@@ -65,6 +65,10 @@ declare global {
     hydrate: () => Promise<void>;
   };
 
+  type PendingWardrobeItemStore = {
+    pendingWardrobeItems: Array<PendingWardrobeItem>;
+  };
+
   type Garment = {
     id: string;
     garmentUrl: string;
@@ -73,6 +77,14 @@ declare global {
     garmentBrandName: string | null;
     garmentName: string | null;
     garmentDescription: string | null;
+  };
+
+  type PendingWardrobeItem = {
+    id?: string;
+    optimisticId: string;
+    signedUrl?: string;
+    status: WardrobeItemStatus;
+    garment: Garment;
   };
 
   type WardrobeItemResponse = {

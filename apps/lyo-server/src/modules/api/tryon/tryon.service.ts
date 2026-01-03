@@ -25,6 +25,7 @@ export class TryonService {
       garmentName,
       garmentDescription,
       brandName,
+      optimisticId,
     }: GenerateTryonDto
   ): Promise<GenerateTryonResponseDto> {
     // temporary later we will get selected avatar image url
@@ -59,6 +60,6 @@ export class TryonService {
       jobId
     );
 
-    return { id: generationId };
+    return { id: generationId, optimisticId };
   }
 }
