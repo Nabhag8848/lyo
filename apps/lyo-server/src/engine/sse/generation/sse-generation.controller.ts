@@ -1,5 +1,6 @@
 import { PubSubService } from '@/engine/pubsub/pubsub.service';
-import { FashnaiGenerationCompletedResponseDto } from '@/engine/webhook/fashnai/dtos/fashnai-wh-gen-response.dto';
+import { FashnaiGenerationCompletedResponseDto } from '@/engine/webhook/fashnai/dtos';
+import { CloseConnectionDto } from './dtos';
 import { FashnaiGenerationCompleteSchema } from '@/engine/webhook/fashnai/schema';
 import { AuthUserDto } from '@/modules/api/user/dtos';
 import { CurrentUser } from '@/modules/auth/decorators';
@@ -52,12 +53,60 @@ export class SseGenerationController {
             id: {
               type: 'string',
               example: '123e4567-e89b-12d3-a456-426614174000',
-              description: 'Generation job ID',
+              description: 'Generation ID',
             },
-            imageUrl: {
+            signedUrl: {
               type: 'string',
-              example: 'https://example.com/generated-image.jpg',
-              description: 'URL of the generated try-on image',
+              example:
+                'https://s3.amazonaws.com/bucket/users/123/generations/456.jpg?X-Amz-Algorithm=...',
+              description: 'Pre-signed URL for the generated try-on image',
+            },
+            garment: {
+              type: 'object',
+              description:
+                'Garment information associated with this generation',
+              properties: {
+                id: {
+                  type: 'string',
+                  example: '123e4567-e89b-12d3-a456-426614174000',
+                  description: 'Garment ID',
+                },
+                garmentUrl: {
+                  type: 'string',
+                  example: 'https://example.com/garment.jpg',
+                  description: 'URL of the garment image',
+                },
+                sourceUrl: {
+                  type: 'string',
+                  example: 'https://ecommerceshop.com/product/123',
+                  description:
+                    'Source URL of the garment (e.g., ecommerce product page)',
+                },
+                brandName: {
+                  type: 'string',
+                  nullable: true,
+                  example: 'Myntra',
+                  description: 'Brand name of the ecommerce shop',
+                },
+                garmentBrandName: {
+                  type: 'string',
+                  nullable: true,
+                  example: 'Nike',
+                  description: 'Brand name of the garment',
+                },
+                garmentName: {
+                  type: 'string',
+                  nullable: true,
+                  example: 'Red Floral Print Maxi Dress',
+                  description: 'Name of the garment',
+                },
+                garmentDescription: {
+                  type: 'string',
+                  nullable: true,
+                  example: 'A comfortable cotton t-shirt with floral print',
+                  description: 'Description of the garment',
+                },
+              },
             },
           },
         },
@@ -80,7 +129,9 @@ export class SseGenerationController {
   })
   generationSse(
     @CurrentUser() authUser: AuthUserDto
-  ): Observable<MessageEventData<FashnaiGenerationCompletedResponseDto>> {
+  ): Observable<
+    MessageEventData<FashnaiGenerationCompletedResponseDto | CloseConnectionDto>
+  > {
     const channel = `user:${authUser.id}:generation`;
 
     // Subscribe to the pubsub channel
@@ -97,12 +148,10 @@ export class SseGenerationController {
       filter((hasPending) => !hasPending), // Only emit when no pending
       take(1), // Take first emission (when no pending found)
       delay(2000),
-      map<boolean, MessageEventData<FashnaiGenerationCompletedResponseDto>>(
-        () => ({
-          data: {},
-          type: 'close_connection',
-        })
-      ),
+      map<boolean, MessageEventData<CloseConnectionDto>>(() => ({
+        data: {},
+        type: 'close_connection',
+      })),
       tap(() => {
         // No pending generations - complete subscription and unsubscribe
         this.pubSubService.unsubscribe(channel);
