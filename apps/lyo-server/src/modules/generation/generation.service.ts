@@ -6,7 +6,7 @@ import { Repository, In } from 'typeorm';
 import { S3BucketService } from '@/modules/storage/s3/services/s3-bucket.service';
 import { S3ObjectService } from '@/modules/storage/s3/services/s3-object.service';
 import {
-  GetGenerationImageUrlResponseDto,
+  GenerationResponseDto,
   GenerationsResponseDto,
   GenerationWithGarmentDto,
 } from './dtos';
@@ -66,28 +66,47 @@ export class GenerationService {
     return count > 0;
   }
 
-  async getGenerationImageUrl(
+  async getGenerationWithGarmentsByJobId(
     jobId: string,
     key: string
-  ): Promise<GetGenerationImageUrlResponseDto> {
+  ): Promise<GenerationResponseDto> {
     const generation = await this.generationRepository.findOne({
       where: {
         jobId,
       },
+      relations: ['garment'],
       select: {
         id: true,
+        garment: {
+          id: true,
+          garmentUrl: true,
+          sourceUrl: true,
+          brandName: true,
+          garmentBrandName: true,
+          garmentName: true,
+          garmentDescription: true,
+        },
       },
     });
 
-    if (!generation) {
+    if (!generation || !generation.garment) {
       throw new NotFoundException('Generation not found');
     }
 
-    const imageUrl = await this.s3ObjectService.get(key);
+    const signedUrl = await this.s3ObjectService.get(key);
 
     return {
       id: generation.id,
-      imageUrl,
+      signedUrl,
+      garment: {
+        id: generation.garment.id,
+        garmentUrl: generation.garment.garmentUrl,
+        sourceUrl: generation.garment.sourceUrl,
+        brandName: generation.garment.brandName,
+        garmentBrandName: generation.garment.garmentBrandName,
+        garmentName: generation.garment.garmentName,
+        garmentDescription: generation.garment.garmentDescription,
+      },
     };
   }
 

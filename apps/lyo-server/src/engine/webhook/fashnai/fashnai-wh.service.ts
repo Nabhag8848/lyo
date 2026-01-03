@@ -50,7 +50,7 @@ export class FashnaiWebhookService {
             JobStatus.COMPLETED,
             key
           );
-          const generation = await this.generationService.getGenerationImageUrl(
+          const generation = await this.generationService.getGenerationWithGarmentsByJobId(
             jobId,
             key
           );

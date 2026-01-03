@@ -1,26 +1,14 @@
-import { api } from '@/api/util';
+import { apiClient } from '@/api/util';
 import useSWRInfinite from 'swr/infinite';
 import { useWardrobeStore } from '@/entrypoints/sidepanel/stores';
 
 const fetchWardrobe = async (
   cursor: string | null | undefined
 ): Promise<WardrobeResponse> => {
-  const baseUrl = api.serverUrl;
-  const url = `${baseUrl}/wardrobe/me${
-    cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
-  }`;
-
-  const res = await fetch(url, {
-    credentials: 'include',
+  const res = await apiClient.get<WardrobeResponse>('/wardrobe/me', {
+    params: cursor ? { cursor } : undefined,
   });
-
-  if (!res.ok) {
-    // TODO: handle error
-    throw new Error('Failed to fetch wardrobe');
-  }
-
-  const data: WardrobeResponse = await res.json();
-  return data;
+  return res.data;
 };
 
 type WardrobeKey = readonly [string, string | null | undefined];

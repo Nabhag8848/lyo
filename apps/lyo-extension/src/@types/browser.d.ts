@@ -51,8 +51,8 @@ declare global {
     discount: string | null;
     discountPercent: string | null;
     description: string | null;
-    imageUrl: string | null;
-    sourceUrl: string | null;
+    imageUrl: string;
+    sourceUrl: string;
     buttonType: ActiveTabProductButton | null;
     sizeOptions: SizeOption[] | null;
     selectedSize?: string | null;
@@ -65,8 +65,41 @@ declare global {
     hydrate: () => Promise<void>;
   };
 
-  type PendingWardrobeItemStore = {
+  type ReferencePhoto = {
+    id: string;
+    url: string;
+  };
+
+  type GenerateTryonResponse = {
+    id: string;
+    optimisticId: string;
+  };
+
+  type GenerateTryonRequestBody = {
+    brandName: string;
+    optimisticId: string;
+    garmentImageUrl: string;
+    garmentSourceUrl: string;
+    garmentBrandName: string | null;
+    garmentName: string | null;
+    garmentDescription: string | null;
+  };
+
+  type ReferencePhotoState = {
+    referencePhoto: ReferencePhoto | null;
+    setReferencePhoto: (referencePhoto: ReferencePhoto | null) => void;
+  };
+
+  type PendingWardrobeItemState = {
     pendingWardrobeItems: Array<PendingWardrobeItem>;
+    prependItem: (item: PendingWardrobeItem) => void;
+    updateItemByOptimisticId: (
+      optimisticId: string,
+      updates: Partial<PendingWardrobeItem>
+    ) => void;
+    updateItem(id: string, updates: Partial<PendingWardrobeItem>);
+    removeItemByOptimisticId: (optimisticId: string) => void;
+    removeItem: (id: string) => void;
   };
 
   type Garment = {
@@ -109,6 +142,7 @@ declare global {
     wardrobe: Array<WardrobeItem>;
     setWardrobe: (wardrobe: Array<WardrobeResponse>) => void;
     prependWardrobeItem: (wardrobeItem: WardrobeItem) => void;
+    syncPendingItems: (pendingItems: Array<PendingWardrobeItem>) => void;
   };
 }
 

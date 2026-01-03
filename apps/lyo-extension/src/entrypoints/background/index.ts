@@ -1,5 +1,5 @@
 import { ActiveTabProductStorageService } from '@/services/active-tab-product-storage.service';
-import { TabEventManager } from './services';
+import { GenerationService, GenerationSSEService, TabEventManager } from './services';
 import { MessageHandlerRegistry } from './registry/message/message-handler-registry';
 import {
   PostActiveTabProductMetaHandler,
@@ -33,7 +33,11 @@ export default defineBackground(() => {
     new UpdateActiveTabProductButtonTypeHandler(activeTabProductStorageService)
   );
 
-  messageRegistry.register(new OpenSidepanelHandler());
+  const generationService = new GenerationService();
+  const generationSSEService = new GenerationSSEService();
+  const openSidepanelHandler = new OpenSidepanelHandler(generationService, generationSSEService);
+
+  messageRegistry.register(openSidepanelHandler);
 
   // Single listener delegates to registry
   browser.runtime.onMessage.addListener(
@@ -44,11 +48,10 @@ export default defineBackground(() => {
     }
   );
 
-  // TODO: when open get active_tab_product_meta, start tryon and connect to sse. 
-  // pending_wardrobe_item - store this info (sync with session storage) 
+  // TODO: when open get active_tab_product_meta, start tryon and connect to sse.
+  // pending_wardrobe_item - store this info (sync with session storage)
   // and in sidepanel listen to changes of storage key in wardrobe
-  // when generation pending -> prepand to wardrobe store. 
+  // when generation pending -> prepand to wardrobe store.
   // when generation completed -> update the wardrobe store and remove this pending_wardrobe_item
   // when generation failed -> update the wardrobe store and remove this pending_wardrobe_item
-
 });
