@@ -29,8 +29,8 @@ export class GenerationSSEService {
     this.eventSource.addEventListener('open', this.handleOpen);
   }
 
-  private handleGenerationComplete(event: MessageEvent<WardrobeItemResponse>) {
-    const wardrobeItem = event.data;
+  private handleGenerationComplete(event: MessageEvent<string>) {
+    const wardrobeItem: WardrobeItemResponse = JSON.parse(event.data);
     const pendingWardrobeItemsStore = usePendingWardrobeItemStore.getState();
     const { updateItem } = pendingWardrobeItemsStore;
     updateItem(wardrobeItem.id, {
