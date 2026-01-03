@@ -31,85 +31,85 @@ declare module 'wxt/browser' {
   }
 }
 
+import { ActiveTabProductButton, WardrobeItemStatus } from '@/constants';
+
 declare global {
+  type User = {
+    isActive: boolean;
+  };
+
   type SizeOption = {
     size: string;
     available: boolean;
   };
 
-  type Product = {
-    brand: string;
-    name: string;
-    price: string;
-    mrp: string;
-    discount: string;
-    discountPercent: string;
-    description: string;
-    imageUrl: string;
-    sourceUrl: string;
-    buttonType: 'add_to_bag' | 'go_to_bag';
-    sizes: SizeOption[];
+  type ActiveTabProductState = {
+    brand: string | null;
+    name: string | null;
+    price: string | null;
+    mrp: string | null;
+    discount: string | null;
+    discountPercent: string | null;
+    description: string | null;
+    imageUrl: string | null;
+    sourceUrl: string | null;
+    buttonType: ActiveTabProductButton | null;
+    sizeOptions: SizeOption[] | null;
     selectedSize?: string | null;
   };
 
-  type ReferencePhoto = {
+  type SignInState = {
+    accessToken: string | null;
+    isHydrated: boolean;
+    setAccessToken: (accessToken: string | null) => void;
+    hydrate: () => Promise<void>;
+  };
+
+  type PendingWardrobeItemStore = {
+    pendingWardrobeItems: Array<PendingWardrobeItem>;
+  };
+
+  type Garment = {
     id: string;
-    url: string;
+    garmentUrl: string;
+    sourceUrl: string;
+    brandName: string | null;
+    garmentBrandName: string | null;
+    garmentName: string | null;
+    garmentDescription: string | null;
+  };
+
+  type PendingWardrobeItem = {
+    id?: string;
+    optimisticId: string;
+    signedUrl?: string;
+    status: WardrobeItemStatus;
+    garment: Garment;
+  };
+
+  type WardrobeItemResponse = {
+    id: string;
+    signedUrl: string;
+    garment: Garment;
   };
 
   type WardrobeItem = {
     id: string;
     signedUrl: string;
-    garment: {
-      id: string;
-      garmentUrl: string;
-      sourceUrl: string;
-      brandName?: string | null;
-      garmentBrandName?: string | null;
-      garmentName?: string | null;
-      garmentDescription?: string | null;
-    };
+    status: WardrobeItemStatus;
+    garment: Garment;
   };
 
   type WardrobeResponse = {
-    wardrobe: WardrobeItem[];
+    wardrobe: Array<WardrobeItemResponse>;
     nextCursor: string | null;
   };
 
-  type User = {
-    isActive: boolean;
+  type WardrobeState = {
+    wardrobe: Array<WardrobeItem>;
+    setWardrobe: (wardrobe: Array<WardrobeResponse>) => void;
+    prependWardrobeItem: (wardrobeItem: WardrobeItem) => void;
   };
-
-  // Generation types for try-on workflow
-  type ProductInfo = {
-    brand: string;
-    name: string;
-    sourceUrl: string;
-    imageUrl: string;
-    garmentBrandName?: string;
-    garmentName?: string;
-    garmentDescription?: string;
-  };
-
-  type PendingGeneration = {
-    id: string;
-    status: 'pending' | 'completed';
-    productImageUrl: string;
-    productInfo: ProductInfo;
-    generatedImageUrl?: string;
-    createdAt: number;
-  };
-
-  type SSEConnectionState = {
-    isConnected: boolean;
-    lastEventId?: string;
-  };
-
-  // Discriminated union for wardrobe display items
-  type WardrobeDisplayItem =
-    | { type: 'pending'; generation: PendingGeneration }
-    | { type: 'completed'; item: WardrobeItem }
-    | { type: 'reference'; imageUrl: string };
 }
 
 export {};

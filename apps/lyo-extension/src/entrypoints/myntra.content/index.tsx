@@ -1,4 +1,4 @@
-import { MATCHES } from '@/lib/matches';
+import { MATCHES } from '@/entrypoints/sidepanel/utils/matches';
 import ReactDOM from 'react-dom/client';
 import React from 'react';
 import TryNowButton from './try-on-button';

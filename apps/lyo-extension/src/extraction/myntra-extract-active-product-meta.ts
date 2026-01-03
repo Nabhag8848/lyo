@@ -1,0 +1,102 @@
+import { ActiveTabProductButton } from '@/constants';
+
+export function myntraExtractActiveProductMeta(): ActiveTabProductState {
+  // garment brand name
+  const brandElement = document.querySelector('h1.pdp-title');
+  const brand = brandElement?.textContent?.trim() || '';
+
+  const nameElement = document.querySelector('h1.pdp-name');
+  const name = nameElement?.textContent?.trim() || '';
+
+  // garment price
+  const priceElement = document.querySelector('.pdp-price strong');
+  const price = priceElement?.textContent?.trim() || '';
+
+  // garment mrp
+  const mrpElement = document.querySelector('.pdp-mrp s');
+  const mrp = mrpElement?.textContent?.trim() || '';
+
+  // garment discount
+  const discountElement = document.querySelector('.pdp-discount');
+  const discountText = discountElement?.textContent?.trim() || '';
+  const discountMatch = discountText.match(/(\d+)%/);
+  const discountPercent = discountMatch ? discountMatch[1] + '%' : '';
+
+  const descElement = document.querySelector(
+    '.pdp-product-description-content'
+  );
+  const description = descElement?.textContent?.trim() || '';
+
+  const firstImageContainer = document.querySelector('.image-grid-image');
+  let imageUrl = '';
+  if (firstImageContainer) {
+    const style = firstImageContainer.getAttribute('style') || '';
+    const urlMatch = style.match(/url\(["']?([^"']+)["']?\)/);
+    if (urlMatch && urlMatch[1]) {
+      imageUrl = urlMatch[1];
+    }
+  }
+
+  // Check which button exists: "GO TO BAG" or "ADD TO BAG"
+  const goToBagButton = document.querySelector('a.pdp-goToCart.pdp-add-to-bag');
+
+  const buttonType: ActiveTabProductButton = goToBagButton
+    ? ActiveTabProductButton.GO_TO_BAG
+    : ActiveTabProductButton.ADD_TO_BAG;
+
+  // Extract available sizes and detect currently selected size
+  const sizeButtons = document.querySelectorAll(
+    'button.size-buttons-size-button'
+  );
+  const sizeOptions: SizeOption[] = [];
+  let selectedSize: string | null = null;
+
+  sizeButtons.forEach((button) => {
+    const sizeElement = button.querySelector('p.size-buttons-unified-size');
+    if (sizeElement) {
+      const size = sizeElement.textContent?.trim() || '';
+      // Check if size is available - unavailable sizes typically have disabled class or strike-through
+      const isDisabled = button.classList.contains(
+        'size-buttons-size-button-disabled'
+      );
+      const hasStrike = button.querySelector(
+        '.size-buttons-size-strike:not(.size-buttons-size-strike-hide)'
+      );
+      const available = !isDisabled && !hasStrike;
+
+      // Check if this size is currently selected
+      // Primary check: size-buttons-size-button-selected class (most reliable)
+      const isSelected =
+        button.classList.contains('size-buttons-size-button-selected') ||
+        button.getAttribute('aria-selected') === 'true' ||
+        button.getAttribute('data-selected') === 'true';
+
+      if (size) {
+        sizeOptions.push({ size, available });
+        if (isSelected && !selectedSize) {
+          selectedSize = size;
+        }
+      }
+    }
+  });
+
+  // garmentSourceUrl
+  const sourceUrl = window.location.href;
+
+  const product: ActiveTabProductState = {
+    brand,
+    name,
+    price,
+    mrp,
+    discount: discountText,
+    discountPercent,
+    description,
+    imageUrl,
+    sourceUrl,
+    buttonType,
+    sizeOptions,
+    selectedSize,
+  };
+
+  return product;
+}

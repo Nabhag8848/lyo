@@ -1,73 +1,77 @@
-import useSWRInfinite from 'swr/infinite';
 import { api } from '@/api/util';
+import useSWRInfinite from 'swr/infinite';
+import { useWardrobeStore } from '@/entrypoints/sidepanel/stores';
 
 const fetchWardrobe = async (
   cursor: string | null | undefined
 ): Promise<WardrobeResponse> => {
   const baseUrl = api.serverUrl;
-  const url = cursor
-    ? `${baseUrl}/wardrobe/me?cursor=${encodeURIComponent(cursor)}`
-    : `${baseUrl}/wardrobe/me`;
+  const url = `${baseUrl}/wardrobe/me${
+    cursor ? `?cursor=${encodeURIComponent(cursor)}` : ''
+  }`;
 
   const res = await fetch(url, {
     credentials: 'include',
   });
 
   if (!res.ok) {
+    // TODO: handle error
     throw new Error('Failed to fetch wardrobe');
   }
 
-  return res.json();
+  const data: WardrobeResponse = await res.json();
+  return data;
 };
+
+type WardrobeKey = readonly [string, string | null | undefined];
 
 const getKey = (
   pageIndex: number,
   previousPageData: WardrobeResponse | null
-) => {
-  // Reached the end
+): WardrobeKey | null => {
   if (previousPageData && !previousPageData.nextCursor) return null;
 
-  // First page, we don't have `previousPageData`
   if (pageIndex === 0) return ['wardrobe', null];
 
-  // Add the cursor to the API endpoint
   return ['wardrobe', previousPageData?.nextCursor];
 };
 
 export const useWardrobe = () => {
-  const { data, error, isLoading, isValidating, size, setSize } =
-    useSWRInfinite<WardrobeResponse, Error>(
-      getKey,
-      ([, cursor]) => fetchWardrobe(cursor),
-      {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-      }
-    );
+  const {
+    data: wardrobe,
+    error,
+    isLoading,
+    isValidating,
+    size: pageSize,
+    setSize: setPageSize,
+  } = useSWRInfinite<WardrobeResponse, Error>(
+    getKey,
+    ([, cursor]: WardrobeKey) => fetchWardrobe(cursor),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      onSuccess: (wardrobe) => {
+        if (wardrobe) {
+          useWardrobeStore.getState().setWardrobe(wardrobe);
+        }
+      },
+    }
+  );
 
-  const wardrobeItems: WardrobeItem[] = data
-    ? data.flatMap((page) => page.wardrobe)
-    : [];
+  const lastWardrobeResponse = wardrobe ? wardrobe[wardrobe.length - 1] : null;
+  const hasMoreWardrobeItems = lastWardrobeResponse?.nextCursor !== null;
 
-  const isLoadingMore =
-    isLoading || (size > 0 && data && typeof data[size - 1] === 'undefined');
-  const isEmpty = data?.[0]?.wardrobe.length === 0;
-  const isReachingEnd =
-    isEmpty || (data && data[data.length - 1]?.nextCursor === null);
-
-  const loadMore = () => {
-    if (!isReachingEnd && !isLoadingMore) {
-      setSize(size + 1);
+  const loadMoreWardrobeItems = () => {
+    if (hasMoreWardrobeItems) {
+      setPageSize(pageSize + 1);
     }
   };
 
   return {
-    wardrobeItems,
     isLoading,
     isValidating,
-    isLoadingMore,
-    isReachingEnd,
     error,
-    loadMore,
+    hasMoreWardrobeItems,
+    loadMoreWardrobeItems,
   };
 };

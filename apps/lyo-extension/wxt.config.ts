@@ -17,9 +17,10 @@ export default defineConfig({
   },
   vite: () => ({
     plugins: [tailwindcss()],
+    envDir: path.resolve(__dirname, '.env'),
   }),
   manifest: {
-    permissions: ['sidePanel', 'storage', 'cookies'],
+    permissions: ['sidePanel', 'storage', 'cookies', 'tabs'],
     host_permissions: ['https://lyo.fashion/*', 'https://api.lyo.fashion/*'],
   },
   webExt: {

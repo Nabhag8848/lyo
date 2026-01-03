@@ -57,4 +57,14 @@ export class GenerateTryonDto {
     required: false,
   })
   garmentDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Optimistic identifier for the try-on generation',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: false,
+  })
+  optimisticId?: string;
 }
