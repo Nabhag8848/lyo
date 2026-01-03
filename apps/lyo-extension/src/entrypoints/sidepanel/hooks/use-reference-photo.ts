@@ -1,18 +1,14 @@
 import useSWR from 'swr';
-import { api } from '@/api/util';
+import { apiClient } from '@/api/util';
 import { useReferencePhotoStore } from '@/entrypoints/sidepanel/stores';
 
 const fetchReferencePhoto = async (): Promise<ReferencePhoto | null> => {
-  const baseUrl = api.serverUrl;
-  const res = await fetch(`${baseUrl}/reference-photo/active`, {
-    credentials: 'include',
-  });
-
-  if (!res.ok) {
+  try {
+    const res = await apiClient.get<ReferencePhoto>('/reference-photo/active');
+    return res.data;
+  } catch {
     return null;
   }
-
-  return res.json();
 };
 
 const getReferencePhotoKey = () => {

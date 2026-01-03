@@ -51,8 +51,8 @@ declare global {
     discount: string | null;
     discountPercent: string | null;
     description: string | null;
-    imageUrl: string | null;
-    sourceUrl: string | null;
+    imageUrl: string;
+    sourceUrl: string;
     buttonType: ActiveTabProductButton | null;
     sizeOptions: SizeOption[] | null;
     selectedSize?: string | null;
@@ -68,6 +68,21 @@ declare global {
   type ReferencePhoto = {
     id: string;
     url: string;
+  };
+
+  type GenerateTryonResponse = {
+    id: string;
+    optimisticId: string;
+  };
+
+  type GenerateTryonRequestBody = {
+    brandName: string;
+    optimisticId: string;
+    garmentImageUrl: string;
+    garmentSourceUrl: string;
+    garmentBrandName: string | null;
+    garmentName: string | null;
+    garmentDescription: string | null;
   };
 
   type ReferencePhotoState = {

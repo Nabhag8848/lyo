@@ -1,5 +1,5 @@
 import { ActiveTabProductStorageService } from '@/services/active-tab-product-storage.service';
-import { TabEventManager } from './services';
+import { GenerationService, TabEventManager } from './services';
 import { MessageHandlerRegistry } from './registry/message/message-handler-registry';
 import {
   PostActiveTabProductMetaHandler,
@@ -33,7 +33,7 @@ export default defineBackground(() => {
     new UpdateActiveTabProductButtonTypeHandler(activeTabProductStorageService)
   );
 
-  messageRegistry.register(new OpenSidepanelHandler());
+  messageRegistry.register(new OpenSidepanelHandler(new GenerationService()));
 
   // Single listener delegates to registry
   browser.runtime.onMessage.addListener(

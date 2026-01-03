@@ -145,3 +145,12 @@ pendingWardrobeItems.watch(({ pendingWardrobeItems }) => {
   const { syncPendingItems } = wardrobe;
   syncPendingItems(pendingWardrobeItems);
 });
+
+// sync pending items when the sidepanel is opened + if watch is fired before hydration of store then sync pending items
+pendingWardrobeItems.getValue().then(({ pendingWardrobeItems }) => {
+  if (pendingWardrobeItems.length > 0) {
+    const wardrobe = useWardrobeStore.getState();
+    const { syncPendingItems } = wardrobe;
+    syncPendingItems(pendingWardrobeItems);
+  }
+});

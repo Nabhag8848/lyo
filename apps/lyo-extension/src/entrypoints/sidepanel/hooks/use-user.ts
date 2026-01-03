@@ -1,17 +1,13 @@
 import useSWR from 'swr';
-import { api } from '@/api/util';
+import { apiClient } from '@/api/util';
 
 const fetchUser = async (): Promise<User | null> => {
-  const baseUrl = api.serverUrl;
-  const res = await fetch(`${baseUrl}/user/me`, {
-    credentials: 'include',
-  });
-
-  if (!res.ok) {
+  try {
+    const res = await apiClient.get<User>('/user/me');
+    return res.data;
+  } catch {
     return null;
   }
-
-  return res.json();
 };
 
 // Create a key function that depends on the access token
