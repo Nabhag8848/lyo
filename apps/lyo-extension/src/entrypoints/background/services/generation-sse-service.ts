@@ -6,7 +6,7 @@ export class GenerationSSEService {
   private eventSource: EventSource | null = null;
 
   async connect() {
-    if (this.isConnectionOpen()) {
+    if (this.isConnectionOpen() || this.isConnectionClosed()) {
       return;
     }
 
@@ -29,7 +29,7 @@ export class GenerationSSEService {
     this.eventSource.addEventListener('open', this.handleOpen);
   }
 
-  private handleGenerationComplete(event: MessageEvent<string>) {
+  private handleGenerationComplete = (event: MessageEvent<string>) => {
     const wardrobeItem: WardrobeItemResponse = JSON.parse(event.data);
     const pendingWardrobeItemsStore = usePendingWardrobeItemStore.getState();
     const { updateItem } = pendingWardrobeItemsStore;
@@ -37,23 +37,31 @@ export class GenerationSSEService {
       ...wardrobeItem,
       status: WardrobeItemStatus.COMPLETED,
     });
-  }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private handleCloseConnection(_event: MessageEvent) {
+  private handleCloseConnection = (_event: MessageEvent) => {
     this.eventSource?.close();
     this.eventSource = null;
-  }
+  };
 
-  private handleError(event: Event) {
+  private handleError = (event: Event) => {
+    if (this.eventSource) {
+      this.eventSource.close();
+      this.eventSource = null;
+    }
     console.error('[Generation SSE] Error:', event);
-  }
+  };
 
-  private handleOpen(event: Event) {
+  private handleOpen = (event: Event) => {
     console.log('[Generation SSE] Connection opened', event);
-  }
+  };
 
   private isConnectionOpen() {
     return this.eventSource && this.eventSource.readyState === EventSource.OPEN;
+  }
+
+  private isConnectionClosed() {
+    return this.eventSource && this.eventSource.readyState === EventSource.CLOSED;
   }
 }
