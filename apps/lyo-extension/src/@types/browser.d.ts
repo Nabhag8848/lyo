@@ -65,8 +65,15 @@ declare global {
     hydrate: () => Promise<void>;
   };
 
-  type PendingWardrobeItemStore = {
+  type PendingWardrobeItemState = {
     pendingWardrobeItems: Array<PendingWardrobeItem>;
+    prependItem: (item: PendingWardrobeItem) => void;
+    updateItemByOptimisticId: (
+      optimisticId: string,
+      updates: Partial<PendingWardrobeItem>
+    ) => void;
+    updateItem(id: string, updates: Partial<PendingWardrobeItem>);
+    removeItem: (optimisticId: string) => void;
   };
 
   type Garment = {

@@ -44,11 +44,10 @@ export default defineBackground(() => {
     }
   );
 
-  // TODO: when open get active_tab_product_meta, start tryon and connect to sse. 
-  // pending_wardrobe_item - store this info (sync with session storage) 
+  // TODO: when open get active_tab_product_meta, start tryon and connect to sse.
+  // pending_wardrobe_item - store this info (sync with session storage)
   // and in sidepanel listen to changes of storage key in wardrobe
-  // when generation pending -> prepand to wardrobe store. 
+  // when generation pending -> prepand to wardrobe store.
   // when generation completed -> update the wardrobe store and remove this pending_wardrobe_item
   // when generation failed -> update the wardrobe store and remove this pending_wardrobe_item
-
 });
