@@ -1,20 +1,25 @@
-import { useActiveTabProductStore } from '@/entrypoints/sidepanel/stores';
+import { useWardrobeStore } from '@/entrypoints/sidepanel/stores';
+import { useWardrobe } from '@/entrypoints/sidepanel/hooks';
 
 export const FittingRoom = () => {
-  const activeTabProduct = useActiveTabProductStore();
+  const { isLoading, error, loadMoreWardrobeItems, hasMoreWardrobeItems } =
+    useWardrobe();
+  const wardrobe = useWardrobeStore((state) => state.wardrobe);
 
-  // have a button which changes price to 100
-  const handleChangePrice = () => {
-    useActiveTabProductStore.setState({
-      ...activeTabProduct,
-      price: '100',
-    });
-  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div>
-      <pre>{JSON.stringify(activeTabProduct, null, 2)}</pre>
-      <button onClick={handleChangePrice}>Change Price</button>
+      <pre>{JSON.stringify(wardrobe, null, 2)}</pre>
+      <button onClick={loadMoreWardrobeItems} disabled={!hasMoreWardrobeItems}>
+        Load More
+      </button>
     </div>
   );
 };

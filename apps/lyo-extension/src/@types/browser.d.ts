@@ -75,15 +75,28 @@ declare global {
     garmentDescription: string | null;
   };
 
+  type WardrobeItemResponse = {
+    id: string;
+    signedUrl: string;
+    garment: Garment;
+  };
+
   type WardrobeItem = {
     id: string;
-    imageUrl: string;
+    signedUrl: string;
     status: WardrobeItemStatus;
     garment: Garment;
   };
 
+  type WardrobeResponse = {
+    wardrobe: Array<WardrobeItemResponse>;
+    nextCursor: string | null;
+  };
+
   type WardrobeState = {
     wardrobe: Array<WardrobeItem>;
+    setWardrobe: (wardrobe: Array<WardrobeResponse>) => void;
+    prependWardrobeItem: (wardrobeItem: WardrobeItem) => void;
   };
 }
 
