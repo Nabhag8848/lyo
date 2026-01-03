@@ -1,7 +1,15 @@
-import { useWardrobeStore } from '@/entrypoints/sidepanel/stores';
+import {
+  useReferencePhotoStore,
+  useWardrobeStore,
+} from '@/entrypoints/sidepanel/stores';
 import { useWardrobe } from '@/entrypoints/sidepanel/hooks';
+import { useReferencePhoto } from '@/entrypoints/sidepanel/hooks';
 
 export const FittingRoom = () => {
+  useReferencePhoto();
+  const referencePhoto = useReferencePhotoStore(
+    (state) => state.referencePhoto
+  );
   const { isLoading, error, loadMoreWardrobeItems, hasMoreWardrobeItems } =
     useWardrobe();
   const wardrobe = useWardrobeStore((state) => state.wardrobe);
@@ -16,6 +24,7 @@ export const FittingRoom = () => {
 
   return (
     <div>
+      <pre>{JSON.stringify(referencePhoto, null, 2)}</pre>
       <pre>{JSON.stringify(wardrobe, null, 2)}</pre>
       <button onClick={loadMoreWardrobeItems} disabled={!hasMoreWardrobeItems}>
         Load More

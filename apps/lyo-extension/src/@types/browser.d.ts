@@ -65,6 +65,16 @@ declare global {
     hydrate: () => Promise<void>;
   };
 
+  type ReferencePhoto = {
+    id: string;
+    url: string;
+  };
+
+  type ReferencePhotoState = {
+    referencePhoto: ReferencePhoto | null;
+    setReferencePhoto: (referencePhoto: ReferencePhoto | null) => void;
+  };
+
   type PendingWardrobeItemState = {
     pendingWardrobeItems: Array<PendingWardrobeItem>;
     prependItem: (item: PendingWardrobeItem) => void;
