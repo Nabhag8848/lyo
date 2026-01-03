@@ -126,6 +126,7 @@ declare global {
     wardrobe: Array<WardrobeItem>;
     setWardrobe: (wardrobe: Array<WardrobeResponse>) => void;
     prependWardrobeItem: (wardrobeItem: WardrobeItem) => void;
+    syncPendingItems: (pendingItems: Array<PendingWardrobeItem>) => void;
   };
 }
 
