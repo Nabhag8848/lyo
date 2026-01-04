@@ -1,4 +1,4 @@
-export function InactiveAccountScreen() {
+export const InactiveAccountScreen = () => {
   return (
     <div className="h-screen bg-stone-50 flex items-center justify-center p-6">
       <div className="text-center px-6 max-w-md">

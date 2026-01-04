@@ -1,4 +1,4 @@
-export function SignInScreen() {
+export const SignInScreen = () => {
   const handleSignIn = () => {
     browser.tabs.create({ url: 'https://lyo.fashion' });
     window.close();
