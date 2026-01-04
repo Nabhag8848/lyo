@@ -134,50 +134,8 @@ export const Wardrobe = ({
     }
   };
 
-  useEffect(() => {
-    const container = historyScrollRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleHistoryScroll);
-      // Initial check
-      handleHistoryScroll();
-
-      return () => {
-        container.removeEventListener('scroll', handleHistoryScroll);
-      };
-    }
-    return undefined;
-  }, [handleHistoryScroll]);
-
   return (
     <div>
-      <div className="flex justify-between items-center mb-1.5">
-        <span className="text-[0.5rem] font-bold text-stone-400 uppercase tracking-[0.2em]">
-          WARDROBE
-        </span>
-      </div>
-      <style>{`
-      .history-scroll::-webkit-scrollbar {
-        display: none;
-      }
-      .history-scroll {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      @keyframes shimmer-opacity {
-        0% {
-          opacity: 0.3;
-        }
-        50% {
-          opacity: 0.7;
-        }
-        100% {
-          opacity: 0.3;
-        }
-      }
-      .shimmer-opacity {
-        animation: shimmer-opacity 1.5s ease-in-out infinite;
-      }
-    `}</style>
       <div
         ref={historyScrollRef}
         className="flex overflow-x-auto pb-1 -mx-2 px-2 history-scroll scroll-smooth"

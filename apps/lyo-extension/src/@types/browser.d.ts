@@ -145,6 +145,11 @@ declare global {
     syncPendingItems: (pendingItems: Array<PendingWardrobeItem>) => void;
     updatePendingItemsSignedUrl: (signedUrl: string) => void;
   };
+
+  type CurrentSelectedWardrobeItemState = {
+    currentSelectedWardrobeItem: WardrobeItem | null;
+    setCurrentSelectedWardrobeItem: (wardrobeItem: WardrobeItem) => void;
+  };
 }
 
 export {};

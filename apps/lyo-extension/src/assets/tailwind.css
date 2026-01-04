@@ -142,3 +142,33 @@
     font-weight: 700 !important;
   }
 }
+
+/* Hidden Scrollbar */
+@layer utilities {
+  .history-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .history-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Shimmer Animation */
+@keyframes shimmer-opacity {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+@layer utilities {
+  .shimmer-opacity {
+    animation: shimmer-opacity 1.5s ease-in-out infinite;
+  }
+}
