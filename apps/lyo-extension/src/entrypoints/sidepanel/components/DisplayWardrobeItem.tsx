@@ -12,7 +12,7 @@ export const DisplayWardrobeItem = () => {
 
   if (isPending) {
     return (
-      <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 max-h-[75%] w-full flex items-center justify-center bg-stone-50">
+      <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 w-full flex items-center justify-center bg-stone-50">
         {/* Product image with reduced opacity */}
         <img
           src={productImageUrl}
@@ -39,7 +39,7 @@ export const DisplayWardrobeItem = () => {
 
   // If loading but no loading image, show spinner only when somethin goes wrong handle this later.
   return (
-    <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 max-h-[75%] w-full flex items-center justify-center bg-stone-50">
+    <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 w-full flex items-center justify-center bg-stone-50">
       <div className="w-10 h-10 border-2 border-stone-200 border-t-brand-pink rounded-full animate-spin" />
     </div>
   );
