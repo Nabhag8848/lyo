@@ -143,6 +143,7 @@ declare global {
     setWardrobe: (wardrobe: Array<WardrobeResponse>) => void;
     prependWardrobeItem: (wardrobeItem: WardrobeItem) => void;
     syncPendingItems: (pendingItems: Array<PendingWardrobeItem>) => void;
+    updatePendingItemsSignedUrl: (signedUrl: string) => void;
   };
 }
 

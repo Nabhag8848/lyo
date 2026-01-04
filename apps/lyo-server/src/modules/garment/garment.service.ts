@@ -16,17 +16,24 @@ export class GarmentService {
     garmentName?: string,
     garmentDescription?: string,
     brandName?: string
-  ): Promise<GarmentEntity> {
-    const garment = await this.garmentRepository.insert({
-      user: { id: userId },
-      garmentUrl,
-      sourceUrl,
-      brandName,
-      garmentName,
-      garmentDescription,
-      garmentBrandName,
-    });
+  ) {
+    // upsert if garment for user and garmentUrl and sourceUrl already exists
+    await this.garmentRepository.upsert(
+      {
+        user: { id: userId },
+        garmentUrl,
+        sourceUrl,
+        brandName,
+        garmentName,
+        garmentDescription,
+        garmentBrandName,
+      },
+      ['user', 'garmentUrl', 'sourceUrl']
+    );
 
-    return garment.raw[0];
+    return this.garmentRepository.findOneOrFail({
+      where: { user: { id: userId }, garmentUrl, sourceUrl },
+      select: { id: true },
+    });
   }
 }

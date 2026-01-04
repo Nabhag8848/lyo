@@ -127,6 +127,14 @@ export const useWardrobeStore = create<WardrobeState>()((set) => ({
         wardrobe: [...itemsToPrepend, ...existingItems],
       };
     }),
+  updatePendingItemsSignedUrl: (signedUrl: string) =>
+    set(({ wardrobe }) => ({
+      wardrobe: wardrobe.map((item) =>
+        item.status === WardrobeItemStatus.PENDING && item.signedUrl === ''
+          ? { ...item, signedUrl }
+          : item
+      ),
+    })),
 }));
 
 pendingWardrobeItems.watch(({ pendingWardrobeItems }) => {
@@ -152,5 +160,24 @@ pendingWardrobeItems.getValue().then(({ pendingWardrobeItems }) => {
     const wardrobe = useWardrobeStore.getState();
     const { syncPendingItems } = wardrobe;
     syncPendingItems(pendingWardrobeItems);
+  }
+});
+
+// Update pending items when reference photo becomes available (fixes race condition)
+useReferencePhotoStore.subscribe((state, prevState) => {
+  // Only update when reference photo transitions from null to a valid value
+  if (!prevState.referencePhoto && state.referencePhoto) {
+    const { wardrobe, updatePendingItemsSignedUrl } =
+      useWardrobeStore.getState();
+
+    // Check if wardrobe has pending items with empty signedUrl
+    const hasPendingItemsWithoutSignedUrl = wardrobe.some(
+      (item) =>
+        item.status === WardrobeItemStatus.PENDING && item.signedUrl === ''
+    );
+
+    if (hasPendingItemsWithoutSignedUrl) {
+      updatePendingItemsSignedUrl(state.referencePhoto.url);
+    }
   }
 });
