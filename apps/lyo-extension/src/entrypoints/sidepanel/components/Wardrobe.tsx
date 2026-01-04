@@ -8,7 +8,7 @@ import {
   useCurrentSelectedWardrobeItemStore,
   useWardrobeStore,
 } from '@/entrypoints/sidepanel/stores';
-import { cn } from '../utils/tailwind';
+import { cn } from '@/entrypoints/sidepanel/utils/tailwind';
 import { WardrobeItemShimmer } from './WardrobeItemShimmer';
 
 export const Wardrobe = () => {

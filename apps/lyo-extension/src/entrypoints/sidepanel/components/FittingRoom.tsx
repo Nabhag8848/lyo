@@ -2,6 +2,7 @@ import { useActiveTabProductStore } from '@/entrypoints/sidepanel/stores';
 import { Wardrobe } from './Wardrobe';
 import { DisplayWardrobeItem } from './DisplayWardrobeItem';
 import { SelectedWardrobeItemDetails } from './SelectedWardrobeItemDetails';
+import { ActionButtons } from './ActionButtons';
 
 export const FittingRoom = () => {
   useActiveTabProductStore();
@@ -16,6 +17,7 @@ export const FittingRoom = () => {
           <Wardrobe />
         </div>
       </div>
+      <ActionButtons />
     </div>
   );
 };
