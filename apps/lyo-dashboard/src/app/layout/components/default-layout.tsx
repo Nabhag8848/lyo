@@ -29,7 +29,7 @@ export const DefaultLayout = () => {
             We're working hard to bring you the best experience possible, for
             early access reachout at{' '}
             <a
-              href="mailto:support@lyo.com"
+              href="mailto:nabhag@lyo.fashion"
               className="text-brand-pink hover:underline"
             >
               nabhag@lyo.fashion
