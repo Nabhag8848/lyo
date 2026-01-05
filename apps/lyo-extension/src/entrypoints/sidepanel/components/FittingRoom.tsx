@@ -4,6 +4,7 @@ import { DisplayWardrobeItem } from './DisplayWardrobeItem';
 import { SelectedWardrobeItemDetails } from './SelectedWardrobeItemDetails';
 import { ActionButtons } from './ActionButtons';
 import { useReferencePhoto } from '@/entrypoints/sidepanel/hooks/use-reference-photo';
+import { SizeSelector } from './SizeSelector';
 
 export const FittingRoom = () => {
   useActiveTabProductStore();
@@ -25,6 +26,7 @@ export const FittingRoom = () => {
         {/* Product Info & Controls */}
         <div className="shrink-0 space-y-2 overflow-y-auto overflow-x-hidden min-h-0">
           <SelectedWardrobeItemDetails />
+          <SizeSelector />
           <Wardrobe />
         </div>
       </div>

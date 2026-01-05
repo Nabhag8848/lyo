@@ -11,12 +11,32 @@ export const ActionButtons = () => {
   const isCurrentProductPage =
     activeTabProduct?.sourceUrl ===
     currentSelectedWardrobeItem?.garment?.sourceUrl;
-  const isDisabled = isCurrentProductPage && activeTabProduct?.selectedSize === null;
+  const isDisabled =
+    isCurrentProductPage && activeTabProduct?.selectedSize === null;
   const buttonType = activeTabProduct?.buttonType;
   const buttonText = buttonType === 'go_to_bag' ? 'Go to Bag' : 'Add to Bag';
   const buttonTextGoToBag = 'Go to Bag';
   const isCurrentProductPageAddToBag =
     isCurrentProductPage && buttonType === 'add_to_bag';
+
+  const handleClick = async () => {
+    if (!isCurrentProductPage) {
+      const goToPageUrl = currentSelectedWardrobeItem?.garment?.sourceUrl;
+
+      if (goToPageUrl) {
+        const currentTab = await browser.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        if (currentTab[0]?.id) {
+          await browser.tabs.update(currentTab[0].id, {
+            url: goToPageUrl,
+          });
+        }
+      }
+    }
+  };
 
   return (
     <div className="p-3 border-t border-stone-100 bg-white shrink-0 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] space-y-2">
@@ -28,6 +48,7 @@ export const ActionButtons = () => {
             ? 'bg-stone-300 text-stone-500 cursor-not-allowed shadow-none'
             : 'bg-brand-pink text-white hover:bg-rose-600 shadow-lg hover:shadow-rose-200'
         )}
+        onClick={handleClick}
       >
         <span className="flex items-center gap-1.5">
           {isCurrentProductPageAddToBag && (
