@@ -27,7 +27,8 @@ export default defineConfig({
   manifest: {
     name: 'LYO',
     author: { email: 'nabhag@lyo.fashion' },
-    version: '1.0.0',
+    version: '0.0.1',
+    version_name: '0.0.1',
     description:
       'Your perfect fit awaits — stop guessing how clothes will look and try them instantly before you buy.',
     permissions: ['sidePanel', 'storage', 'cookies', 'tabs'],
