@@ -16,8 +16,6 @@ export default defineContentScript({
     );
 
     const handleProductMetaSync = async (event: Event, delay = 0) => {
-      if (!event.isTrusted) return;
-
       await new Promise((resolve) => setTimeout(resolve, delay));
       const activeTabProductMeta = myntraExtractActiveProductMeta();
 
@@ -54,6 +52,28 @@ export default defineContentScript({
         handleAddToBag(event)
       );
     }
+
+    browser.runtime.onMessage.addListener(async (message) => {
+      if (message.type === 'update_selected_size') {
+        const size = message.size;
+        // Find the size button that matches the selected size
+        const xpath = `//button[contains(@class, 'size-buttons-size-button')]//p[contains(@class, 'size-buttons-unified-size') and normalize-space(text())='${size}']/ancestor::button[1]`;
+        const result = document.evaluate(
+          xpath,
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+          null
+        );
+        const targetButton = result.singleNodeValue as HTMLElement | null;
+
+        if (targetButton) {
+          targetButton.click();
+        }
+      }
+
+      return;
+    });
 
     return () => {
       sizeButtonRoot.forEach((button) => {

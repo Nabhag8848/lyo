@@ -1,11 +1,16 @@
 import { ActiveTabProductStorageService } from '@/services/active-tab-product-storage.service';
-import { GenerationService, GenerationSSEService, TabEventManager } from './services';
+import {
+  GenerationService,
+  GenerationSSEService,
+  TabEventManager,
+} from './services';
 import { MessageHandlerRegistry } from './registry/message/message-handler-registry';
 import {
   PostActiveTabProductMetaHandler,
   UpdateActiveTabProductButtonTypeHandler,
 } from './handlers/active-tab-product-meta';
 import { OpenSidepanelHandler } from './handlers/sidepanel/open';
+import { UpdateSelectedSizeHandler } from './handlers/active-tab-product-meta/update-selected-size';
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
@@ -35,9 +40,15 @@ export default defineBackground(() => {
 
   const generationService = new GenerationService();
   const generationSSEService = new GenerationSSEService();
-  const openSidepanelHandler = new OpenSidepanelHandler(generationService, generationSSEService);
+  const openSidepanelHandler = new OpenSidepanelHandler(
+    generationService,
+    generationSSEService
+  );
 
   messageRegistry.register(openSidepanelHandler);
+
+  const updateSelectedSizeHandler = new UpdateSelectedSizeHandler();
+  messageRegistry.register(updateSelectedSizeHandler);
 
   // Single listener delegates to registry
   browser.runtime.onMessage.addListener(

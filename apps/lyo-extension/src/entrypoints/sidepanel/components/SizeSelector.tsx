@@ -19,6 +19,16 @@ export const SizeSelector = () => {
   const sizeOptions = activeTabProduct?.sizeOptions ?? [];
   const selectedSize = activeTabProduct?.selectedSize ?? null;
 
+  const handleSizeClick = async (size: string) => {
+    await browser.runtime.sendMessage<
+      { type: 'update_selected_size'; data: { size: string } },
+      void
+    >({
+      type: 'update_selected_size',
+      data: { size },
+    });
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-1.5">
@@ -33,11 +43,11 @@ export const SizeSelector = () => {
           return (
             <button
               key={sizeOption.size}
-              //   onClick={() => {
-              //     if (sizeOption.available) {
-              //       onSizeClick(sizeOption.size);
-              //     }
-              //   }}
+              onClick={() => {
+                if (sizeOption.available) {
+                  handleSizeClick(sizeOption.size);
+                }
+              }}
               disabled={!sizeOption.available}
               className={cn(
                 'w-9 h-9 rounded-full border text-[0.625rem] font-bold transition-colors shrink-0',
