@@ -5,7 +5,7 @@ export class UpdateSelectedSizeHandler
 {
   readonly messageType = 'update_selected_size';
 
-  async handle(data: { size: string }): Promise<void> {
+  async handle(data: { size: string }, _sender: Browser.runtime.MessageSender): Promise<void> {
     const tabs = await browser.tabs.query({
       active: true,
       currentWindow: true,

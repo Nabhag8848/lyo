@@ -15,7 +15,7 @@ export const ActionButtons = () => {
     isCurrentProductPage && activeTabProduct?.selectedSize === null;
   const buttonType = activeTabProduct?.buttonType;
   const buttonText = buttonType === 'go_to_bag' ? 'Go to Bag' : 'Add to Bag';
-  const buttonTextGoToBag = 'Go to Bag';
+  const buttonTextGoToPage = 'Go to Page';
   const isCurrentProductPageAddToBag =
     isCurrentProductPage && buttonType === 'add_to_bag';
 
@@ -36,6 +36,13 @@ export const ActionButtons = () => {
         }
       }
     }
+
+    await browser.runtime.sendMessage<
+      { type: 'click_buy_action_button' },
+      void
+    >({
+      type: 'click_buy_action_button',
+    });
   };
 
   return (
@@ -66,7 +73,7 @@ export const ActionButtons = () => {
               />
             </svg>
           )}
-          {isCurrentProductPage ? buttonText : buttonTextGoToBag}
+          {isCurrentProductPage ? buttonText : buttonTextGoToPage}
         </span>
         {isCurrentProductPageAddToBag && !isDisabled && (
           <span className="text-[0.625rem]">{price}</span>

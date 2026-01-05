@@ -8,9 +8,10 @@ import { MessageHandlerRegistry } from './registry/message/message-handler-regis
 import {
   PostActiveTabProductMetaHandler,
   UpdateActiveTabProductButtonTypeHandler,
+  UpdateSelectedSizeHandler,
+  ClickBuyActionButtonHandler,
 } from './handlers/active-tab-product-meta';
 import { OpenSidepanelHandler } from './handlers/sidepanel/open';
-import { UpdateSelectedSizeHandler } from './handlers/active-tab-product-meta/update-selected-size';
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
@@ -50,6 +51,9 @@ export default defineBackground(() => {
   const updateSelectedSizeHandler = new UpdateSelectedSizeHandler();
   messageRegistry.register(updateSelectedSizeHandler);
 
+  const clickBuyActionButtonHandler = new ClickBuyActionButtonHandler();
+  messageRegistry.register(clickBuyActionButtonHandler);
+
   // Single listener delegates to registry
   browser.runtime.onMessage.addListener(
     async (message: { type: string; data: unknown }, sender, sendResponse) => {
@@ -58,11 +62,4 @@ export default defineBackground(() => {
       return true;
     }
   );
-
-  // TODO: when open get active_tab_product_meta, start tryon and connect to sse.
-  // pending_wardrobe_item - store this info (sync with session storage)
-  // and in sidepanel listen to changes of storage key in wardrobe
-  // when generation pending -> prepand to wardrobe store.
-  // when generation completed -> update the wardrobe store and remove this pending_wardrobe_item
-  // when generation failed -> update the wardrobe store and remove this pending_wardrobe_item
 });

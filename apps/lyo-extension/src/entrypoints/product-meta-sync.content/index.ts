@@ -70,9 +70,28 @@ export default defineContentScript({
         if (targetButton) {
           targetButton.click();
         }
+        return;
       }
 
-      return;
+      if (message.type === 'click_buy_action_button') {
+        const actionbutton: HTMLElement | null =
+          document.querySelector('a.pdp-goToCart.pdp-add-to-bag') ??
+          document.querySelector(
+            'div.pdp-add-to-bag.pdp-button.pdp-flex.pdp-center'
+          );
+
+        if (actionbutton) {
+          actionbutton.click();
+        }
+
+        const isAddToBag = actionbutton?.classList.contains('pdp-add-to-bag');
+
+        if (isAddToBag) {
+          await handleProductMetaSync(new Event('click'), 1000);
+        }
+
+        return;
+      }
     });
 
     return () => {
