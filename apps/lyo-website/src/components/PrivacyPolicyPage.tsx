@@ -7,7 +7,7 @@ export const PrivacyPolicyPage = () => {
         </h1>
 
         <div className="prose prose-stone max-w-none space-y-6">
-          <p className="text-stone-600">Last updated: January 2025</p>
+          <p className="text-stone-600">Last updated: January 2026</p>
 
           <section>
             <h2 className="font-display text-2xl text-black uppercase tracking-wide mt-8 mb-4">

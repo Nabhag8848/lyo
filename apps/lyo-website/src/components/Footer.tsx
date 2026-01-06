@@ -115,7 +115,7 @@ export const Footer = () => {
 
       <div className="border-t border-stone-200 pt-10 flex flex-col md:flex-row justify-between items-center gap-4 px-6 max-w-[1400px] mx-auto">
         <div className="text-[10px] text-stone-500 uppercase tracking-wider font-bold">
-          © 2025 LYO.
+          © 2026 LYO.
         </div>
         <div className="flex gap-8 text-[10px] text-stone-500 uppercase tracking-wider font-bold">
           <a
