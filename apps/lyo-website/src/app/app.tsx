@@ -8,6 +8,7 @@ import { OGPreview } from '@/components/OGPreview';
 import { ScreenshotsPage } from '@/components/ScreenshotsPage';
 import { PromoTilePage } from '@/components/PromoTilePage';
 import { MarqueeImagePage } from '@/components/MarqueeImagePage';
+import { PrivacyPolicyPage } from '@/components/PrivacyPolicyPage';
 
 const Home = () => (
   <>
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/screenshots" element={<ScreenshotsPage />} />
         <Route path="/promo-tile" element={<PromoTilePage />} />
         <Route path="/marquee" element={<MarqueeImagePage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
       </Routes>
     </div>
   );

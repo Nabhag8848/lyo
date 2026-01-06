@@ -119,6 +119,12 @@ export const Footer = () => {
         </div>
         <div className="flex gap-8 text-[10px] text-stone-500 uppercase tracking-wider font-bold">
           <a
+            href="/privacy"
+            className="hover:text-black transition-colors"
+          >
+            Privacy Policy
+          </a>
+          <a
             href="mailto:nabhag@lyo.fashion"
             className="hover:text-black transition-colors"
           >
