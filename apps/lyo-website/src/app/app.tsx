@@ -5,6 +5,9 @@ import { HowItWorks } from '@/components/HowItWorks';
 import { Pricing } from '@/components/Pricing';
 import { Footer } from '@/components/Footer';
 import { OGPreview } from '@/components/OGPreview';
+import { ScreenshotsPage } from '@/components/ScreenshotsPage';
+import { PromoTilePage } from '@/components/PromoTilePage';
+import { MarqueeImagePage } from '@/components/MarqueeImagePage';
 
 const Home = () => (
   <>
@@ -34,6 +37,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/og" element={<OGPage />} />
+        <Route path="/screenshots" element={<ScreenshotsPage />} />
+        <Route path="/promo-tile" element={<PromoTilePage />} />
+        <Route path="/marquee" element={<MarqueeImagePage />} />
       </Routes>
     </div>
   );
