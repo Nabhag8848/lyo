@@ -11,7 +11,16 @@ export const Footer = () => {
             room for Myntra shopping.
           </p>
           <div className="flex flex-col gap-4">
-            <button className="bg-black text-white px-6 py-3 rounded-[2px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-stone-800 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+            <button
+              onClick={() =>
+                window.open(
+                  'https://chromewebstore.google.com/detail/lyo/galgnmbbkfbmhggdmdjkjloakoilobjn',
+                  '_blank',
+                  'noopener,noreferrer'
+                )
+              }
+              className="bg-black text-white px-6 py-3 rounded-[2px] text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-stone-800 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+            >
               Add to Browser
               <svg
                 className="w-4 h-4"
@@ -118,10 +127,7 @@ export const Footer = () => {
           © 2026 LYO.
         </div>
         <div className="flex gap-8 text-[10px] text-stone-500 uppercase tracking-wider font-bold">
-          <a
-            href="/privacy"
-            className="hover:text-black transition-colors"
-          >
+          <a href="/privacy" className="hover:text-black transition-colors">
             Privacy Policy
           </a>
           <a
