@@ -2,7 +2,10 @@
 
 **Stop Guessing. Start Wearing.**
 
-## What this project is
+https://github.com/user-attachments/assets/da39c46e-1dc9-41ef-bc16-8ba7a8e01bc0
+
+
+## About
 
 LYO is a **virtual fitting room for [Myntra](https://www.myntra.com)**. Shoppers upload a full-body photo once, get avatars in multiple poses, then try garments on those avatars while browsing product pages. Favorites land in a **virtual wardrobe** so they can compare looks before buying.
 
