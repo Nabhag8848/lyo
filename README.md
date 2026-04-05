@@ -118,7 +118,3 @@ Tests and lint targets follow each project’s Nx configuration (`pnpm exec nx t
 ## Product and pricing
 
 Plans, credit bundles, and customer-facing copy should match **[lyo.fashion](https://lyo.fashion)**. This README stays technical; marketing and legal pages live in `apps/lyo-website` and on the live site.
-
-## License
-
-MIT — see `package.json` / repository license file if present.
