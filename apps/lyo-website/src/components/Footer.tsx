@@ -99,14 +99,14 @@ export const Footer = () => {
           <div className="relative w-full max-h-[160px] sm:max-h-[180px] md:max-h-[200px] lg:max-h-[220px] rounded-lg overflow-hidden flex items-end justify-center">
             <div className="flex items-end justify-center gap-0 -space-x-1 sm:-space-x-2 md:-space-x-3 lg:-space-x-4 xl:-space-x-5 w-full min-w-0">
               {[
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-5-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-7-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-4-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-6-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-2-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-3-removebg-preview.png',
-                'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-8-removebg-preview.png',
+                '/website/model-1-removebg-preview.png',
+                '/website/model-5-removebg-preview.png',
+                '/website/model-7-removebg-preview.png',
+                '/website/model-4-removebg-preview.png',
+                '/website/model-6-removebg-preview.png',
+                '/website/model-2-removebg-preview.png',
+                '/website/model-3-removebg-preview.png',
+                '/website/model-8-removebg-preview.png',
               ].map((src, index) => (
                 <img
                   key={index}

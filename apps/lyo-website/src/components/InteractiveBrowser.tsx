@@ -27,14 +27,14 @@ export const InteractiveBrowser = () => {
   }, [isPanelOpen]);
 
   const avatarImages = [
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-4-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-6-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-2-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-3-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-5-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-7-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-8-removebg-preview.png',
+    '/website/model-1-removebg-preview.png',
+    '/website/model-4-removebg-preview.png',
+    '/website/model-6-removebg-preview.png',
+    '/website/model-2-removebg-preview.png',
+    '/website/model-3-removebg-preview.png',
+    '/website/model-5-removebg-preview.png',
+    '/website/model-7-removebg-preview.png',
+    '/website/model-8-removebg-preview.png',
   ];
 
   const getImageSrc = (): string => {
@@ -79,7 +79,7 @@ export const InteractiveBrowser = () => {
             {/* Store Image */}
             <div className="w-full md:w-[58%] flex-1 relative overflow-hidden bg-stone-100 group flex items-end">
               <img
-                src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
+                src="/website/new.png"
                 className="w-full h-full md:object-cover object-scale-down"
                 alt="Store Model"
               />

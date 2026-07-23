@@ -2,12 +2,12 @@ import React from 'react';
 
 // Different wardrobe images like in the website
 const wardrobeImages = [
-  'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png',
-  'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-6-removebg-preview.png',
-  'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-4-removebg-preview.png',
-  'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-2-removebg-preview.png',
-  'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-3-removebg-preview.png',
-  'https://tryonn.s3.ap-south-1.amazonaws.com/website/model.png',
+  '/website/model-1-removebg-preview.png',
+  '/website/model-6-removebg-preview.png',
+  '/website/model-4-removebg-preview.png',
+  '/website/model-2-removebg-preview.png',
+  '/website/model-3-removebg-preview.png',
+  '/website/model.png',
 ];
 
 const ScreenshotCard = ({
@@ -54,7 +54,7 @@ export const ScreenshotsPage = () => {
               <div className="flex-1 lg:flex-[0.5] flex items-center justify-center min-w-0 min-h-0 overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center border border-stone-200 lg:border-stone-300 rounded-lg lg:rounded-xl bg-transparent">
                   <img
-                    src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model.png"
+                    src="/website/model.png"
                     alt=""
                     className="max-w-full max-h-full w-auto h-auto object-contain"
                   />
@@ -110,7 +110,7 @@ export const ScreenshotsPage = () => {
                             >
                               {item.generating ? (
                                 <img
-                                  src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model.png"
+                                  src="/website/model.png"
                                   alt="Generating"
                                   className="max-w-full max-h-full object-contain"
                                   style={{
@@ -121,7 +121,7 @@ export const ScreenshotsPage = () => {
                               ) : (
                                 <img
                                   src={
-                                    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model.png'
+                                    '/website/model.png'
                                   }
                                   alt={`Avatar ${item.idx + 1}`}
                                   className="max-w-full max-h-full object-contain"
@@ -183,7 +183,7 @@ export const ScreenshotsPage = () => {
               {/* Product Image */}
               <div className="w-[58%] bg-stone-100 flex items-end">
                 <img
-                  src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
+                  src="/website/new.png"
                   className="w-full h-full object-cover"
                   alt="Product"
                 />
@@ -280,7 +280,7 @@ export const ScreenshotsPage = () => {
               <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 w-full flex items-center justify-center bg-stone-50">
                 {/* Product image with reduced opacity */}
                 <img
-                  src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
+                  src="/website/new.png"
                   className="w-auto h-full max-w-full max-h-full object-cover opacity-40"
                   alt="Product"
                 />
@@ -354,7 +354,7 @@ export const ScreenshotsPage = () => {
                     {/* First item is the one being generated */}
                     <div className="shrink-0 w-16 h-28 rounded overflow-hidden flex items-center justify-center">
                       <img
-                        src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model.png"
+                        src="/website/model.png"
                         alt="Loading..."
                         className="max-w-full max-h-full object-contain"
                         style={{
@@ -427,7 +427,7 @@ export const ScreenshotsPage = () => {
               {/* Product Image */}
               <div className="w-[58%] bg-stone-100 flex items-end">
                 <img
-                  src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
+                  src="/website/new.png"
                   className="w-full h-full object-cover"
                   alt="Product"
                 />
@@ -536,7 +536,7 @@ export const ScreenshotsPage = () => {
               {/* Display Area - Completed Try-On */}
               <div className="relative rounded overflow-hidden mb-3 flex-1 min-h-0 w-full flex items-center justify-center bg-stone-50">
                 <img
-                  src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png"
+                  src="/website/model-1-removebg-preview.png"
                   className="w-auto h-full max-w-full max-h-full object-contain"
                   alt="Try-on result"
                 />

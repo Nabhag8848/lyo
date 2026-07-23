@@ -1,13 +1,13 @@
 export const OGPreview = () => {
   const modelImages = [
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-5-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-7-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-4-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-6-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-2-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-3-removebg-preview.png',
-    'https://tryonn.s3.ap-south-1.amazonaws.com/website/model-8-removebg-preview.png',
+    '/website/model-1-removebg-preview.png',
+    '/website/model-5-removebg-preview.png',
+    '/website/model-7-removebg-preview.png',
+    '/website/model-4-removebg-preview.png',
+    '/website/model-6-removebg-preview.png',
+    '/website/model-2-removebg-preview.png',
+    '/website/model-3-removebg-preview.png',
+    '/website/model-8-removebg-preview.png',
   ];
 
   return (

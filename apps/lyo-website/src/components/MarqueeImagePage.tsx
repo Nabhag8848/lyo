@@ -62,7 +62,7 @@ export const MarqueeImagePage = () => {
               <div className="flex flex-1 min-h-0 h-[35vh]">
                 <div className="w-[30%] bg-stone-50 flex items-center justify-center overflow-hidden">
                   <img
-                    src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
+                    src="/website/new.png"
                     className="w-full h-full object-cover scale-100"
                     alt="Product"
                   />
@@ -131,7 +131,7 @@ export const MarqueeImagePage = () => {
               <div className="flex-1 p-3 flex flex-col min-h-0">
                 <div className="flex-1 bg-stone-50 rounded mb-2 flex items-center justify-center overflow-hidden min-h-0">
                   <img
-                    src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png"
+                    src="/website/model-1-removebg-preview.png"
                     className="w-full h-full object-contain"
                     alt="Try-on result"
                   />

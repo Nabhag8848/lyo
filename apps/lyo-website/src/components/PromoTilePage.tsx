@@ -25,7 +25,7 @@ export const PromoTilePage = () => {
             {/* Product Image */}
             <div className="w-36 h-48 bg-stone-50 rounded border border-stone-200 overflow-hidden flex items-center justify-center shadow-md">
               <img
-                src="https://tryonn.s3.ap-south-1.amazonaws.com/website/new.png"
+                src="/website/new.png"
                 className="w-full h-full object-cover opacity-80"
                 alt="Product"
               />
@@ -49,7 +49,7 @@ export const PromoTilePage = () => {
             {/* Try-On Result */}
             <div className="w-36 h-48 bg-stone-50 rounded border border-stone-200 overflow-hidden flex items-center justify-center shadow-md">
               <img
-                src="https://tryonn.s3.ap-south-1.amazonaws.com/website/model-1-removebg-preview.png"
+                src="/website/model-1-removebg-preview.png"
                 className="w-full h-full object-contain"
                 alt="Try-on result"
               />
